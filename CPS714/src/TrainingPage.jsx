@@ -58,13 +58,14 @@ function TrainingPage() {
               className="submenu-item"
               onClick={() => setSelectedComplete("")}
             >
-              Not Completed
+                {selectedMode==="Event" ? "Upcoming" : "Not Completed"}
+              
             </li>
             <li
               className="submenu-item"
               onClick={() => setSelectedComplete("Completed ")}
             >
-              Completed
+              {selectedMode==="Event" ? "Past" : "Completed"}
             </li>
           </ul>
         </nav>
@@ -76,6 +77,8 @@ function TrainingPage() {
         <h4></h4>
         {showBigBox===-1 ? (
           <>
+            {selectedMode==="Event" && selectedComplete==="" && <h4>Signed Up Events</h4>}
+            {selectedMode==="Event" && selectedComplete==="Completed " && <h4>Signed Up Past Events</h4>}
             <SmallBox
               title={`${selectedComplete} ${selectedMode} 1`}
               description="Description, description"
@@ -88,8 +91,16 @@ function TrainingPage() {
               points={100}
               onShowMore={() => setShowBigBox(2)}
             ></SmallBox>
+            {selectedMode==="Event" && selectedComplete==="" && <h4>Upcoming Events</h4>}
+            {selectedMode==="Event" && selectedComplete==="Completed " && <h4>Past Events</h4>}
             <SmallBox
               title={`${selectedComplete} ${selectedMode} 3`}
+              description="Description, description"
+              points={100}
+              onShowMore={() => setShowBigBox(3)}
+            ></SmallBox>
+            <SmallBox
+              title={`${selectedComplete} ${selectedMode} 4`}
               description="Description, description"
               points={100}
               onShowMore={() => setShowBigBox(3)}
