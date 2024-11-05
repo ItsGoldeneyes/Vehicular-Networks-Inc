@@ -17,10 +17,10 @@ function SmallBox({ title, description, points, onShowMore }) {
   );
 }
 
-function BigBox({ title, description, points }) {
+function BigBox({ title, description, points, onBack }) {
   return (
     <section className="main-content">
-      <button className="show-more">Back</button>
+      <button className="show-more" onClick={onBack}>Back</button>
       <br />
       <br />
       <div>
@@ -29,6 +29,7 @@ function BigBox({ title, description, points }) {
           <button className="logout">⛁ {points}</button>
         </header>
         <p>{description}</p>
+        <p>INSERT VIDEO HERE</p>
       </div>
     </section>
   );
@@ -37,7 +38,7 @@ function BigBox({ title, description, points }) {
 function TrainingPage() {
   const [selectedMode, setSelectedMode] = useState("Course");
   const [selectedComplete, setSelectedComplete] = useState("");
-  const [showSmallBoxes, setShowSmallBoxes] = useState(true);
+  const [showBigBox, setShowBigBox] = useState(-1);
 
   return (
     <div className="container">
@@ -73,32 +74,35 @@ function TrainingPage() {
           <h1>{selectedMode}s</h1>
         </header>
         <h4></h4>
-        {showSmallBoxes ? (
+        {showBigBox===-1 ? (
           <>
             <SmallBox
               title={`${selectedComplete} ${selectedMode} 1`}
               description="Description, description"
               points={100}
-              onShowMore={() => setShowSmallBoxes(false)}
+              onShowMore={() => setShowBigBox(1)}
             ></SmallBox>
             <SmallBox
               title={`${selectedComplete} ${selectedMode} 2`}
               description="Description, description"
               points={100}
+              onShowMore={() => setShowBigBox(2)}
             ></SmallBox>
             <SmallBox
               title={`${selectedComplete} ${selectedMode} 3`}
               description="Description, description"
               points={100}
+              onShowMore={() => setShowBigBox(3)}
             ></SmallBox>
           </>
-        ):
-        <BigBox
-        title={`${selectedComplete} ${selectedMode} 3`}
-        description="Description, description"
-        points={100}
-      ></BigBox>
-        }
+        ) : (
+          <BigBox
+            title={`${selectedComplete} ${selectedMode} ${showBigBox} `}
+            description="Description, description"
+            points={100}
+            onBack={() => setShowBigBox(-1)}
+          ></BigBox>
+        )}
       </main>
     </div>
   );
