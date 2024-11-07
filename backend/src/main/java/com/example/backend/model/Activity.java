@@ -23,9 +23,6 @@ public class Activity {
     @Column(nullable = false)
     private LocalDateTime timestamp; // When the activity occurred
 
-    @Column(nullable = false)
-    private int pointsChange;
-
     // Constructor for creating a new Activity
     public Activity(User user, String type, String description) {
         this.user = user;
@@ -76,8 +73,5 @@ public class Activity {
 
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
-    }
-    public void setPointsChange(int pointsChange) {
-        this.pointsChange = pointsChange;
     }
 }

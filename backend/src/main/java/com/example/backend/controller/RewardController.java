@@ -68,10 +68,6 @@ public class RewardController {
         return rewardService.getRewardsByPointsGreaterThan(points);
     }
 
-    @GetMapping("/name/{rewardName}")
-    public List<Reward> getRewardsByExactName(@PathVariable("rewardName") String rewardName) {
-        return rewardService.getRewardsByExactName(rewardName);
-    }
 
     @GetMapping("/points-between/{minPoints}/{maxPoints}")
     public List<Reward> getRewardsByPointsBetween(@PathVariable("minPoints") int minPoints, @PathVariable("maxPoints") int maxPoints) {

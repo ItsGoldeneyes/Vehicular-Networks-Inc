@@ -5,14 +5,25 @@ import RecentActivities from './RecentActivities';
 import RewardsCatalog from './RewardsCatalog';
 
 const Dashboard: React.FC = () => {
-    const userId = 6;  // Assuming the user ID is 3, you can make this dynamic if needed
+    const userId = 30;  // Replace with a dynamic value if needed
     const [points, setPoints] = useState<number>(0);
     const [activities, setActivities] = useState<any[]>([]);
     const [rewards, setRewards] = useState<any[]>([]); // Rewards state
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    // Fetch points, activities, and rewards from the API
+    // Function to fetch activities
+    const fetchActivities = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8080/api/activities/${userId}`);
+            setActivities(response.data);
+        } catch (error: any) {
+            setError('Error fetching activities.');
+            console.error('Error fetching activities:', error);
+        }
+    };
+
+    // Fetch points and rewards from the API
     useEffect(() => {
         const fetchPoints = async () => {
             try {
@@ -21,16 +32,6 @@ const Dashboard: React.FC = () => {
             } catch (error: any) {
                 setError('Error fetching points.');
                 console.error('Error fetching points:', error);
-            }
-        };
-
-        const fetchActivities = async () => {
-            try {
-                const response = await axios.get(`http://localhost:8080/api/activities/${userId}`);
-                setActivities(response.data);
-            } catch (error: any) {
-                setError('Error fetching activities.');
-                console.error('Error fetching activities:', error);
             }
         };
 
@@ -62,6 +63,11 @@ const Dashboard: React.FC = () => {
         }
     };
 
+    // Function to refresh activities after a reward redemption
+    const refreshActivities = () => {
+        fetchActivities();
+    };
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -79,6 +85,7 @@ const Dashboard: React.FC = () => {
                 rewards={rewards}  // Pass the rewards data to RewardsCatalog
                 userId={userId}    // Pass userId to RewardsCatalog
                 updateUserPoints={updateUserPoints}  // Pass the updateUserPoints function to RewardsCatalog
+                refreshActivities={refreshActivities}  // Pass the refreshActivities function to RewardsCatalog
             />
         </div>
     );

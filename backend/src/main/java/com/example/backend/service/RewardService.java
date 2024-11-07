@@ -56,9 +56,6 @@ public class RewardService {
         return rewardRepository.findByPointsRequiredGreaterThan(points);
     }
 
-    public List<Reward> getRewardsByExactName(String rewardName) {
-        return rewardRepository.findByRewardName(rewardName);
-    }
 
     public List<Reward> getRewardsByPointsBetween(int minPoints, int maxPoints) {
         return rewardRepository.findByPointsRequiredBetween(minPoints, maxPoints);

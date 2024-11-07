@@ -9,6 +9,9 @@ import java.util.List;
 
 @Repository
 public interface RewardRepository extends JpaRepository<Reward, Integer> {
+
+
+
     // Default findAll() method is already provided by JpaRepository
     @Query("SELECT r FROM Reward r ORDER BY r.pointsRequired ASC")
     List<Reward> findAll();

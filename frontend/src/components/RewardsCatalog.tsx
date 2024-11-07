@@ -10,24 +10,39 @@ interface RewardsCatalogProps {
     rewards: Reward[];
     userId: number;
     updateUserPoints: (newPoints: number | ((prevPoints: number) => number)) => void;
+    refreshActivities: () => void; // New prop to refresh activities
 }
 
-const RewardsCatalog: React.FC<RewardsCatalogProps> = ({ rewards, userId, updateUserPoints }) => {
+const RewardsCatalog: React.FC<RewardsCatalogProps> = ({ rewards, userId, updateUserPoints, refreshActivities }) => {
     const handleRedeem = async (reward: Reward) => {
         if (reward.pointsRequired > 0) {
             try {
-                // Redeem the points on the backend by sending the userId and rewardId in the URL and query params
+                // Redeem the points on the backend
                 const response = await fetch(`http://localhost:8080/api/loyalty/redeem/${reward.rewardId}/${userId}`, {
-                    method: 'POST',  // Make sure method is POST
+                    method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                 });
 
                 if (response.ok) {
-                    // If redemption is successful, update the points
+                    // Update user points
                     updateUserPoints((prevPoints) => prevPoints - reward.pointsRequired);
-                    alert(`Successfully redeemed: ${reward.rewardName}`);
+
+                    // Log the redemption activity
+                    const activityResponse = await fetch(`http://localhost:8080/api/activities/${userId}/${reward.rewardId}?type=REDEEMED`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    });
+
+                    if (activityResponse.ok) {
+                        alert(`Successfully redeemed: ${reward.rewardName} and logged activity.`);
+                        refreshActivities(); // Refresh activities after logging
+                    } else {
+                        alert('Successfully redeemed, but failed to log activity.');
+                    }
                 } else {
                     alert('Failed to redeem points. Please try again.');
                 }
@@ -39,7 +54,6 @@ const RewardsCatalog: React.FC<RewardsCatalogProps> = ({ rewards, userId, update
             alert('Insufficient points to redeem this reward');
         }
     };
-
 
     return (
         <div className="container mx-auto px-4 py-8">
