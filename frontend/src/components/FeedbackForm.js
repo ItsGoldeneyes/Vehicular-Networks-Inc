@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import "./FeedbackForm.css"; 
 
 export default function FeedbackForm() {
   const { theme } = useOutletContext(); // Get theme from context
+
+  useEffect(() => {
+      document.title = "Submit Feedback - FleetRewards";
+  }, []);
 
   return (
     <div className={`feedback-form ${theme}`}>
