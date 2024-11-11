@@ -21,7 +21,7 @@ export default function Register() {
     }
 
     return (<>
-        <main className={styles.main}>
+        <div className={styles.container}>
             <h2>Log In</h2>
             <p>Fields marked with <span className={styles.required} /> are required.</p>
             <form method="post" onSubmit={handleSubmit} className={styles.registerForm}>
@@ -34,6 +34,6 @@ export default function Register() {
                 <button className={styles.submit} type="submit">Login</button>
             </form>
             <p>Don't have an account? <NavLink to="/register">Register Now</NavLink></p>
-        </main>
+        </div>
     </>)
 }
