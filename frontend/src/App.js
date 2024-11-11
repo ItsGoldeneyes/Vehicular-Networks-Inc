@@ -11,6 +11,8 @@ import Home from "./components/Home";
 import Surveys from "./components/Surveys";
 import Polls from "./components/Polls";
 import FeedbackForm from "./components/FeedbackForm";
+import Register from "./pages/Register/Register";
+import Login from "./pages/Login/Login";
 
 //layouts
 import RootLayout from "./layouts/RootLayout"; /* - to be used for navbar*/
@@ -29,6 +31,8 @@ const router = createBrowserRouter(
       <Route path="Feedback" element={<FeedbackForm />}>
         {/* <Route path=""></Route> */}
       </Route>
+      <Route path="register" element={<Register />} />
+      <Route path="login" element={<Login />} />
     </Route>
   )
 );
