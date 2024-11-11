@@ -49,6 +49,23 @@ export default function RootLayout() {
                   Feedback Form
                 </NavLink>
               </li>
+              {/* { authenticated && */}
+                <li>
+                    <NavLink
+                      to="/register"
+                      className={({ isActive }) =>
+                        isActive ? "nav-item active" : "nav-item"
+                      }
+                    >
+                      Register
+                    </NavLink> 
+                </li>
+              {/* } */}
+              {/* { !authenticated &&
+                <li>
+                  Sign out
+                </li>
+              } */}
             </ul>
           </nav>
           <div className="search-box">
