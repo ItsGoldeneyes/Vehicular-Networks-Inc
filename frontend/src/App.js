@@ -7,10 +7,10 @@ import {
 } from "react-router-dom";
 
 //pages
-import Home from "./components/Home";
-import Surveys from "./components/Surveys";
-import Polls from "./components/Polls";
-import FeedbackForm from "./components/FeedbackForm";
+import Home from "./components/Home/Home";
+import Surveys from "./components/Surveys/Surveys";
+import Polls from "./components/Polls/Polls";
+import FeedbackForm from "./components/FeedbackForm/FeedbackForm";
 import Register from "./pages/Register/Register";
 import Login from "./pages/Login/Login";
 

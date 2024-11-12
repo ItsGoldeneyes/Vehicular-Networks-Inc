@@ -69,7 +69,7 @@ export default function RootLayout() {
             </ul>
           </nav>
           <div className="search-box">
-            <input tpye="text" placeholder="Search" />
+            <input type="text" placeholder="Search" />
             <img
               src={theme == "light" ? search_icon_light : search_icon_dark}
               alt=""

@@ -78,7 +78,9 @@ ul li {
 .dark .search-box input::placeholder {
   color: #222;
 }
-
+.dark .search-box input{
+  color:#000;
+}
 .nav-item {
   text-decoration: none; /* Removes the underline */
   color: #000; /* Default color */
