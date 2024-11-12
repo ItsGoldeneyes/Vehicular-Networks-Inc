@@ -1,0 +1,15 @@
+.user-info-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.user-info-table th,
+.user-info-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.user-info-table th {
+  background-color: #f4f4f4;
+}

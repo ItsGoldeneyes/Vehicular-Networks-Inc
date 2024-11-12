@@ -1,0 +1,17 @@
+.user-row td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.user-row button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.user-row button:hover {
+  background-color: #2980b9;
+}

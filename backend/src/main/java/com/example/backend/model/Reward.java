@@ -45,6 +45,7 @@ public class Reward {
     }
 
     public void setPointsRequired(int pointsRequired) {
+
         this.pointsRequired = pointsRequired;
     }
 }

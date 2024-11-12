@@ -38,6 +38,10 @@ public class RewardService {
         return rewardRepository.save(reward);
     }
 
+    public void updateReward(int rewardId, int points)
+    {
+       rewardRepository.updatePointsRequiredById(rewardId, points);
+    }
     // Delete a reward
     public void deleteReward(int rewardId) {
         rewardRepository.deleteById(rewardId);

@@ -22,7 +22,7 @@ public class RewardController {
     }
 
     // Get all rewards
-    @GetMapping
+    @GetMapping("/all")
     public List<Reward> getAllRewards() {
         return rewardService.getAllRewards();
     }
@@ -45,6 +45,11 @@ public class RewardController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedReward);
     }
 
+    @PostMapping("/{id}/{points}")
+    public ResponseEntity<Reward> updateReward(@PathVariable("id") int rewardId, @PathVariable("points") int points) {
+       rewardService.updateReward(rewardId, points);
+       return ResponseEntity.noContent().build();
+    }
     // Delete a reward by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReward(@PathVariable("id") int rewardId) {

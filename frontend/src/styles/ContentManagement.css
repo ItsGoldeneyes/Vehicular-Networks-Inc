@@ -1,0 +1,47 @@
+.content-management-container {
+  padding-left: 10rem; 
+  padding-right: 10rem; 
+}
+
+
+.upload-form {
+  margin-bottom: 20px;
+}
+
+.upload-form label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.upload-form input,
+.upload-form textarea {
+  width: 100%;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.upload-form button {
+  padding: 10px 15px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.upload-form button:hover {
+  background-color: #2980b9;
+}
+
+.content-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.content-list li {
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}

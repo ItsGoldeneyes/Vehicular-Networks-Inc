@@ -5,7 +5,7 @@ import RecentActivities from './RecentActivities';
 import RewardsCatalog from './RewardsCatalog';
 
 const Dashboard: React.FC = () => {
-    const userId = 30;  // Replace with a dynamic value if needed
+    const userId = 0;  // Replace with a dynamic value if needed
     const [points, setPoints] = useState<number>(0);
     const [activities, setActivities] = useState<any[]>([]);
     const [rewards, setRewards] = useState<any[]>([]); // Rewards state
@@ -37,7 +37,7 @@ const Dashboard: React.FC = () => {
 
         const fetchRewards = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/rewards');
+                const response = await axios.get('http://localhost:8080/api/rewards/all');
                 setRewards(response.data);  // Assuming response.data is an array of rewards
             } catch (error: any) {
                 setError('Error fetching rewards.');

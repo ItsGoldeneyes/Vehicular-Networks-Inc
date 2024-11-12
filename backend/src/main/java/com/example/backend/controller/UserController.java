@@ -19,11 +19,9 @@ public class UserController {
     @GetMapping("/{userId}/points")
     public PointsResponse getPoints(@PathVariable Integer userId) {
         int points = userService.getUserPoints(userId);
-        if (points != 0) {
+
             return new PointsResponse(points);
-        } else {
-            throw new UserNotFoundException("User not found with ID: " + userId);
-        }
+
     }
 
     @PostMapping("/{userId}/points/add")
