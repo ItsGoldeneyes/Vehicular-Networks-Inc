@@ -1,18 +1,49 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import { useOutletContext } from "react-router-dom";
+import { TextField, Button } from "@mui/material";
 import "./FeedbackForm.css"; 
 
 export default function FeedbackForm() {
   const { theme } = useOutletContext(); // Get theme from context
+  const [feedback, setFeedback] = useState(""); // State for feedback
 
-  useEffect(() => {
-      document.title = "Submit Feedback - FleetRewards";
-  }, []);
+  const handleSubmit = async() => {
+    try {
+      console.log(feedback);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   return (
     <div className={`feedback-form ${theme}`}>
-      <h2>Welcome to the FeedbackForm page</h2>
-      {/* Add your form content here */}
+      <h2>Is there anything sort of feedback you can give us?</h2>
+
+      <TextField
+        label="Give us your thought!"
+        multiline
+        rows={20}
+        value={feedback}
+        onChange={(e) => setFeedback(e.target.value)}
+        sx={{
+          width: "100%",
+          marginTop: "20px",
+          backgroundColor: theme === "dark" ? "darkgray" : "white"
+        }}
+      />
+      
+      <Button
+        id="submit-button"
+        variant="contained"
+        size="large"
+        sx={{ 
+          marginTop: "20px",
+          backgroundColor: "#007bff"
+        }}
+        onClick={handleSubmit}
+      >
+        Submit
+      </Button>
     </div>
   );
 }
