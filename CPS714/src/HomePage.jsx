@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import supabase from "../supabaseClient";
+
 import "./main.css";
 
 function SmallBox({ title, description, points, onShowMore }) {
@@ -19,34 +21,12 @@ function SmallBox({ title, description, points, onShowMore }) {
   );
 }
 
-function BigBox({ title, description, points, onBack }) {
-  return (
-    <section className="main-content">
-      <button className="show-more" onClick={onBack}>
-        Back
-      </button>
-      <br />
-      <br />
-      <div>
-        <header className="header">
-          <h1>{title}</h1>
-          <button className="logout">⛁ {points}</button>
-        </header>
-        <p>{description}</p>
-        <p>
-          This is a very long and pointless desctription. If you are reading
-          this you are cool!
-        </p>
-        <p>INSERT VIDEO HERE</p>
-      </div>
-    </section>
-  );
-}
 
 function HomePage() {
+  const navigate = useNavigate();
   const [selectedMode, setSelectedMode] = useState("Course");
-  const [selectedComplete, setSelectedComplete] = useState("");
-  const [showBigBox, setShowBigBox] = useState(-1);
+  const [selectedComplete, setSelectedComplete] = useState("Not Completed");
+
 
   //Fetching media
   const [fetchError, setFetchError] = useState(null);
@@ -55,7 +35,9 @@ function HomePage() {
   useEffect(() => {
     const fetchMedia = async () => {
       console.log("Fetching media...");
-      const { data, error } = await supabase.from("MEDIA").select("");
+      const { data, error } = await supabase
+        .from("MEDIA")
+        .select("");
 
       console.log("Data:", data);
       console.log("Error:", error);
@@ -74,23 +56,29 @@ function HomePage() {
   }, []);
   //Fetching media End
 
+
+
   return (
     <div className="container">
       <aside className="sidebar">
+        <b>Menu</b>
+        <br></br>
         <nav className="menu">
-          <div className="menu-item" onClick={() => setSelectedMode("Course")}>
-            Courses
+          <div className="menu-item" onClick={() => { setSelectedMode("Course"); setSelectedComplete("Not Completed"); }}>
+            {selectedMode==="Course" ? <b>Courses</b> : "Course"}
           </div>
-          <div className="menu-item" onClick={() => setSelectedMode("Event")}>
-            Events
+          <div className="menu-item" onClick={() => { setSelectedMode("Event"); setSelectedComplete("Not Completed"); }}>
+            {selectedMode==="Event" ? <b>Events</b> : "Events"}
           </div>
         </nav>
         <nav className="menu">
-          <div className="menu-item" onClick={() => setSelectedComplete("")}>
-            {selectedMode === "Event" ? "Upcoming" : "Not Completed"}
+          <div className="menu-item" onClick={() => setSelectedComplete("Not Completed")}>
+            {selectedMode === "Course" && ( selectedComplete === "Not Completed" ? <b>Not Completed</b> : "Not Completed" ) }
+            {selectedMode === "Event" && ( selectedComplete === "Not Completed" ? <b>Upcoming</b> : "Upcoming" ) }
           </div>
-          <div className="menu-item" onClick={() => setSelectedComplete("Completed ")}>
-            {selectedMode === "Event" ? "Past" : "Completed"}
+          <div className="menu-item" onClick={() => setSelectedComplete("Completed")}>
+          {selectedMode === "Course" && ( selectedComplete === "Completed" ? <b>Completed</b> : "Completed" ) }
+          {selectedMode === "Event" && ( selectedComplete === "Completed" ? <b>Past</b> : "Past" ) }
           </div>
         </nav>
       </aside>
@@ -98,35 +86,20 @@ function HomePage() {
         <header className="header">
           <h1>{selectedMode}s</h1>
         </header>
-        {showBigBox === -1 ? (
-          <>
-            {selectedMode === "Event" && selectedComplete === "" && (
-              <h4>Signed Up Events</h4>
-            )}
-            {selectedMode === "Event" && selectedComplete === "Completed " && (
-              <h4>Signed Up Past Events</h4>
-            )}
-
-            {media &&
-              media.map((user) => (
-                <SmallBox
-                  key={user.id}
-                  title={user.TITLE} // Adjust according to actual column names
-                  description={user.DESCRIPTION}
-                  points={user.points || 100}
-                  onShowMore={() => setShowBigBox(user.id)}
-                />
-              ))}
-          </>
-        ) : (
-          <BigBox
-            key={user.id}
-            title={user.TITLE} // Adjust according to actual column names
-            description={user.DESCRIPTION}
-            points={user.points || 100}
-            onShowMore={() => setShowBigBox(user.id)}
-          ></BigBox>
-        )}
+        <div>
+        <main className="content">
+              {media &&
+                media.map((post) => (
+                  <SmallBox
+                    key={post.id}
+                    title={post.TITLE} // Adjust according to actual column names
+                    description={post.DESCRIPTION}
+                    points={post.points || 100}
+                    onShowMore={() => navigate(`/media/${post.id}`)}
+                  />
+                ))}
+        </main>
+      </div>
       </main>
     </div>
   );
