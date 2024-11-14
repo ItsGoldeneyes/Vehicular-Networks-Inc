@@ -4,7 +4,7 @@
 
 .sidebar {
   width: 200px;
-  background-color: #6494aa;
+  background-color: #003dbf;
   padding: 10px;
   display: flex;
   flex-direction: column;
@@ -13,7 +13,7 @@
 .menu,
 .chat-menu {
   margin-bottom: 20px;
-  background-color: #d6e6f3;
+  background-color: #dfe7ee;
   padding: 10px;
   border-radius: 5px;
 }
@@ -44,7 +44,7 @@
 .content {
   flex-grow: 1;
   padding: 20px;
-  background-color: #d6e6f3;
+  background-color: #d9e2e9;
 }
 
 .header {
