@@ -7,8 +7,40 @@ export function UserProvider({ children }) {
     const [ isLoading, setIsLoading ] = useState(false);
 
     async function userRegister(form) {
-        alert("Not implemented");
-        setUser(null);
+        const formData = new FormData(form);
+        const formEntries = Object.fromEntries(formData.entries());
+        
+        setIsLoading(true);
+        const newUser = await fetch("http://localhost:5000/register", {
+            method: form.method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formEntries)
+        })
+            .then(res => res.json())
+            .then(
+                res => {
+                    if (res.status === 200) {
+                        return {
+                            profile_status: res.profile_status,
+                            username: res.username
+                        };
+                    } else {
+                        alert("Error. Check console for more details.")
+                        console.error(res.text);
+                        return null;
+                    }
+                }
+            )
+            .catch(
+                err => {
+                    alert("Error registering account. Check the console for more details.");
+                    console.error(err);
+                    return null;
+                }
+            );
+        setIsLoading(false);
+
+        setUser(newUser);
     }
 
     async function userAuth(form) {
@@ -30,8 +62,8 @@ export function UserProvider({ children }) {
                             username: res.username
                         };
                     } else {
-                        // console.log("Login: Fail")
-                        // console.log(res)
+                        alert("Error. Check console for more details.")
+                        console.error(res.text);
                         return null;
                     }
                 }

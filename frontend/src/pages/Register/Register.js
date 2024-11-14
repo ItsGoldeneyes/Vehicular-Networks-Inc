@@ -11,7 +11,7 @@ export default function Register() {
   const passId = useId();
   const passConfirmId = useId();
   const { theme } = useOutletContext(); // Get theme from context
-  const { userRegister } = useUser();
+  const { userRegister, isLoading } = useUser();
 
   // const [username, setUsername] = useState("");
   // const [password, setPassword] = useState("");
@@ -41,13 +41,13 @@ export default function Register() {
             className={styles.registerForm}
           >
             <label htmlFor={nameId} className={styles.registerLabel}>
-              Name
+              Username
               <span className={styles.required} />
             </label>
             <input
               id={nameId}
               className={styles.registerInput}
-              name="name"
+              name="username"
               type="text"
               maxLength={20}
               required
@@ -96,8 +96,10 @@ export default function Register() {
               Create Account
             </button>
           </form>
+          { isLoading && <p>Loading...</p> }
+
           <p>
-          Already have an account? <Link component={NavLink} to="/login">Log In</Link>
+            Already have an account? <Link component={NavLink} to="/login">Log In</Link>
           </p>
         </div>
       </div>
