@@ -36,6 +36,11 @@ export default function FeedbackForm() {
               color: theme === "dark" ? "white" : "black",
             },
           },
+          inputLabel: {
+            style: {
+              color: theme === "dark" ? "white" : "black",
+            },
+          },
         }}
       />
 
