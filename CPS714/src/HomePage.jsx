@@ -89,14 +89,16 @@ function HomePage() {
         <div>
         <main className="content">
               {media &&
-                media.map((post) => (
-                  <SmallBox
-                    key={post.id}
-                    title={post.TITLE} // Adjust according to actual column names
-                    description={post.DESCRIPTION}
-                    points={post.points || 100}
-                    onShowMore={() => navigate(`/media/${post.id}`)}
-                  />
+                media
+                  .filter((post) => post.TYPE === (selectedMode === "Course" ? "course" : "event"))
+                  .map((post) => (
+                    <SmallBox
+                      key={post.id}
+                      title={post.TITLE} // Adjust according to actual column names
+                      description={post.DESCRIPTION}
+                      points={post.points || 100}
+                      onShowMore={() => navigate(`/media/${post.id}`)}
+                    />
                 ))}
         </main>
       </div>
