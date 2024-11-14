@@ -1,16 +1,6 @@
 import { createContext, useContext, useState } from "react";
 
-// pull BACKEND_URL environment variable
-if (!process.env.REACT_APP_BACKEND_URL) {
-    const BACKEND_URL = "http://localhost:5000";
-    console.error("REACT_APP_BACKEND_URL environment variable not set");
-}
-else {
-    const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-    console.log("REACT_APP_BACKEND_URL: " + process.env.REACT_APP_BACKEND_URL);
-}
-
-
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 
 export const UserContext = createContext(null);
 
