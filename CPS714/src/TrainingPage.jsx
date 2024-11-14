@@ -44,13 +44,13 @@ function TrainingPage() {
   const [selectedComplete, setSelectedComplete] = useState("");
   const [showBigBox, setShowBigBox] = useState(-1);
 
-  //Fetching Users
+  //Fetching media
   const [fetchError, setFetchError] = useState(null);
-  const [users, setUsers] = useState(null);
+  const [media, setMedia] = useState(null);
   
   useEffect(() => {
-    const fetchUsers = async () => {
-      console.log("Fetching users...");
+    const fetchMedia = async () => {
+      console.log("Fetching media...");
       const { data, error } = await supabase
         .from("MEDIA")
         .select("");
@@ -59,18 +59,18 @@ function TrainingPage() {
       console.log("Error:", error);
   
       if (error) {
-        setFetchError("Could not fetch users");
-        setUsers(null);
+        setFetchError("Could not fetch media");
+        setMedia(null);
         console.error(error);
       } else {
-        setUsers(data);
+        setMedia(data);
         setFetchError(null);
       }
     };
   
-    fetchUsers();
+    fetchMedia();
   }, []);
-  //Fetching Users End
+  //Fetching media End
 
   return (
     <div className="container">
@@ -112,7 +112,7 @@ function TrainingPage() {
             {selectedMode==="Event" && selectedComplete==="" && <h4>Signed Up Events</h4>}
             {selectedMode==="Event" && selectedComplete==="Completed " && <h4>Signed Up Past Events</h4>}
             
-            {users && users.map((user) => (
+            {media && media.map((user) => (
               <SmallBox
                 key={user.id}
                 title={user.TITLE}  // Adjust according to actual column names
