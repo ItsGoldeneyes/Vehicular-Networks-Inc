@@ -1,5 +1,17 @@
 import { createContext, useContext, useState } from "react";
 
+// pull BACKEND_URL environment variable
+if (!process.env.REACT_APP_BACKEND_URL) {
+    const BACKEND_URL = "http://localhost:5000";
+    console.error("REACT_APP_BACKEND_URL environment variable not set");
+}
+else {
+    const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+    console.log("REACT_APP_BACKEND_URL: " + process.env.REACT_APP_BACKEND_URL);
+}
+
+
+
 export const UserContext = createContext(null);
 
 export function UserProvider({ children }) {
@@ -14,9 +26,9 @@ export function UserProvider({ children }) {
     async function userAuth(form) {
         const formData = new FormData(form);
         const formEntries = Object.fromEntries(formData.entries());
-        
+
         setIsLoading(true);
-        const newUser = await fetch("http://localhost:5000/login", {
+        const newUser = await fetch(`${BACKEND_URL}/login`, {
             method: form.method,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formEntries)

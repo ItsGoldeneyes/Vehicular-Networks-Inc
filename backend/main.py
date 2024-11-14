@@ -7,9 +7,14 @@ import os
 app = Flask(__name__)
 CORS(app)
 
+if 'DATABASE_URL' in os.environ:
+    DATABASE_URL = os.environ['DATABASE_URL']
+else:
+    DATABASE_URL = 'postgresql://postgres:WbVwEVfMeYzfzUGnrUKzmRfdHGRHjOHS@autorack.proxy.rlwy.net:31200/railway'
+
 
 def get_db_connection():
-    conn = psycopg2.connect('postgresql://postgres:WbVwEVfMeYzfzUGnrUKzmRfdHGRHjOHS@autorack.proxy.rlwy.net:31200/railway')
+    conn = psycopg2.connect(DATABASE_URL)
     # conn = psycopg2.connect(host='autorack.proxy.rlwy.net',
     #                         database='railway',
     #                         user=os.environ['DB_USERNAME'],
