@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { TextField, Button } from "@mui/material";
-import "./FeedbackForm.css"; 
+import "./FeedbackForm.css";
 
 export default function FeedbackForm() {
   const { theme } = useOutletContext(); // Get theme from context
   const [feedback, setFeedback] = useState(""); // State for feedback
 
-  const handleSubmit = async() => {
+  const handleSubmit = async () => {
     try {
       console.log(feedback);
     } catch (e) {
       console.error(e);
     }
-  }
+  };
 
   return (
     <div className={`feedback-form ${theme}`}>
@@ -28,17 +28,24 @@ export default function FeedbackForm() {
         sx={{
           width: "100%",
           marginTop: "20px",
-          backgroundColor: theme === "dark" ? "darkgray" : "white"
+          backgroundColor: theme === "dark" ? "darkgray" : "white",
+        }}
+        slotProps={{
+          input: {
+            style: {
+              color: theme === "dark" ? "white" : "black",
+            },
+          },
         }}
       />
-      
+
       <Button
         id="submit-button"
         variant="contained"
         size="large"
-        sx={{ 
+        sx={{
           marginTop: "20px",
-          backgroundColor: "#007bff"
+          backgroundColor: "#007bff",
         }}
         onClick={handleSubmit}
       >
