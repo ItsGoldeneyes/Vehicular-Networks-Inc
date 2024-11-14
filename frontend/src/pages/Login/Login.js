@@ -1,12 +1,16 @@
-import React, { useEffect, useId } from "react";
+import React, { useEffect, useId, useState } from "react";
 import styles from "./Login.module.css";
 import { NavLink } from "react-router-dom";
 import { useOutletContext } from "react-router-dom";
+import { useUser } from "../../context/UserContext";
 
-export default function Register() {
-  const emailId = useId();
+export default function Login() {
+  const usernameId = useId();
   const passId = useId();
   const { theme } = useOutletContext(); // Get theme from context
+  const [ attemptedLogin, setAttemptedLogin ] = useState(false);
+  const [ loginMessage, setLoginMessage ] = useState(null);
+  const { user, userAuth, isLoading } = useUser();
 
   useEffect(() => {
     document.title = "Login - FleetRewards";
@@ -14,13 +18,23 @@ export default function Register() {
 
   function handleSubmit(e) {
     e.preventDefault();
-
-    const form = e.target;
-    const formData = new FormData(form);
-
-    fetch("/some-api", { method: form.method, body: formData });
-    console.log(Object.fromEntries(formData.entries()));
+    setAttemptedLogin(true);
+    userAuth(e.target);
   }
+
+  function updateLoginMessage() {
+    if (user) {
+      setLoginMessage("Login successful!");
+    } else {
+      setLoginMessage("Login failed.");
+    }
+  }
+
+  useEffect(() => {
+    if (attemptedLogin) {
+      updateLoginMessage();
+    }
+  }, [user]);
 
   return (
     <>
@@ -36,15 +50,15 @@ export default function Register() {
             onSubmit={handleSubmit}
             className={styles.registerForm}
           >
-            <label htmlFor={emailId} className={styles.registerLabel}>
-              Email
+            <label htmlFor={usernameId} className={styles.registerLabel}>
+              Username
               <span className={styles.required} />
             </label>
             <input
-              id={emailId}
+              id={usernameId}
               className={styles.registerInput}
-              name="email"
-              type="email"
+              name="username"
+              type="text"
               maxLength={50}
               required
             />
@@ -56,7 +70,7 @@ export default function Register() {
             <input
               id={passId}
               className={styles.registerInput}
-              name="pass"
+              name="password"
               type="password"
               maxLength={30}
               required
@@ -66,10 +80,20 @@ export default function Register() {
               Login
             </button>
           </form>
+          { isLoading && <p>Loading...</p> }
+          { loginMessage && <p>{loginMessage}</p> }
+          
           <p>
             Don't have an account?{" "}
             <NavLink to="/register">Register Now</NavLink>
           </p>
+
+          { user && <>
+            <h3>Current User</h3>
+            <p>
+              User: {user.username}, Type of User: {user.profile_status}
+            </p>
+          </>}
         </div>
       </div>
     </>

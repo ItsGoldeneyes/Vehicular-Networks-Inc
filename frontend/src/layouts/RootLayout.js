@@ -3,7 +3,8 @@ import "./RootLayout.css";
 import search_icon_light from "../Assets/search-w.png";
 import search_icon_dark from "../Assets/search-b.png";
 import React, { useEffect, useState } from "react";
-import { Switch } from "@mui/material";
+import { Button, Switch } from "@mui/material";
+import { useUser } from "../context/UserContext";
 
 export default function RootLayout() {
   const current_theme = localStorage.getItem("current_theme");
@@ -11,6 +12,9 @@ export default function RootLayout() {
   const toggle_mode = () => {
     theme == "light" ? setTheme("dark") : setTheme("light");
   };
+
+  const { user, userLogOut } = useUser();
+
   useEffect(() => {
     localStorage.setItem("current_theme", theme);
   }, [theme]);
@@ -49,23 +53,23 @@ export default function RootLayout() {
                   Feedback Form
                 </NavLink>
               </li>
-              {/* { authenticated && */}
+              { user ?
+                <li>
+                  <Button component={NavLink} onClick={userLogOut}>
+                    Logout
+                  </Button>
+                </li> :
                 <li>
                     <NavLink
-                      to="/register"
+                      to="/login"
                       className={({ isActive }) =>
                         isActive ? "nav-item active" : "nav-item"
                       }
                     >
-                      Register
+                      Login
                     </NavLink> 
                 </li>
-              {/* } */}
-              {/* { !authenticated &&
-                <li>
-                  Sign out
-                </li>
-              } */}
+              }
             </ul>
           </nav>
           <div className="search-box">

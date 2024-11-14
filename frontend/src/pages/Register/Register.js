@@ -2,6 +2,8 @@ import React, { useEffect, useId } from "react";
 import styles from "./Register.module.css";
 import { NavLink } from "react-router-dom";
 import { useOutletContext } from "react-router-dom";
+import { Link } from "@mui/material";
+import { useUser } from "../../context/UserContext";
 
 export default function Register() {
   const nameId = useId();
@@ -9,6 +11,7 @@ export default function Register() {
   const passId = useId();
   const passConfirmId = useId();
   const { theme } = useOutletContext(); // Get theme from context
+  const { userRegister } = useUser();
 
   // const [username, setUsername] = useState("");
   // const [password, setPassword] = useState("");
@@ -20,12 +23,7 @@ export default function Register() {
 
   function handleSubmit(e) {
     e.preventDefault();
-
-    const form = e.target;
-    const formData = new FormData(form);
-
-    fetch("/some-api", { method: form.method, body: formData });
-    console.log(Object.fromEntries(formData.entries()));
+    userRegister(e.target);
   }
 
   return (
@@ -99,7 +97,7 @@ export default function Register() {
             </button>
           </form>
           <p>
-            Already have an account? <NavLink to="/login">Log In</NavLink>
+          Already have an account? <Link component={NavLink} to="/login">Log In</Link>
           </p>
         </div>
       </div>
