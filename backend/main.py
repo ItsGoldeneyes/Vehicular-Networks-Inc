@@ -1,8 +1,12 @@
-from flask import Flask, jsonify
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+
 import psycopg2
 import os
 
 app = Flask(__name__)
+CORS(app)
+
 
 def get_db_connection():
     conn = psycopg2.connect('postgresql://postgres:WbVwEVfMeYzfzUGnrUKzmRfdHGRHjOHS@autorack.proxy.rlwy.net:31200/railway')
@@ -29,9 +33,34 @@ def testdb():
     cur.close()
     conn.close()
 
-    response = jsonify(data)
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    return response
+    return jsonify(data)
+
+
+@app.route('/login', methods=["POST"])
+def login():
+    body = request.json
+    query = f"SELECT username, profile_status FROM public.profile WHERE username = '{body['username']}' AND password = '{body['password']}';"
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute(query)
+    data = cur.fetchall()
+    cur.close()
+    conn.close()
+
+    if len(data) == 1:
+        response = {
+            "status": 200,
+            "username": data[0][0],
+            "profile_status": data[0][1]
+        }
+    else:
+        response = {
+            "status": 400,
+            "text": "User not found"
+        }
+
+    return jsonify(response)
 
 
 if __name__ == '__main__':
