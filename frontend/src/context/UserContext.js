@@ -13,7 +13,7 @@ export function UserProvider({ children }) {
         const formEntries = Object.fromEntries(formData.entries());
         
         setIsLoading(true);
-        const newUser = await fetch("http://localhost:5000/register", {
+        const newUser = await fetch(`${BACKEND_URL}/register`, {
             method: form.method,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formEntries)
