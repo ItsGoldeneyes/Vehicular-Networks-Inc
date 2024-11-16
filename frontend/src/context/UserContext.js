@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:5000";
 
 export const UserContext = createContext(null);
 
@@ -11,7 +11,7 @@ export function UserProvider({ children }) {
     async function userRegister(form) {
         const formData = new FormData(form);
         const formEntries = Object.fromEntries(formData.entries());
-        
+
         setIsLoading(true);
         const newUser = await fetch(`${BACKEND_URL}/register`, {
             method: form.method,
