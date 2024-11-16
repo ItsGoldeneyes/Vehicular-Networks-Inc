@@ -1,9 +1,10 @@
 import { createContext, useContext, useState } from "react";
 
-const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:5000";
-console.log("BACKEND_URL: ", BACKEND_URL);
-console.log("process.env.BACKEND_URL: ", process.env.BACKEND_URL);
-console.log("process.env ", process.env);
+const NODE_ENV = process.env.NODE_ENV || 'development';
+const BACKEND_URL = NODE_ENV === 'development' ? 'http://localhost:5000' : 'daring-perception.railway.internal';
+
+console.log(`Using backend URL: ${BACKEND_URL}`);
+console.log(`Using NODE_ENV: ${NODE_ENV}`);
 
 export const UserContext = createContext(null);
 
