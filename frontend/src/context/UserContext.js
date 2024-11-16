@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
-const BACKEND_URL = NODE_ENV === 'development' ? 'http://localhost:5000' : 'daring-perception.railway.internal';
+const BACKEND_URL = NODE_ENV === 'development' ? 'http://localhost:5000' : 'daring-perception.railway.internal:8080';
 
 console.log(`Using backend URL: ${BACKEND_URL}`);
 console.log(`Using NODE_ENV: ${NODE_ENV}`);
