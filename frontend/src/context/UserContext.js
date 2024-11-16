@@ -2,6 +2,8 @@ import { createContext, useContext, useState } from "react";
 
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:5000";
 console.log("BACKEND_URL: ", BACKEND_URL);
+console.log("process.env.BACKEND_URL: ", process.env.BACKEND_URL);
+console.log("process.env ", process.env);
 
 export const UserContext = createContext(null);
 
