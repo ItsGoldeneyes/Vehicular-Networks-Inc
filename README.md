@@ -1,7 +1,7 @@
 ﻿# CPS714Group6
 
 
-Ammar Ali - 501034707
+Ammar Ali - 501034
 
 Bosko Pajkic - 501017634
 
