@@ -62,25 +62,16 @@ function HomePage() {
   const [selectedMode, setSelectedMode] = useState("Course");
   const [selectedComplete, setSelectedComplete] = useState("Not Completed");
 
-
-  //Fetching media
   const [fetchError, setFetchError] = useState(null);
   const [media, setMedia] = useState(null);
 
   useEffect(() => {
     const fetchMedia = async () => {
-      console.log("Fetching media...");
-      const { data, error } = await supabase
-        .from("MEDIA")
-        .select("");
-
-      console.log("Data:", data);
-      console.log("Error:", error);
+      const { data, error } = await supabase.from("MEDIA").select("");
 
       if (error) {
         setFetchError("Could not fetch media");
         setMedia(null);
-        console.error(error);
       } else {
         setMedia(data);
         setFetchError(null);
@@ -89,57 +80,107 @@ function HomePage() {
 
     fetchMedia();
   }, []);
-  //Fetching media End
 
-  console.log(media)
+  const buttonStyle = (isSelected) => ({
+    backgroundColor: isSelected ? "#b3cde8" : "#dfe7ee", // Complementary colors
+    border: "1px solid #ccc",
+    borderRadius: "4px",
+    padding: "10px 0", // Consistent button height
+    marginBottom: "8px",
+    cursor: "pointer",
+    width: "100%", // Full width
+    textAlign: "center",
+    fontWeight: isSelected ? "bold" : "normal",
+  });
 
   return (
-    <div className="container">
-      <aside className="sidebar">
-        <b>Menu</b>
-        <br></br>
+    <div
+      className="container"
+      style={{
+        display: "flex",
+        height: "100vh",
+        backgroundColor: "#f9f9f9", // Default container background
+      }}
+    >
+      <aside
+        className="sidebar"
+        style={{
+          width: "200px", // Fixed width
+          backgroundColor: "#f0f4f8", // Sidebar background restored
+          padding: "16px",
+          boxShadow: "2px 0 4px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        <b style={{ display: "block", marginBottom: "16px" }}>Menu</b>
         <nav className="menu">
-          <div className="menu-item" onClick={() => { setSelectedMode("Course"); setSelectedComplete("Not Completed"); }}>
-            {selectedMode==="Course" ? <b>Courses</b> : "Course"}
-          </div>
-          <div className="menu-item" onClick={() => { setSelectedMode("Event"); setSelectedComplete("Not Completed"); }}>
-            {selectedMode==="Event" ? <b>Events</b> : "Events"}
-          </div>
+          <button
+            style={buttonStyle(selectedMode === "Course")}
+            onClick={() => {
+              setSelectedMode("Course");
+              setSelectedComplete("Not Completed");
+            }}
+          >
+            Course
+          </button>
+          <button
+            style={buttonStyle(selectedMode === "Event")}
+            onClick={() => {
+              setSelectedMode("Event");
+              setSelectedComplete("Not Completed");
+            }}
+          >
+            Events
+          </button>
         </nav>
         <nav className="menu">
-          <div className="menu-item" onClick={() => setSelectedComplete("Not Completed")}>
-            {selectedMode === "Course" && ( selectedComplete === "Not Completed" ? <b>Not Completed</b> : "Not Completed" ) }
-            {selectedMode === "Event" && ( selectedComplete === "Not Completed" ? <b>Upcoming</b> : "Upcoming" ) }
-          </div>
-          <div className="menu-item" onClick={() => setSelectedComplete("Completed")}>
-          {selectedMode === "Course" && ( selectedComplete === "Completed" ? <b>Completed</b> : "Completed" ) }
-          {selectedMode === "Event" && ( selectedComplete === "Completed" ? <b>Past</b> : "Past" ) }
-          </div>
+          <button
+            style={buttonStyle(selectedComplete === "Not Completed")}
+            onClick={() => setSelectedComplete("Not Completed")}
+          >
+            {selectedMode === "Course" ? "Not Completed" : "Upcoming"}
+          </button>
+          <button
+            style={buttonStyle(selectedComplete === "Completed")}
+            onClick={() => setSelectedComplete("Completed")}
+          >
+            {selectedMode === "Course" ? "Completed" : "Past"}
+          </button>
         </nav>
       </aside>
-      <main className="content">
+      <main
+        className="content"
+        style={{
+          flex: 1,
+          padding: "20px",
+          backgroundColor: "#fff",
+        }}
+      >
         <header className="header">
           <h1>{selectedMode}s</h1>
         </header>
         <div>
-        <main className="content">
-              {media &&
-                media
-                  .filter((post) => post.TYPE === (selectedMode === "Course" ? "course" : "event"))
-                  .map((post) => (
-                    <SmallBox
-                      key={post.id}
-                      title={post.TITLE} // Adjust according to actual column names
-                      description={post.DESCRIPTION}
-                      points={post.points || 100}
-                      onShowMore={() => navigate(`/media/${post.id}`)}
-                    />
-                ))}
-        </main>
-      </div>
+          {media &&
+            media
+              .filter((post) =>
+                selectedMode === "Course"
+                  ? post.TYPE === "course"
+                  : post.TYPE === "event"
+              )
+              .map((post) => (
+                <SmallBox
+                  key={post.id}
+                  title={post.TITLE}
+                  description={post.DESCRIPTION}
+                  points={post.points || 100}
+                  onShowMore={() => navigate(`/media/${post.id}`)}
+                />
+              ))}
+        </div>
       </main>
     </div>
   );
 }
 
 export default HomePage;
+
+
