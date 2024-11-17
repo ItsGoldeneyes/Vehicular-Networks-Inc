@@ -5,21 +5,56 @@ import supabase from "../supabaseClient";
 import "./main.css";
 
 function SmallBox({ title, description, points, onShowMore }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const boxStyle = {
+    border: "1px solid #ccc",
+    borderRadius: "8px",
+    padding: "16px",
+    cursor: "pointer",
+    position: "relative",
+    transition: "all 0.3s ease", // Smooth transition
+    overflow: "hidden",
+    maxHeight: isHovered ? "140px" : "80px", // Expand height on hover
+    boxShadow: isHovered ? "0 4px 8px rgba(0, 0, 0, 0.2)" : "none",
+  };
+
+  const descriptionStyle = {
+    marginTop: "8px",
+    opacity: isHovered ? 1 : 0, // Show on hover
+    transition: "opacity 0.3s ease", // Smooth fade-in
+  };
+
   return (
     <section className="main-content">
-      <div>
-        <header className="header">
+      <div
+        style={boxStyle}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onClick={onShowMore} // Entire box is clickable
+      >
+        <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <h1>{title}</h1>
-          <button>⛁ {points}</button>
+          <button
+            style={{
+              backgroundColor: "#f0f0f0",
+              border: "none",
+              borderRadius: "12px",
+              padding: "4px 8px",
+              fontSize: "14px",
+            }}
+          >
+            ⛁ {points}
+          </button>
         </header>
-        <p>{description}</p>
-        <button className="show-more" onClick={onShowMore}>
-          Show More
-        </button>
+        <div style={descriptionStyle}>
+          <p>{description}</p>
+        </div>
       </div>
     </section>
   );
 }
+
 
 
 function HomePage() {
