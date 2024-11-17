@@ -61,7 +61,7 @@ function HomePage() {
   return (
     <div className="container">
       <aside className="sidebar">
-        <b>Ammar's Menu</b>
+        <b>Menu</b>
         <br></br>
         <nav className="menu">
           <div className="menu-item" onClick={() => { setSelectedMode("Course"); setSelectedComplete("Not Completed"); }}>
