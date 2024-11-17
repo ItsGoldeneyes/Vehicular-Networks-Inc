@@ -56,12 +56,12 @@ function HomePage() {
   }, []);
   //Fetching media End
 
-
+  console.log(media)
 
   return (
     <div className="container">
       <aside className="sidebar">
-        <b>Menu</b>
+        <b>Ammar's Menu</b>
         <br></br>
         <nav className="menu">
           <div className="menu-item" onClick={() => { setSelectedMode("Course"); setSelectedComplete("Not Completed"); }}>
