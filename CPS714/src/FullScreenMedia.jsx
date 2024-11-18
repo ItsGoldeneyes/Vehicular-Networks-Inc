@@ -51,7 +51,7 @@ function FullScreenMedia() {
                 <h1>{media.TITLE}</h1>
                 <button>⛁ 100</button>
             </header>
-            <p>{media.DESCRIPTION}</p>
+            <p dangerouslySetInnerHTML={{ __html: media.DESCRIPTION }}></p>
             </div>
         ) : (
             !fetchError && <p>Loading...</p> // Show loading message if media is not yet available
