@@ -4,7 +4,7 @@ import supabase from "../supabaseClient";
 
 import "./main.css";
 
-function SmallBox({ title, description, points, onShowMore }) {
+function SmallBox({ title, description, points, date, onShowMore }) {
   const [isHovered, setIsHovered] = useState(false);
 
   const boxStyle = {
@@ -50,6 +50,7 @@ function SmallBox({ title, description, points, onShowMore }) {
         </header>
         <div style={descriptionStyle}>
           <p>{description}</p>
+          <p> {date}</p>
         </div>
       </div>
     // {/* </section> */}
@@ -68,9 +69,7 @@ function HomePage() {
 
   useEffect(() => {
     const fetchMedia = async () => {
-      const { data, error } = await supabase
-        .from("MEDIA")
-        .select("");
+      const { data, error } = await supabase.from("MEDIA").select("");
 
       if (error) {
         setFetchError("Could not fetch media");
@@ -95,6 +94,16 @@ function HomePage() {
     textAlign: "center",
     fontWeight: isSelected ? "bold" : "normal",
   });
+
+  // Helper function to compare dates
+  const isUpcomingEvent = (eventDate) => {
+    const today = new Date();
+    const eventDateObj = new Date(eventDate);
+    // Check if event date is today or in the future
+    console.log(today);
+    console.log(eventDateObj);
+    return eventDateObj >= today;
+  };
 
   return (
     <div className="container"
@@ -166,11 +175,17 @@ function HomePage() {
                   ? post.TYPE === "course"
                   : post.TYPE === "event"
               )
+              .filter((post) =>
+                selectedComplete === "Upcoming"
+                  ? isUpcomingEvent(post.DATE) // Show upcoming events
+                  : !isUpcomingEvent(post.DATE) // Show past events
+              )
               .map((post) => (
                 <SmallBox
                   key={post.id}
                   title={post.TITLE}
                   description={post.DESCRIPTION}
+                  date={post.DATE}
                   points={post.points || 100}
                   onShowMore={() => navigate(`/media/${post.id}`)}
                 />
@@ -180,6 +195,7 @@ function HomePage() {
     </div>
   );
 }
+
 
 export default HomePage;
 
