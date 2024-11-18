@@ -40,7 +40,23 @@ function FullScreenMedia() {
     return (
       <section className="main-content">
         <button className="show-more">
-            <Link to="/">Back</Link>
+        <Link
+        to="/"
+        style={{
+          display: "inline-block",
+          padding: "10px 20px",
+          backgroundColor: "#007bff",
+          color: "white",
+          textAlign: "center",
+          borderRadius: "4px",
+          textDecoration: "none",
+          fontWeight: "bold",
+          cursor: "pointer",
+          marginTop: "20px",
+        }}
+        >
+          Back
+        </Link>
         </button> 
         <br />
         <br />
