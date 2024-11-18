@@ -5,7 +5,7 @@ import RecentActivities from './RecentActivities';
 import RewardsCatalog from './RewardsCatalog';
 
 const Dashboard: React.FC = () => {
-    const userId = 0;  // Replace with a dynamic value if needed
+    const userId = 8;  // Replace with a dynamic value if needed
     const [points, setPoints] = useState<number>(0);
     const [activities, setActivities] = useState<any[]>([]);
     const [rewards, setRewards] = useState<any[]>([]); // Rewards state
