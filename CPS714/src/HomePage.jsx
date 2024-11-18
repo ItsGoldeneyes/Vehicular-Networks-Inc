@@ -13,6 +13,7 @@ function SmallBox({ title, description, points, onShowMore }) {
     padding: "16px",
     cursor: "pointer",
     position: "relative",
+    marginBottom: "20px",
     transition: "all 0.3s ease", // Smooth transition
     overflow: "hidden",
     maxHeight: isHovered ? "140px" : "80px", // Expand height on hover
@@ -26,7 +27,7 @@ function SmallBox({ title, description, points, onShowMore }) {
   };
 
   return (
-    <section className="main-content">
+    // <section className="main-content">
       <div
         style={boxStyle}
         onMouseEnter={() => setIsHovered(true)}
@@ -51,7 +52,7 @@ function SmallBox({ title, description, points, onShowMore }) {
           <p>{description}</p>
         </div>
       </div>
-    </section>
+    // {/* </section> */}
   );
 }
 
@@ -67,7 +68,9 @@ function HomePage() {
 
   useEffect(() => {
     const fetchMedia = async () => {
-      const { data, error } = await supabase.from("MEDIA").select("");
+      const { data, error } = await supabase
+        .from("MEDIA")
+        .select("");
 
       if (error) {
         setFetchError("Could not fetch media");
@@ -94,19 +97,16 @@ function HomePage() {
   });
 
   return (
-    <div
-      className="container"
+    <div className="container"
       style={{
         display: "flex",
         height: "100vh",
         backgroundColor: "#f9f9f9", // Default container background
       }}
     >
-      <aside
-        className="sidebar"
+      <aside className="sidebar"
         style={{
           width: "200px", // Fixed width
-          backgroundColor: "#f0f4f8", // Sidebar background restored
           padding: "16px",
           boxShadow: "2px 0 4px rgba(0, 0, 0, 0.1)",
         }}
