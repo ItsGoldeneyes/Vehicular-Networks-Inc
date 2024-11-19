@@ -59,3 +59,110 @@ html, body {
   text-decoration: underline;
   cursor: pointer;
 }
+
+
+
+
+
+
+
+
+
+
+/* New CHAT STUFF */
+
+.app {
+  font-family: "Arial", sans-serif;
+  color: #333;
+  background-color: #f9f9f9;
+  padding: 0;
+  margin: 0;
+}
+
+
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header nav a {
+  margin: 0 15px;
+  color: #333;
+  text-decoration: none;
+}
+
+.header nav a.active {
+  font-weight: bold;
+  border-bottom: 2px solid #f05a5b;
+}
+
+
+.filter-bar {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background: #fff;
+  margin-bottom: 10px;
+}
+
+.filter-bar button {
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.filter-bar button.active {
+  font-weight: bold;
+  color: #f05a5b;
+}
+
+
+
+.course-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  flex: 1 1 calc(33.333% - 20px);
+  max-width: calc(33.333% - 20px);
+}
+
+.course-card img {
+  width: 100%;
+  height: auto;
+}
+
+.course-details {
+  padding: 10px;
+}
+
+.category {
+  color: #888;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.new {
+  color: #fff;
+  background: #f05a5b;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 10px;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin-top: 10px;
+}

@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import HomePage from './HomePage';
 import FullScreenMedia from './FullScreenMedia';
+import NEWHomePage from './NEWHomePage';
 import './main.css';
 
 
@@ -13,6 +14,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/new" element={<NEWHomePage />} />
         <Route path="/media/:id" element={<FullScreenMedia />} />
       </Routes>
     </BrowserRouter>
