@@ -48,7 +48,7 @@ function SmallBox({ title, description, points, date, onShowMore }) {
           </button>
         </header>
         <div style={descriptionStyle}>
-          <p>{description}</p>
+          <p>{description.split('.')[0] + '.'}</p>
           <p> {date}</p>
         </div>
       </div>
