@@ -26,36 +26,37 @@ function SmallBox({ title, description, points, date, onShowMore }) {
     transition: "opacity 0.3s ease", // Smooth fade-in
   };
 
+  const getShortDescription = (desc) =>
+    desc.length > 100 ? desc.substring(0, 100) + "..." : desc;
+
   return (
-      <div
-        style={boxStyle}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        onClick={onShowMore} // Entire box is clickable
-      >
-        <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <h1>{title}</h1>
-          <button
-            style={{
-              backgroundColor: "#f0f0f0",
-              border: "none",
-              borderRadius: "12px",
-              padding: "4px 8px",
-              fontSize: "14px",
-            }}
-          >
-            ⛁ {points}
-          </button>
-        </header>
-        <div style={descriptionStyle}>
-          <p>{description.split('.')[0] + '.'}</p>
-          <p> {date}</p>
-        </div>
+    <div
+      style={boxStyle}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onClick={onShowMore} // Entire box is clickable
+    >
+      <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <h1>{title}</h1>
+        <button
+          style={{
+            backgroundColor: "#f0f0f0",
+            border: "none",
+            borderRadius: "12px",
+            padding: "4px 8px",
+            fontSize: "14px",
+          }}
+        >
+          ⛁ {points}
+        </button>
+      </header>
+      <div style={descriptionStyle}>
+        <p>{getShortDescription(description)}</p>
+        <p>{date}</p>
       </div>
+    </div>
   );
 }
-
-
 
 function HomePage() {
   const navigate = useNavigate();
@@ -95,7 +96,7 @@ function HomePage() {
       const { data, error } = await supabase
         .from("USERS")
         .select("")
-        .eq('id', userID)
+        .eq("id", userID)
         .single();
 
       if (error) {
@@ -111,16 +112,9 @@ function HomePage() {
     fetchUser();
   }, []);
 
-
   if (loading || !user || !media) {
-    return (
-          <p>Loading data...</p>
-    );
+    return <p>Loading data...</p>;
   }
-  
-  
-
-
 
   const buttonStyle = (isSelected) => ({
     backgroundColor: isSelected ? "#b3cde8" : "#dfe7ee", // Complementary colors
@@ -138,25 +132,30 @@ function HomePage() {
     const today = new Date();
     const todayDateOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     const eventDateObj = new Date(eventDate);
-    const eventDateOnly = new Date(eventDateObj.getFullYear(), eventDateObj.getMonth(), eventDateObj.getDate()+1);   // The +1 fixes the time zone issue. 
-  
+    const eventDateOnly = new Date(
+      eventDateObj.getFullYear(),
+      eventDateObj.getMonth(),
+      eventDateObj.getDate() + 1
+    ); // The +1 fixes the time zone issue.
+
     console.log("Event Date:", eventDateOnly);
     console.log("Today:", todayDateOnly);
     console.log(eventDateOnly >= todayDateOnly);
-  
+
     return eventDateOnly >= todayDateOnly;
   };
-  
 
   return (
-    <div className="container"
+    <div
+      className="container"
       style={{
         display: "flex",
         height: "100vh",
         backgroundColor: "#f9f9f9", // Default container background
       }}
     >
-      <aside className="sidebar"
+      <aside
+        className="sidebar"
         style={{
           width: "200px", // Fixed width
           padding: "16px",
@@ -220,18 +219,18 @@ function HomePage() {
               )
               .filter((post) => {
                 if (selectedMode === "Event") {
-                  console.log(post.TITLE)
+                  console.log(post.TITLE);
                   if (selectedComplete === "Not Completed") {
                     return isUpcomingEvent(post.DATE); // Include only upcoming events
                   } else {
                     return !isUpcomingEvent(post.DATE); // Include only past events
                   }
                 } else if (selectedMode === "Course") {
-                    if (selectedComplete === "Not Completed") {
-                      return !user.COMPLETED_COURSES.includes(post.id); // Exclude completed courses
-                    } else {
-                      return user.COMPLETED_COURSES.includes(post.id); // Include only completed courses
-                    }
+                  if (selectedComplete === "Not Completed") {
+                    return !user.COMPLETED_COURSES.includes(post.id); // Exclude completed courses
+                  } else {
+                    return user.COMPLETED_COURSES.includes(post.id); // Include only completed courses
+                  }
                 }
               })
               .map((post) => (
@@ -250,7 +249,4 @@ function HomePage() {
   );
 }
 
-
 export default HomePage;
-
-
