@@ -95,15 +95,19 @@ function HomePage() {
     fontWeight: isSelected ? "bold" : "normal",
   });
 
-  // Helper function to compare dates
   const isUpcomingEvent = (eventDate) => {
     const today = new Date();
+    const todayDateOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     const eventDateObj = new Date(eventDate);
-    // Check if event date is today or in the future
-    console.log(today);
-    console.log(eventDateObj);
-    return eventDateObj >= today;
+    const eventDateOnly = new Date(eventDateObj.getFullYear(), eventDateObj.getMonth(), eventDateObj.getDate()+1);   // The +1 fixes the time zone issue. 
+  
+    console.log("Event Date:", eventDateOnly);
+    console.log("Today:", todayDateOnly);
+    console.log(eventDateOnly >= todayDateOnly);
+  
+    return eventDateOnly >= todayDateOnly;
   };
+  
 
   return (
     <div className="container"
@@ -175,11 +179,21 @@ function HomePage() {
                   ? post.TYPE === "course"
                   : post.TYPE === "event"
               )
-              .filter((post) =>
-                selectedComplete === "Upcoming"
-                  ? isUpcomingEvent(post.DATE) // Show upcoming events
-                  : !isUpcomingEvent(post.DATE) // Show past events
-              )
+              .filter((post) => {
+                if (selectedMode === "Event") {
+                  console.log(post.TITLE)
+                  if (selectedComplete === "Not Completed") {
+                    return isUpcomingEvent(post.DATE); // Include only upcoming events
+                  } else {
+                    return !isUpcomingEvent(post.DATE); // Include only past events
+                  }
+                } else if (selectedMode === "Course") {
+                  return selectedComplete === "Not Completed"
+                    ? !post.COMPLETED // Include not completed courses
+                    : post.COMPLETED; // Include completed courses
+                }
+                return true;
+              })
               .map((post) => (
                 <SmallBox
                   key={post.id}
