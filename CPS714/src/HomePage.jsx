@@ -27,7 +27,6 @@ function SmallBox({ title, description, points, date, onShowMore }) {
   };
 
   return (
-    // <section className="main-content">
       <div
         style={boxStyle}
         onMouseEnter={() => setIsHovered(true)}
@@ -53,7 +52,6 @@ function SmallBox({ title, description, points, date, onShowMore }) {
           <p> {date}</p>
         </div>
       </div>
-    // {/* </section> */}
   );
 }
 
@@ -69,7 +67,9 @@ function HomePage() {
 
   useEffect(() => {
     const fetchMedia = async () => {
-      const { data, error } = await supabase.from("MEDIA").select("");
+      const { data, error } = await supabase
+        .from("MEDIA")
+        .select("");
 
       if (error) {
         setFetchError("Could not fetch media");
@@ -82,6 +82,31 @@ function HomePage() {
 
     fetchMedia();
   }, []);
+
+  const userID = 1;
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data, error } = await supabase
+        .from("USERS")
+        .select("")
+        .eq('id', userID)
+        .single();
+
+      if (error) {
+        setFetchError("Could not fetch media");
+        setUser(null);
+      } else {
+        setUser(data);
+        setFetchError(null);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  user && console.log(user.COMPLETED_COURSES)
 
   const buttonStyle = (isSelected) => ({
     backgroundColor: isSelected ? "#b3cde8" : "#dfe7ee", // Complementary colors
@@ -188,11 +213,12 @@ function HomePage() {
                     return !isUpcomingEvent(post.DATE); // Include only past events
                   }
                 } else if (selectedMode === "Course") {
-                  return selectedComplete === "Not Completed"
-                    ? !post.COMPLETED // Include not completed courses
-                    : post.COMPLETED; // Include completed courses
+                    if (selectedComplete === "Not Completed") {
+                      return !user.COMPLETED_COURSES.includes(post.id); // Exclude completed courses
+                    } else {
+                      return user.COMPLETED_COURSES.includes(post.id); // Include only completed courses
+                    }
                 }
-                return true;
               })
               .map((post) => (
                 <SmallBox
