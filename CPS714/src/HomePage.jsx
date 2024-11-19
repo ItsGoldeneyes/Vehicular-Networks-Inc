@@ -63,10 +63,12 @@ function HomePage() {
   const [selectedComplete, setSelectedComplete] = useState("Not Completed");
 
   const [fetchError, setFetchError] = useState(null);
+  const [loading, setLoading] = useState(true); // New loading state
   const [media, setMedia] = useState(null);
 
   useEffect(() => {
     const fetchMedia = async () => {
+      setLoading(true); // Set loading to true before fetching
       const { data, error } = await supabase
         .from("MEDIA")
         .select("");
@@ -78,6 +80,7 @@ function HomePage() {
         setMedia(data);
         setFetchError(null);
       }
+      setLoading(false); // Set loading to false after fetching
     };
 
     fetchMedia();
@@ -88,6 +91,7 @@ function HomePage() {
 
   useEffect(() => {
     const fetchUser = async () => {
+      setLoading(true); // Set loading to true before fetching
       const { data, error } = await supabase
         .from("USERS")
         .select("")
@@ -101,12 +105,22 @@ function HomePage() {
         setUser(data);
         setFetchError(null);
       }
+      setLoading(false); // Set loading to false after fetching
     };
 
     fetchUser();
   }, []);
 
-  user && console.log(user.COMPLETED_COURSES)
+
+  if (loading || !user || !media) {
+    return (
+          <p>Loading data...</p>
+    );
+  }
+  
+  
+
+
 
   const buttonStyle = (isSelected) => ({
     backgroundColor: isSelected ? "#b3cde8" : "#dfe7ee", // Complementary colors
