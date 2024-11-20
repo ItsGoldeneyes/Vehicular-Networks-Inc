@@ -6,7 +6,7 @@ const { env } = require('process');
 
 const USER = env.PGUSER || 'postgres';
 const HOST = env.PGHOST || 'localhost';
-const PASSWORD = env.PGPASSWORD || 'password';
+const PASSWORD = env.PGPASSWORD || 'password'; 
 const PORT = env.PGPORT || 5432;
 
 
