@@ -58,7 +58,7 @@ function CourseCard({ course, onClick }) {
             color: "#777",
           }}
         >
-          <span>{course.lessons || 1} Lessons</span>
+          <span>{course.lessons_num || 1} Lessons</span>
           <span>⏱ {course.duration || "1h 30m"}</span>
         </div>
 
