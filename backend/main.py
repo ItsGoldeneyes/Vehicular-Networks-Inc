@@ -3,6 +3,7 @@ from flask_cors import CORS
 
 import uuid
 import time
+import datetime
 import psycopg2
 import os
 
@@ -236,8 +237,9 @@ def create_form():
     try:
         # Create form uuid
         id = uuid.uuid4()
-        current_timestamp = time.time()
-        
+        ts = time.time()
+        current_timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+
         print(f"INSERT INTO public.form VALUES ('{id}', '{body['form']['name']}', '{body['form']['type']}', '{body['requested_by']}', {current_timestamp});")
 
         # Add form to form table
