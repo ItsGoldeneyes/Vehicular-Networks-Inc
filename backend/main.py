@@ -181,6 +181,7 @@ def create_form():
     """
     body = request.json
 
+    print("create-form")
     # Check for form name
     if not 'name' in body['form']:
         response = {
