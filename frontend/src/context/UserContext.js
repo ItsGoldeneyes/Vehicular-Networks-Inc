@@ -31,8 +31,7 @@ export function UserProvider({ children }) {
                             username: res.username
                         };
                     } else {
-                        alert("Error. Check console for more details.")
-                        console.error(res.text);
+                        alert(`Error Registering: ${res.text}`)
                         return null;
                     }
                 }
@@ -68,8 +67,7 @@ export function UserProvider({ children }) {
                             username: res.username
                         };
                     } else {
-                        alert("Error. Check console for more details.")
-                        console.error(res.text);
+                        alert(`Error Logging In: ${res.text}`)
                         return null;
                     }
                 }
