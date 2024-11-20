@@ -52,9 +52,10 @@ def register():
         # username, email, pass, pass-confirm
         username = body['username']
         password = body['pass']
+        email = body['email']
         profile_status = 'normal'
 
-        query = f"INSERT INTO public.profile (username, password, profile_status) VALUES ('{username}', '{password}', '{profile_status}') RETURNING user_id;"
+        query = f"INSERT INTO public.profile (username, email, password, profile_status) VALUES ('{username}', '{email}', '{password}', '{profile_status}') RETURNING user_id;"
 
         try:
             conn = get_db_connection()
