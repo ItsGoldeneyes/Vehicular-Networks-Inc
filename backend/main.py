@@ -124,6 +124,137 @@ def login():
 
     return jsonify(response)
 
+@app.route('/create-form', methods=["POST"])
+def create_form():
+    """
+    Request needs to be in the format:
+    {
+        "requested_by": "username",
+        "form": {
+            "name": "form name",
+            "type": "feedback, survey, or poll",
+            "questions": [
+                {
+                    "question_num": 1,
+                    "type": "freeform, rate, or multiple_choice"
+                    "description": "description of question 1, effectively the question itself"
+                    "options": {["option1", "option2", "option3"]} (only for multiple_choice)
+                },
+                {
+                    "question_num": 2,
+                    "type": "freeform, rate, or multiple_choice"
+                    "description": "description of question 2, effectively the question itself"
+                    "options": {["option1", "option2", "option3"]} (only for multiple_choice)
+                }
+            ]
+        }
+    }
+
+    If request accepted, returns:
+    {
+        "status": 200,
+        "form_id": "form_id"
+    }
+
+    If request rejected, returns:
+    {
+        "status": 400,
+        "text": "Error message"
+    }
+
+    Form added to database with format:
+        TABLE form
+        "id": "form_id",
+        "name": "form name",
+        "type": "feedback, survey, or poll",
+        "created_by": "username",
+        "created_at": "timestamp",
+
+        TABLE form_question
+        "form_id": "form_id",
+        "question_num": "1",
+        "type": "freeform, rate, or multiple_choice"
+        "description": "description of question 1, effectively the question itself"
+        "options": {["option1", "option2", "option3"]} (only for multiple_choice)
+    """
+    body = request.json
+
+    # Check for form name
+    if not 'name' in body['form']:
+        response = {
+            "status": 400,
+            "text": "Form name not provided"
+        }
+        return jsonify(response)
+
+    # Check for type of form
+    if not 'type' in body['form']:
+        response = {
+            "status": 400,
+            "text": "Form type not provided"
+        }
+        return jsonify(response)
+
+    # Check for questions
+    if not 'questions' in body['form']:
+        response = {
+            "status": 400,
+            "text": "Form questions not provided"
+        }
+        return jsonify(response)
+
+    # Check for question type, description, and options
+    for question in body['form']['questions']:
+        if not 'type' in question:
+            response = {
+                "status": 400,
+                "text": "Question type not provided"
+            }
+            return jsonify(response)
+
+        if not 'description' in question:
+            response = {
+                "status": 400,
+                "text": "Question description not provided"
+            }
+            return jsonify(response)
+
+        if question['type'] == "multiple_choice" and not 'options' in question:
+            response = {
+                "status": 400,
+                "text": "Question options not provided"
+            }
+            return jsonify(response)
+
+    # Add form to database
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+
+        query = f"INSERT INTO public.form (name, type, created_by, created_at) VALUES ('{body['form']['name']}', '{body['form']['type']}', '{body['requested_by']}', NOW()) RETURNING id;"
+        cur.execute(query)
+        form_id = cur.fetchall()[0][0]
+
+        for question in body['form']['questions']:
+            query = f"INSERT INTO public.form_question (form_id, question_num, type, description, options) VALUES ('{form_id}', '{question['question_num']}', '{question['type']}', '{question['description']}', '{question['options'] if 'options' in question else ''}');"
+            cur.execute(query)
+
+        cur.close()
+        conn.commit()
+        conn.close()
+
+        response = {
+            "status": 200,
+            "form_id": form_id
+        }
+    except psycopg2.OperationalError as e:
+        response = {
+            "status": 400,
+            "text": f"Error while using database: '{str(e).strip()}'"
+        }
+
+    return jsonify(response)
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv("PORT", default=5000))
