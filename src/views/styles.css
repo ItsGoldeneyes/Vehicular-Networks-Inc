@@ -1,0 +1,46 @@
+.dashboard {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .dashboard-container {
+    display: flex;
+  }
+  
+  .sidebar {
+    width: 200px;
+    background-color: #00509e;
+    color: white;
+    padding: 1rem;
+  }
+  
+  .sidebar ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .sidebar li {
+    margin: 1rem 0;
+  }
+  
+  .dashboard-content {
+    flex: 1;
+    padding: 1rem;
+  }
+  
+  .dashboard-overview, .points-tracker, .rewards-catalog, .recent-activity, .support-tickets, .profile-summary, .educational-resources {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+  }
+  
+  .dashboard-widgets, .dashboard-main, .dashboard-footer {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .dashboard-widgets div, .dashboard-main div, .dashboard-footer div {
+    flex: 1;
+  }
+  
