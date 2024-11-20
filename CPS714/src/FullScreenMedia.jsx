@@ -87,7 +87,7 @@ function FullScreenMedia() {
             ></div>
             <button style={{
                 margin: "0px 0px 100px 20px", // Space above and below the bar
-              }}>⛁ 100</button>
+              }}>⛁ {media.POINTS}</button>
             <p style={{
                 margin: "0px 0px 100px 20px", // Space above and below the bar
               }} 
