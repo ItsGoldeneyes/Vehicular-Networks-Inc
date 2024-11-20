@@ -36,7 +36,7 @@ function CourseCard({ course, onClick }) {
     >
       <div style={{ height: "100%", position: "relative", zIndex: 1 }}>
         <span style={{ display: "block", fontSize: "0.9em", color: "#555" }}>
-          {course.category || "Category: Driving"}
+          Category: {course.category || "Fleet Management"}
         </span>
         <h3
           style={{
@@ -58,7 +58,7 @@ function CourseCard({ course, onClick }) {
             color: "#777",
           }}
         >
-          <span>{course.lessons || 1} Lessons</span>
+          <span>{course.lessons_num || 1} Lessons</span>
           <span>⏱ {course.duration || "1h 30m"}</span>
         </div>
 
