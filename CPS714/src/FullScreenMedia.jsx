@@ -112,10 +112,56 @@ function FullScreenMedia() {
             cursor: "pointer",
           }}
             className="completed"
-            onClick={() => {
-              //put something here for completed
-            }}
-          >Completed</button>
+            onClick={async () => {
+              try {
+                // Fetch the current completed courses
+                const { data: userData, error: fetchError } = await supabase
+                  .from('USERS')
+                  .select('COMPLETED_COURSES, POINTS')
+                  .eq('id', 1)
+                  .single();
+
+                console.log(userData);
+            
+                if (fetchError) {
+                  console.error('Fetch Error:', fetchError);
+                  throw fetchError;
+                }
+            
+                // Parse the existing completed courses
+                let completedCourses = [];
+                if (userData.COMPLETED_COURSES) {
+                  completedCourses = JSON.parse(userData.COMPLETED_COURSES);
+                }
+            
+                // Add the new mediaId to the array if it doesn't already exist
+                if (!completedCourses.includes(mediaId)) {
+                  completedCourses.push(mediaId);
+
+                  console.log('User Current Points:', userData.POINTS);
+                  console.log('Media Points:', media.POINTS);
+
+                  // Update the completed courses field
+                  const { data, error: updateError } = await supabase
+                  .from('USERS')
+                  .update({ COMPLETED_COURSES: JSON.stringify(completedCourses), POINTS: (userData.POINTS + media.POINTS) })
+                  .eq('id', 1);
+            
+                  if (updateError) {
+                    console.error('Update Error:', updateError);
+                    throw updateError;
+                  }
+              
+                  console.log('Completed courses updated:', data);
+                }
+                else {
+                  console.log('Course Already Completed');
+                }
+              } catch (error) {
+                console.error('Error updating completed courses:', error);
+              }
+            }}                                              
+          >{media.TYPE === 'course' ? 'Completed' : 'Sign Up'}</button>
           </div>
           </div>
         ) : (

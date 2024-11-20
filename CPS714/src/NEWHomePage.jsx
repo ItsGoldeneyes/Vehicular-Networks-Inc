@@ -204,7 +204,7 @@ function NEWHomePage() {
         <div className="filters">
           {(selectedMode === "Courses"
             ? ["All", "Not Completed", "Completed"]
-            : ["All", "Upcoming", "Past"]
+            : ["All", "Upcoming", "Signed Up", "Past"]
           ).map((option) => (
             <button
               key={option}
@@ -248,6 +248,8 @@ function NEWHomePage() {
                             return true;
                         } else if (filter === "Upcoming") {
                             return isUpcomingEvent(post.DATE); // Include only upcoming events
+                        } else if (filter === "Signed Up") {
+                          return isUpcomingEvent(post.DATE) && user.COMPLETED_COURSES.includes(post.id); // Include only upcoming events that the user signed up for
                         } else {
                             return !isUpcomingEvent(post.DATE); // Include only past events
                         }
