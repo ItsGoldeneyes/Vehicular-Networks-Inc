@@ -45,7 +45,7 @@ function FullScreenMedia() {
         style={{
           display: "inline-block",
           padding: "10px 20px",
-          backgroundColor: "#007bff",
+          backgroundColor: "#f05a5b",
           color: "white",
           textAlign: "center",
           borderRadius: "4px",
@@ -66,6 +66,7 @@ function FullScreenMedia() {
             <h1
               style={{
                 padding: "10px 20px",
+                // color: "darkgrey",
                 textAlign: "left",
                 borderRadius: "4px",
                 textDecoration: "none",
