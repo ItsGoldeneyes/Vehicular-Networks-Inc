@@ -237,6 +237,8 @@ def create_form():
         # Create form uuid
         id = uuid.uuid4()
         current_timestamp = time.time()
+        
+        print(f"INSERT INTO public.form (id, name, type, created_by, created_at) VALUES ('{id}', '{body['form']['name']}', '{body['form']['type']}', '{body['requested_by']}', {current_timestamp});")
 
         # Add form to form table
         conn = get_db_connection()
