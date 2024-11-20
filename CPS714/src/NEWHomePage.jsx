@@ -96,6 +96,23 @@ function NEWHomePage() {
     return <p>Loading data...</p>;
   }
 
+  const isUpcomingEvent = (eventDate) => {
+    const today = new Date();
+    const todayDateOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const eventDateObj = new Date(eventDate);
+    const eventDateOnly = new Date(
+      eventDateObj.getFullYear(),
+      eventDateObj.getMonth(),
+      eventDateObj.getDate() + 1
+    ); // The +1 fixes the time zone issue.
+
+    console.log("Event Date:", eventDateOnly);
+    console.log("Today:", todayDateOnly);
+    console.log(eventDateOnly >= todayDateOnly);
+
+    return eventDateOnly >= todayDateOnly;
+  };
+
   return (
     <div className="app">
       <header className="header">
@@ -167,21 +184,25 @@ function NEWHomePage() {
                 .filter((post) =>
                     selectedMode === "Courses" ? post.TYPE === "course" : post.TYPE === "event"
                 )
-                // .filter((post) => {
-                //     if (selectedMode === "Event") {
-                //         if (filter === "Not Completed") {
-                //             return isUpcomingEvent(post.DATE); // Include only upcoming events
-                //         } else {
-                //             return !isUpcomingEvent(post.DATE); // Include only past events
-                //         }
-                //     } else if (selectedMode === "Course") {
-                //         if (filter === "Not Completed") {
-                //             return !user.COMPLETED_COURSES.includes(post.id); // Exclude completed courses
-                //         } else {
-                //             return user.COMPLETED_COURSES.includes(post.id); // Include only completed courses
-                //         }
-                //     }
-                // })
+                .filter((post) => {
+                    if (selectedMode === "Events") {
+                        if (filter === "All"){
+                            return true;
+                        } else if (filter === "Upcoming") {
+                            return isUpcomingEvent(post.DATE); // Include only upcoming events
+                        } else {
+                            return !isUpcomingEvent(post.DATE); // Include only past events
+                        }
+                    } else if (selectedMode === "Courses") {
+                        if (filter === "All"){
+                            return true;
+                        } else if (filter === "Not Completed") {
+                            return !user.COMPLETED_COURSES.includes(post.id); // Exclude completed courses
+                        } else {
+                            return user.COMPLETED_COURSES.includes(post.id); // Include only completed courses
+                        }
+                    }
+                })
                 // Step 2: Sort media based on filter2
                 .sort((a, b) => {
                     if (filter2 === "Recency") {
