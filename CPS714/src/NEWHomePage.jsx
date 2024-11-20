@@ -25,7 +25,7 @@ import "./main.css";
             <span>{course.lessons} Lessons</span>
             <span>⏱ {course.duration}</span>
           </div>
-          {isHovered && <span>{course.DESCRIPTION}</span>}
+          {isHovered && <><br></br><span>{course.DESCRIPTION}</span></>}
         </div>
       </div>
     );
