@@ -1,2 +1,5 @@
 # PyCharm project files
 .idea/
+
+# For testing api
+test.ipynb
