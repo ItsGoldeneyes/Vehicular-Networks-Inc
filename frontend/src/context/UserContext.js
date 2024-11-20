@@ -27,6 +27,7 @@ export function UserProvider({ children }) {
                 res => {
                     if (res.status === 200) {
                         return {
+                            user_id: res.user_id,
                             profile_status: res.profile_status,
                             username: res.username
                         };
@@ -63,6 +64,7 @@ export function UserProvider({ children }) {
                 res => {
                     if (res.status === 200) {
                         return {
+                            user_id: res.user_id,
                             profile_status: res.profile_status,
                             username: res.username
                         };
