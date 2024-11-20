@@ -86,6 +86,9 @@ function NEWHomePage() {
   }, []);
 
 
+//   console.log(loading)
+//   console.log(user)
+//   console.log(media)
   if (loading || !user || !media) {
     return (
           <p>Loading data...</p>
@@ -192,30 +195,43 @@ function NEWHomePage() {
       <div className="course-grid">
         {media &&
             media
+                // Step 1: Filter media based on type
                 .filter((post) =>
-                    selectedMode === "Courses"
-                    ? post.TYPE === "course"
-                    : post.TYPE === "event"
+                    selectedMode === "Courses" ? post.TYPE === "course" : post.TYPE === "event"
                 )
                 // .filter((post) => {
                 //     if (selectedMode === "Event") {
-                //     console.log(post.TITLE);
-                //     if (filter === "Not Completed") {
-                //         return isUpcomingEvent(post.DATE); // Include only upcoming events
-                //     } else {
-                //         return !isUpcomingEvent(post.DATE); // Include only past events
-                //     }
+                //         if (filter === "Not Completed") {
+                //             return isUpcomingEvent(post.DATE); // Include only upcoming events
+                //         } else {
+                //             return !isUpcomingEvent(post.DATE); // Include only past events
+                //         }
                 //     } else if (selectedMode === "Course") {
-                //     if (filter === "Not Completed") {
-                //         return !user.COMPLETED_COURSES.includes(post.id); // Exclude completed courses
-                //     } else {
-                //         return user.COMPLETED_COURSES.includes(post.id); // Include only completed courses
-                //     }
+                //         if (filter === "Not Completed") {
+                //             return !user.COMPLETED_COURSES.includes(post.id); // Exclude completed courses
+                //         } else {
+                //             return user.COMPLETED_COURSES.includes(post.id); // Include only completed courses
+                //         }
                 //     }
                 // })
+                // Step 2: Sort media based on filter2
+                .sort((a, b) => {
+                    if (filter2 === "Recency") {
+                    // Sort by recency: Compare created_at or event_date (if available)
+                    const dateA = new Date(a.created_at || a.event_date || 0);
+                    const dateB = new Date(b.created_at || b.event_date || 0);
+                    return dateB - dateA; // Most recent first
+                    } else if (filter2 === "Alphabetically") {
+                    // Sort by title alphabetically
+                    return a.TITLE.localeCompare(b.TITLE);
+                    }
+                    return 0; // Default no sorting
+                })
+                // Step 3: Render sorted and filtered media
                 .map((post) => (
-                    <CourseCard key={post.id} course={post} onClick={() => navigate(`/media/${post.id}`)}/>
+                    <CourseCard key={post.id} course={post} onClick={() => navigate(`/media/${post.id}`)} />
                 ))}
+                
       </div>
     </div>
   );
