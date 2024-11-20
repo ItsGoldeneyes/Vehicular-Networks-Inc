@@ -13,8 +13,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/new" element={<NEWHomePage />} />
+        <Route path="/old" element={<HomePage />} />
+        <Route path="/" element={<NEWHomePage />} />
         <Route path="/media/:id" element={<FullScreenMedia />} />
       </Routes>
     </BrowserRouter>
