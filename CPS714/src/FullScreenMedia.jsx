@@ -36,6 +36,22 @@ function FullScreenMedia() {
       }, [mediaId]); // Ensure effect runs when mediaId changes
     //Fetching media End
 
+    const isUpcomingEvent = (eventDate) => {
+      const today = new Date();
+      const todayDateOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      const eventDateObj = new Date(eventDate);
+      const eventDateOnly = new Date(
+        eventDateObj.getFullYear(),
+        eventDateObj.getMonth(),
+        eventDateObj.getDate() + 1
+      ); // The +1 fixes the time zone issue.
+  
+      console.log("Event Date:", eventDateOnly);
+      console.log("Today:", todayDateOnly);
+      console.log(eventDateOnly >= todayDateOnly);
+  
+      return eventDateOnly >= todayDateOnly;
+    };
 
     return (
       <section style={{
@@ -101,7 +117,7 @@ function FullScreenMedia() {
           <div style={{
             textAlign: "right",
           }}>
-          <button style={{
+          {isUpcomingEvent(media.DATE) && <button style={{
             padding: "10px 20px",
             backgroundColor: "green",
             color: "white",
@@ -161,7 +177,7 @@ function FullScreenMedia() {
                 console.error('Error updating completed courses:', error);
               }
             }}                                              
-          >{media.TYPE === 'course' ? 'Completed' : 'Sign Up'}</button>
+          >{media.TYPE === 'course' ? 'Completed' : 'Sign Up'}</button>}
           </div>
           </div>
         ) : (
