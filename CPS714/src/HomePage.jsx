@@ -51,7 +51,7 @@ function SmallBox({ title, description, points, date, onShowMore }) {
         </button>
       </header>
       <div style={descriptionStyle}>
-        <p>{getShortDescription(description)}</p>
+        <p dangerouslySetInnerHTML={{ __html: getShortDescription(description) }}></p>
         <p>{date}</p>
       </div>
     </div>

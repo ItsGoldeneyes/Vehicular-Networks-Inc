@@ -28,7 +28,7 @@ function CourseCard({ course, onClick }) {
         {isHovered && (
           <>
             <br />
-            <span>{getShortDescription(course.DESCRIPTION)}</span>
+            <span dangerouslySetInnerHTML={{ __html: getShortDescription(course.DESCRIPTION) }}></span>
           </>
         )}
       </div>
