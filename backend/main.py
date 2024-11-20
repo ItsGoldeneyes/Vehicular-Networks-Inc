@@ -251,7 +251,7 @@ def create_form():
         # Add questions to form_question table
         for question in body['form']['questions']:
             cur = conn.cursor()
-            cur.execute(f"INSERT INTO public.form_question VALUES ('{id}', '{question['question_num']}', '{question['type']}', '{question['description']}' {',' if 'options' in question else ''} {set(question['options']) if 'options' in question else ''});")
+            cur.execute(f"INSERT INTO public.form_question VALUES ('{id}', '{question['question_num']}', '{question['type']}', '{question['description']}' {',' if 'options' in question else ''} {question['options'] if 'options' in question else ''});")
             conn.commit()
             cur.close()
 
