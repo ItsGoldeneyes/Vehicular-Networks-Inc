@@ -5,25 +5,24 @@ import supabase from "../supabaseClient";
 import "./main.css";
 
 
-  function CourseCard({ course }) {
+  function CourseCard({ course, onClick }) {
     const [isHovered, setIsHovered] = useState(false);
-    const navigate = useNavigate();
 
     return (
       <div 
         className="course-card" 
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        // onClick={navigate(`/media/${course.id}`)} // Entire box is clickable
+        onClick={onClick} // Entire box is clickable
       >
         {/* <img src={course.image} alt={course.TITLE} /> */}
         <div className="course-details">
-          <span className="category">{course.category}</span>
-          {course.isNew && <span className="new">New</span>}
+          <span className="category">{course.category ? course.category:"Category: Driving"}</span>
+          {/* {course.isNew && <span className="new">New</span>} */}
           <h3>{course.TITLE}</h3>
           <div className="stats">
-            <span>{course.lessons} Lessons</span>
-            <span>⏱ {course.duration}</span>
+            <span>{course.lessons ? course.lessons:1} Lessons</span>
+            <span>⏱ {course.duration ? course.duration:"1h 30m"}</span>
           </div>
           {isHovered && <><br></br><span>{course.DESCRIPTION}</span></>}
         </div>
@@ -32,11 +31,10 @@ import "./main.css";
   }
 
 function NEWHomePage() {
+    const navigate = useNavigate();
+  const [selectedMode, setSelectedMode] = useState("Courses");
   const [filter, setFilter] = useState("All");
-
-  const navigate = useNavigate();
-  const [selectedMode, setSelectedMode] = useState("Course");
-  const [selectedComplete, setSelectedComplete] = useState("Not Completed");
+  const [filter2, setFilter2] = useState("Recency");
 
   const [fetchError, setFetchError] = useState(null);
   const [loading, setLoading] = useState(true); // New loading state
@@ -142,17 +140,31 @@ function NEWHomePage() {
       <header className="header">
       <div className="logo">🚚</div>
       <nav>
-        <a href="#" className="active">Courses</a>
-        <a href="#">Events</a>
+        <a  href="#" 
+            className={selectedMode==="Courses" && "active"}
+            onClick={() => {
+              setSelectedMode("Courses");
+              setFilter("All");
+              setFilter2("Recency");
+            }}
+        >Courses</a>
+        <a  href="#" 
+            className={selectedMode==="Events" && "active"}
+            onClick={() => {
+              setSelectedMode("Events");
+              setFilter("All");
+              setFilter2("Recency");
+            }}
+        >Events</a>
       </nav>
       <div className="profile">
       </div>
     </header>
     <div className="filter-bar">
-
+        
 
         <div className="filters">
-          {["All", "Not Completed", "Completed"].map((option) => (
+          {(selectedMode==="Courses"?["All", "Not Completed", "Completed"]:["All", "Upcoming", "Past"]).map((option) => (
             <button
               key={option}
               className={filter === option ? "active" : ""}
@@ -163,13 +175,23 @@ function NEWHomePage() {
           ))}
         </div>
         <div className="sorting">
-          <button>Recency</button>
-          <button className="active">Alphabetically</button>
+          <button 
+            className={filter2==="Recency" && "active"}
+            onClick={() => {
+              setFilter2("Recency");
+            }}
+        >Recency</button>
+          <button 
+            className={filter2==="Alphabetically" && "active"}
+            onClick={() => {
+              setFilter2("Alphabetically");
+            }}
+        >Alphabetically</button>
         </div>
       </div>
       <div className="course-grid">
         {media.map((course) => (
-          <CourseCard key={course.id} course={course} />
+          <CourseCard key={course.id} course={course} onClick={() => navigate(`/media/${course.id}`)}/>
         ))}
       </div>
     </div>
