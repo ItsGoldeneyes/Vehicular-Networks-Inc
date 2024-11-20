@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
+import uuid
+import time
 import psycopg2
 import os
 
@@ -182,7 +184,7 @@ def create_form():
 
     print("create-form")
     body = request.json
-    
+
     # Check for form name
     if not 'name' in body['form']:
         response = {
@@ -232,24 +234,31 @@ def create_form():
 
     # Add form to database
     try:
+        # Create form uuid
+        id = uuid.uuid4()
+        current_timestamp = time.time()
+        
+        print(f"INSERT INTO public.form VALUES ('{id}', '{body['form']['name']}', '{body['form']['type']}', '{body['requested_by']}', {current_timestamp});")
+
+        # Add form to form table
         conn = get_db_connection()
         cur = conn.cursor()
-
-        query = f"INSERT INTO public.form (name, type, created_by, created_at) VALUES ('{body['form']['name']}', '{body['form']['type']}', '{body['requested_by']}', NOW()) RETURNING id;"
-        cur.execute(query)
-        form_id = cur.fetchall()[0][0]
-
-        for question in body['form']['questions']:
-            query = f"INSERT INTO public.form_question (form_id, question_num, type, description, options) VALUES ('{form_id}', '{question['question_num']}', '{question['type']}', '{question['description']}', '{question['options'] if 'options' in question else ''}');"
-            cur.execute(query)
-
-        cur.close()
+        cur.execute(f"INSERT INTO public.form (id, name, type, created_by, created_at) VALUES ('{id}', '{body['form']['name']}', '{body['form']['type']}', '{body['requested_by']}', {current_timestamp});")
         conn.commit()
+        cur.close()
+
+        # Add questions to form_question table
+        for question in body['form']['questions']:
+            cur = conn.cursor()
+            cur.execute(f"INSERT INTO public.form_question (form_id, question_num, type, description, options) VALUES ('{id}', '{question['question_num']}', '{question['type']}', '{question['description']}', '{question['options'] if 'options' in question else ''}');")
+            conn.commit()
+            cur.close()
+
         conn.close()
 
         response = {
             "status": 200,
-            "form_id": form_id
+            "form_id": id
         }
     except psycopg2.OperationalError as e:
         response = {
