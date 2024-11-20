@@ -39,6 +39,8 @@ function CourseCard({ course, onClick }) {
         </span>
         <h3
           style={{
+            color: isHovered ? "#ee8c8c" : "black",
+            transition: "color 0.2s ease",
             margin: "8px 0",
             whiteSpace: "nowrap",
             overflow: "hidden",
