@@ -46,7 +46,7 @@ create table public.attendance(
   training_id	uuid,
   user_id		uuid,
 
-  FOREIGN KEY (training_id) REFERENCES public.profile (id),
+  FOREIGN KEY (training_id) REFERENCES public.training_session (id),
   FOREIGN KEY (user_id) REFERENCES public.profile (user_id),
   PRIMARY KEY (training_id, user_id)
 );
