@@ -184,6 +184,7 @@ function NEWHomePage() {
                 .filter((post) =>
                     selectedMode === "Courses" ? post.TYPE === "course" : post.TYPE === "event"
                 )
+                // Step 2: Filter media based on filter
                 .filter((post) => {
                     if (selectedMode === "Events") {
                         if (filter === "All"){
