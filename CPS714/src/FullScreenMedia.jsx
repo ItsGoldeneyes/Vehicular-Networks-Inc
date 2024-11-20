@@ -109,6 +109,7 @@ function FullScreenMedia() {
             <button style={{
                 margin: "0px 0px 100px 20px", // Space above and below the bar
               }}>⛁ {media.POINTS}</button>
+            {media.TYPE === "event" && <b><p style = {{margin: "0px 0px 80px 20px"}}> Event date: {media.DATE}</p></b>}
             <p style={{
                 // textAlign: "center",
                 margin: "0px 0px 100px 20px", // Space above and below the bar
