@@ -190,9 +190,32 @@ function NEWHomePage() {
         </div>
       </div>
       <div className="course-grid">
-        {media.map((course) => (
-          <CourseCard key={course.id} course={course} onClick={() => navigate(`/media/${course.id}`)}/>
-        ))}
+        {media &&
+            media
+                .filter((post) =>
+                    selectedMode === "Courses"
+                    ? post.TYPE === "course"
+                    : post.TYPE === "event"
+                )
+                // .filter((post) => {
+                //     if (selectedMode === "Event") {
+                //     console.log(post.TITLE);
+                //     if (filter === "Not Completed") {
+                //         return isUpcomingEvent(post.DATE); // Include only upcoming events
+                //     } else {
+                //         return !isUpcomingEvent(post.DATE); // Include only past events
+                //     }
+                //     } else if (selectedMode === "Course") {
+                //     if (filter === "Not Completed") {
+                //         return !user.COMPLETED_COURSES.includes(post.id); // Exclude completed courses
+                //     } else {
+                //         return user.COMPLETED_COURSES.includes(post.id); // Include only completed courses
+                //     }
+                //     }
+                // })
+                .map((post) => (
+                    <CourseCard key={post.id} course={post} onClick={() => navigate(`/media/${post.id}`)}/>
+                ))}
       </div>
     </div>
   );
