@@ -40,7 +40,7 @@ function FullScreenMedia() {
     return (
       <section className="main-content">
         <button className="show-more">
-        <Link
+            <Link
         to="/"
         style={{
           display: "inline-block",
@@ -62,15 +62,39 @@ function FullScreenMedia() {
         <br />
         {fetchError && <p className="error">{fetchError}</p>}
         {media ? (
-            <div>
-            <header className="header">
-                <h1>{media.TITLE}</h1>
-                <button>⛁ 100</button>
-            </header>
-            <p dangerouslySetInnerHTML={{ __html: media.DESCRIPTION }}></p>
-            </div>
+          <div>
+            <h1
+              style={{
+                padding: "10px 20px",
+                textAlign: "left",
+                borderRadius: "4px",
+                textDecoration: "none",
+                fontWeight: "bold",
+                fontSize: "45px",
+                margin: "8px 0",
+              }}
+            >
+              {media.TITLE}
+            </h1>
+            <div
+              style={{
+                width: "500px", // Length of the bar
+                height: "4px", // Thickness of the bar
+                backgroundColor: "grey",
+                borderRadius: "2px", // Rounding the ends
+                margin: "40px 20px", // Space above and below the bar
+              }}
+            ></div>
+            <button style={{
+                margin: "0px 0px 100px 20px", // Space above and below the bar
+              }}>⛁ 100</button>
+            <p style={{
+                margin: "0px 0px 100px 20px", // Space above and below the bar
+              }} 
+              dangerouslySetInnerHTML={{ __html: media.DESCRIPTION }}></p>
+          </div>
         ) : (
-            !fetchError && <p>Loading...</p> // Show loading message if media is not yet available
+          !fetchError && <p>Loading...</p> // Show loading message if media is not yet available
         )}
         </section>
     );
