@@ -4,10 +4,10 @@ const bodyParser = require('body-parser');
 const { Client } = require('pg');  // PostgreSQL client
 const { env } = require('process');
 
-const USER = env.DBUSER || 'postgres';
-const HOST = env.DBHOST || 'localhost';
-const PASSWORD = env.DBPASSWORD || 'password';
-const PORT = env.DBPORT || 5432;
+const USER = env.PGUSER || 'postgres';
+const HOST = env.PGHOST || 'localhost';
+const PASSWORD = env.PGPASSWORD || 'password';
+const PORT = env.PGPORT || 5432;
 
 
 
