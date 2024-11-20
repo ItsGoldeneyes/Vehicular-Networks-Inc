@@ -90,6 +90,7 @@ function FullScreenMedia() {
                 margin: "0px 0px 100px 20px", // Space above and below the bar
               }}>⛁ {media.POINTS}</button>
             <p style={{
+                // textAlign: "center",
                 margin: "0px 0px 100px 20px", // Space above and below the bar
               }} 
               dangerouslySetInnerHTML={{ __html: media.DESCRIPTION }}></p>
