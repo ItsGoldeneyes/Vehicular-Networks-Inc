@@ -68,9 +68,19 @@ CREATE TYPE profile_status AS ENUM ('normal', 'admin');
 CREATE TYPE form_type AS ENUM ('feedback', 'survey');
 CREATE TYPE question_type AS ENUM ('freeform', 'rate', 'multiple_choice');
 
-INSERT INTO form (name, type, created_by) VALUES ('Feedback Form', 'feedback', 'd45a0d11-acb0-43cc-b20b-e2ab8c1444e2');
-INSERT INTO form (name, type, created_by) VALUES ('A Poll', 'survey', 'd45a0d11-acb0-43cc-b20b-e2ab8c1444e2');
-INSERT INTO form (name, type, created_by) VALUES ('A Survey', 'survey', 'd45a0d11-acb0-43cc-b20b-e2ab8c1444e2');
+INSERT INTO form (id, name, type, created_by) VALUES ('20c1200f-cc03-4b80-9349-f19f6e826d03', 'Feedback Form', 'feedback', 'd45a0d11-acb0-43cc-b20b-e2ab8c1444e2');
+INSERT INTO form_question (form_id, question_num, type, description) VALUES ('20c1200f-cc03-4b80-9349-f19f6e826d03', 1, 'freeform', 'Is there any sort of feedback you want to give us?');
+
+INSERT INTO form (id, name, type, created_by) VALUES ('a04c1d1b-f4fd-4dc7-ab39-86a83a3b70aa', 'A Poll', 'survey', 'd45a0d11-acb0-43cc-b20b-e2ab8c1444e2');
+INSERT INTO form_question (form_id, question_num, type, description) VALUES ('a04c1d1b-f4fd-4dc7-ab39-86a83a3b70aa', 1, 'rate', 'Let us know how satisfied you are with the recent exclusive FleetRewards offers.');
+INSERT INTO form_question (form_id, question_num, type, description) VALUES ('a04c1d1b-f4fd-4dc7-ab39-86a83a3b70aa', 2, 'freeform', 'Any additional comments?');
+
+INSERT INTO form (id, name, type, created_by) VALUES ('38c09435-975e-47c7-bb97-ab072c326764', 'A Survey', 'survey', 'd45a0d11-acb0-43cc-b20b-e2ab8c1444e2');
+INSERT INTO form_question (form_id, question_num, type, description) VALUES ('38c09435-975e-47c7-bb97-ab072c326764', 1, 'multiple_choice', 'Overall, Vehicular Services Inc. meets all your fleet''s needs.');
+INSERT INTO form_question (form_id, question_num, type, description) VALUES ('38c09435-975e-47c7-bb97-ab072c326764', 2, 'multiple_choice', 'Vehicular Services Inc.''s products are helpful to your fleet.');
+INSERT INTO form_question (form_id, question_num, type, description) VALUES ('38c09435-975e-47c7-bb97-ab072c326764', 3, 'multiple_choice', 'Vehicular Services Inc.''s services are helpful to your fleet.');
+INSERT INTO form_question (form_id, question_num, type, description) VALUES ('38c09435-975e-47c7-bb97-ab072c326764', 4, 'multiple_choice', 'Vehicular Services Inc.''s FleetRewards loyalty program is useful.');
+INSERT INTO form_question (form_id, question_num, type, description) VALUES ('38c09435-975e-47c7-bb97-ab072c326764', 5, 'freeform', 'Enter any additional comments you have for us (Vehicular Services Inc. or the FleetRewards program).');
 
 -- enums/types
 
