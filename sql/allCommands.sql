@@ -36,7 +36,23 @@ create table public.form_response (
   FOREIGN KEY (form_id) REFERENCES public.form (id),
   FOREIGN KEY (user_id) REFERENCES public.profile (user_id)
 );
+create table public.training_session (
+  id			uuid PRIMARY KEY,
+  title		varchar NOT NULL,
+  description	varchar,
+  points		int2
+);
+create table public.attendance(
+  training_id	uuid,
+  user_id		uuid,
 
+  FOREIGN KEY (training_id) REFERENCES public.profile (id),
+  FOREIGN KEY (user_id) REFERENCES public.profile (user_id),
+  PRIMARY KEY (training_id, user_id)
+);
+
+DROP TABLE public.attendance;
+DROP TABLE public.training_session;
 DROP TABLE public.form_response;
 DROP TABLE public.form_question;
 DROP TABLE public.form;
