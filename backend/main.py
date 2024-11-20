@@ -179,9 +179,10 @@ def create_form():
         "description": "description of question 1, effectively the question itself"
         "options": {["option1", "option2", "option3"]} (only for multiple_choice)
     """
-    body = request.json
 
     print("create-form")
+    body = request.json
+    
     # Check for form name
     if not 'name' in body['form']:
         response = {
