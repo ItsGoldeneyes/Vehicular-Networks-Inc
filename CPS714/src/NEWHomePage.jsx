@@ -21,6 +21,7 @@ function CourseCard({ course, onClick }) {
         padding: "16px",
         margin: "8px",
         backgroundColor: "#fff",
+        borderRadius: "15px",
         transition: "height 0.3s ease, box-shadow 0.3s ease",
         cursor: "pointer",
         boxShadow: isHovered

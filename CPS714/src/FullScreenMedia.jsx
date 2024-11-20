@@ -38,7 +38,11 @@ function FullScreenMedia() {
 
 
     return (
-      <section className="main-content">
+      <section style={{
+        margin: "20px 100px",
+        boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
+      }}
+       className="main-content">
         <button className="show-more">
             <Link
         to="/"
@@ -94,6 +98,25 @@ function FullScreenMedia() {
                 margin: "0px 0px 100px 20px", // Space above and below the bar
               }} 
               dangerouslySetInnerHTML={{ __html: media.DESCRIPTION }}></p>
+          <div style={{
+            textAlign: "right",
+          }}>
+          <button style={{
+            padding: "10px 20px",
+            backgroundColor: "green",
+            color: "white",
+            textAlign: "right",
+            borderRadius: "100px",
+            textDecoration: "none",
+            fontWeight: "bold",
+            cursor: "pointer",
+          }}
+            className="completed"
+            onClick={() => {
+              //put something here for completed
+            }}
+          >Completed</button>
+          </div>
           </div>
         ) : (
           !fetchError && <p>Loading...</p> // Show loading message if media is not yet available
