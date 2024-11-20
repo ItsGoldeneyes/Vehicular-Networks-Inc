@@ -13,28 +13,82 @@ function CourseCard({ course, onClick }) {
 
   return (
     <div
-      className="course-card"
+      style={{
+        width: "100%", // Default to 100% for flexibility
+        maxWidth: "1000px", // Max width of 1000px
+        minWidth: "480px", // Min width of 480px
+        height: isHovered ? "120px" : "80px", // Fixed height for uniform appearance
+        padding: "16px",
+        margin: "8px",
+        backgroundColor: "#fff",
+        transition: "height 0.3s ease, box-shadow 0.3s ease",
+        cursor: "pointer",
+        boxShadow: isHovered
+          ? "0 8px 16px rgba(0, 0, 0, 0.2)"
+          : "0 2px 4px rgba(0, 0, 0, 0.1)",
+        overflow: "hidden",
+        // Additional dynamic behavior with media query
+      }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={onClick} // Entire box is clickable
+      onClick={onClick}
     >
-      <div className="course-details">
-        <span className="category">{course.category || "Category: Driving"}</span>
-        <h3>{course.TITLE}</h3>
-        <div className="stats">
+      <div style={{ height: "100%", position: "relative", zIndex: 1 }}>
+        <span style={{ display: "block", fontSize: "0.9em", color: "#555" }}>
+          {course.category || "Category: Driving"}
+        </span>
+        <h3
+          style={{
+            margin: "8px 0",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}
+        >
+          {course.TITLE}
+        </h3>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            fontSize: "0.85em",
+            color: "#777",
+          }}
+        >
           <span>{course.lessons || 1} Lessons</span>
           <span>⏱ {course.duration || "1h 30m"}</span>
         </div>
-        {isHovered && (
-          <>
-            <br />
-            <span dangerouslySetInnerHTML={{ __html: getShortDescription(course.DESCRIPTION) }}></span>
-          </>
-        )}
+
+        {/* Hover content revealed downward */}
+        <div
+          style={{
+            position: "absolute",
+            // bottom: isHovered ? "0" : "-60px", // Starts hidden, slides in on hover
+            left: "0",
+            width: "100%",
+            // backgroundColor: "#f9f9f9",
+            padding: "8px",
+            // boxShadow: "0px -2px 4px rgba(0, 0, 0, 0.1)",
+            opacity: isHovered ? 1 : 0,
+            transition: "all 0.3s ease",
+          }}
+        >
+          <span
+            style={{
+              fontSize: "0.85em",
+              color: "#333",
+              textAlign: "center",
+            }}
+            dangerouslySetInnerHTML={{
+              __html: getShortDescription(course.DESCRIPTION),
+            }}
+          ></span>
+        </div>
       </div>
     </div>
   );
 }
+
 
 function NEWHomePage() {
   const navigate = useNavigate();
