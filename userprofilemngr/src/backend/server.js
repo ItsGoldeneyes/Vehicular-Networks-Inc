@@ -2,14 +2,22 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const { Client } = require('pg');  // PostgreSQL client
+const { env } = require('process');
+
+const USER = env.DBUSER || 'postgres';
+const HOST = env.DBHOST || 'localhost';
+const PASSWORD = env.DBPASSWORD || 'password';
+const PORT = env.DBPORT || 5432;
+
+
 
 // PostgreSQL client setup
 const client = new Client({
-    user: 'USER',
-    host: 'HOST',
+    user: USER,
+    host: HOST,
     database: 'usermanagement',
-    password: 'PASSWORD',
-    port: PORT, // default PostgreSQL port
+    password: PASSWORD,
+    port: PORT,
 });
 
 client.connect(); // Establish connection to the database
