@@ -79,27 +79,44 @@ html, body {
   margin: 0;
 }
 
-
+.course-grid {
+  display: flex;
+  flex-direction: column; /* Stack boxes vertically */
+  align-items: center;    /* Center boxes horizontally */
+  gap: 20px;              /* Add margin between boxes */
+  padding: 20px;          /* Optional: Add padding around the grid */
+}
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+  padding: 20px 20px;
+
   background: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+/* .header nav {
+  display: flex; /* Place items (Courses and Events) side by side */
+  /*gap: 10px; /* Add space between the links
+ } */
 
 .header nav a {
   margin: 0 15px;
   color: #333;
   text-decoration: none;
+
+  
+  width: 300px;
+  
 }
 
 .header nav a.active {
   font-weight: bold;
   border-bottom: 2px solid #f05a5b;
+  
 }
+
 
 
 .filter-bar {
@@ -129,21 +146,33 @@ html, body {
   display: flex;
   flex-direction: column;
   background: #fff;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* border-radius: 8px; */
+  /* overflow: hidden; */
+  width: 90%;             /* Adjust width of each card */
+  max-width: 600px;       /* Ensure cards don't get too wide */
+  border: 1px solid #ccc; /* Add a border for better separation */
+  border-radius: 10px;    /* Add rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  overflow: hidden;       /* Ensure content doesn't overflow */
+  background-color: white;
+  transition: all 0.3s ease; /* Add hover effect */
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
   margin: 10px;
   flex: 1 1 calc(33.333% - 20px);
-  max-width: calc(33.333% - 20px);
+  /* max-width: calc(33.333% - 20px); */
 }
-
+.course-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover */
+  transition: all 0.3s ease; /* Smooth effect for hover changes */
+}
 .course-card img {
   width: 100%;
   height: auto;
 }
 
 .course-details {
-  padding: 10px;
+  padding: 16px;
 }
 
 .category {
