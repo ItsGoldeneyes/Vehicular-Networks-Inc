@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 import uuid
+import time
 import psycopg2
 import os
 
@@ -235,11 +236,12 @@ def create_form():
     try:
         # Create form uuid
         id = uuid.uuid4()
+        current_timestamp = time.time()
 
         # Add form to form table
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute(f"INSERT INTO public.form (id, name, type, created_by, created_at) VALUES ('{id}', '{body['form']['name']}', '{body['form']['type']}', '{body['requested_by']}', current_timestamp);")
+        cur.execute(f"INSERT INTO public.form (id, name, type, created_by, created_at) VALUES ('{id}', '{body['form']['name']}', '{body['form']['type']}', '{body['requested_by']}', {current_timestamp});")
         conn.commit()
         cur.close()
 
