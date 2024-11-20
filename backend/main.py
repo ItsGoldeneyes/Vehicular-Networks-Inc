@@ -69,6 +69,7 @@ def register():
             if data[0]:
                 response = {
                     "status": 200,
+                    "user_id": data[0][0],
                     "username": username,
                     "profile_status": profile_status
                 }
@@ -95,7 +96,7 @@ def register():
 @app.route('/login', methods=["POST"])
 def login():
     body = request.json
-    query = f"SELECT username, profile_status FROM public.profile WHERE username = '{body['username']}' AND password = '{body['password']}';"
+    query = f"SELECT user_id, username, profile_status FROM public.profile WHERE username = '{body['username']}' AND password = '{body['password']}';"
 
     try:
         conn = get_db_connection()
@@ -108,8 +109,9 @@ def login():
         if len(data) == 1:
             response = {
                 "status": 200,
-                "username": data[0][0],
-                "profile_status": data[0][1]
+                "user_id": data[0][0],
+                "username": data[0][1],
+                "profile_status": data[0][2]
             }
         else:
             response = {

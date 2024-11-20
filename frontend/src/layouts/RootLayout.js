@@ -33,26 +33,28 @@ export default function RootLayout() {
                   Home
                 </NavLink>
               </li>
-              <li>
-                <NavLink to="/surveys" className="nav-item">
-                  Surveys
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/polls" className="nav-item">
-                  Polls
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  to="/feedback"
-                  className={({ isActive }) =>
-                    isActive ? "nav-item active" : "nav-item"
-                  }
-                >
-                  Feedback Form
-                </NavLink>
-              </li>
+              { user && <>
+                <li>
+                  <NavLink to="/surveys" className="nav-item">
+                    Surveys
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/polls" className="nav-item">
+                    Polls
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/feedback"
+                    className={({ isActive }) =>
+                      isActive ? "nav-item active" : "nav-item"
+                    }
+                  >
+                    Feedback Form
+                  </NavLink>
+                </li>
+              </>}
               { user ?
                 <li>
                   <Button component={NavLink} onClick={userLogOut}>

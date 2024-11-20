@@ -13,10 +13,6 @@ export default function Register() {
   const { theme } = useOutletContext(); // Get theme from context
   const { userRegister, isLoading } = useUser();
 
-  // const [username, setUsername] = useState("");
-  // const [password, setPassword] = useState("");
-  // const [email, setEmail] = useState("");
-
   useEffect(() => {
     document.title = "Register - FleetRewards";
   }, []);
