@@ -359,7 +359,8 @@ def get_forms():
                 "name": form[1],
                 "type": form[2],
                 "created_by": form[3],
-                "created_at": form[4]
+                "created_at": form[4],
+                "points": form[5]
             })
 
         response = {
