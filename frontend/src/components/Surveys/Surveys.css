@@ -10,3 +10,54 @@
     color: #fff; 
     background-color: #222; 
 }
+
+.survey-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 25px;
+}
+
+.survey-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: calc(33.333% - 20px);
+    box-sizing: border-box;
+    transition: transform 0.2s;
+}
+
+.survey-card.dark {
+    
+}
+
+.survey-card:hover {
+    transform: translateY(-5px);
+}
+
+.survey-title {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.survey-points {
+    font-size: 1.2em;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.survey-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.survey-button:hover {
+    background-color: #0056b3;
+}

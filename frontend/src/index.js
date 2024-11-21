@@ -5,6 +5,7 @@ import App from './App';
 import { UserProvider } from './context/UserContext';
 import { FormFeedbackProvider } from './context/FormFeedbackContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { SurveyContextProvider } from './context/SurveyContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -12,7 +13,9 @@ root.render(
     <ThemeProvider>
       <UserProvider>
         <FormFeedbackProvider>
-          <App />
+          <SurveyContextProvider>
+            <App />
+          </SurveyContextProvider>
         </FormFeedbackProvider>
       </UserProvider>
     </ThemeProvider>
