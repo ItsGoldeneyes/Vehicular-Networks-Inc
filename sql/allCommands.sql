@@ -26,7 +26,7 @@ create table public.form_question (
 );
 create table public.form_response (
   id				uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  question_num		uuid,
+  question_num		int2,
   form_id			uuid,
   user_id			uuid,
   freeform_answer	varchar,
@@ -34,7 +34,7 @@ create table public.form_response (
   mc_answer		int2,
 
   FOREIGN KEY (form_id) REFERENCES public.form (id),
-  FOREIGN KEY (user_id) REFERENCES public.profile (user_id)
+  FOREIGN KEY (user_id) REFERENCES public.profile (user_id),
 );
 create table public.training_session (
   id			uuid PRIMARY KEY,
