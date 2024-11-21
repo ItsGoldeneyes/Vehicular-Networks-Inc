@@ -791,6 +791,8 @@ def submit_form():
         print(data)
         print(len(data))
         print(len(body['form']['responses']))
+        print(body['form']['responses'])
+        print(len(data) == len(body['form']['responses']))
         if len(data) == len(body['form']['responses']):
             response = {
                 "status": 200,
