@@ -364,5 +364,108 @@ def get_forms():
 
     return jsonify(response)
 
+@app.route('/get-form', methods=["POST"])
+def get_form():
+    """
+    Request needs to be in the format:
+    {
+        "form_id": "form_id"
+    }
+
+    If request accepted, returns:
+    {
+        "status": 200,
+        "form": {
+            "name": "form name",
+            "type": "feedback, survey, or poll",
+            "created_by": "username",
+            "created_at": "timestamp",
+            "questions": [
+                {
+                    "question_num": 1,
+                    "type": "freeform, rate, or multiple_choice"
+                    "description": "description of question 1, effectively the question itself"
+                    "options": {["option1", "option2", "option3"]} (only for multiple_choice)
+                },
+                ...
+            ]
+        }
+    }
+
+    If request rejected, returns:
+    {
+        "status": 400,
+        "text": "Error message"
+    }
+    """
+    print("get-form")
+    body = request.json
+
+    # Check for form_id
+    if not 'form_id' in body:
+        response = {
+            "status": 400,
+            "text": "Form ID not provided"
+        }
+        return jsonify(response)
+
+    # Get form from database
+    query = f"SELECT name, type, created_by, created_at FROM public.form WHERE id = '{body['form_id']}';"
+
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+        cur.close()
+        conn.close()
+
+        if len(data) == 0:
+            response = {
+                "status": 400,
+                "text": "Form not found"
+            }
+            return jsonify(response)
+
+        form = {
+            "name": data[0][0],
+            "type": data[0][1],
+            "created_by": data[0][2],
+            "created_at": data[0][3]
+        }
+
+        query = f"SELECT question_num, type, description, options FROM public.form_question WHERE form_id = '{body['form_id']}';"
+
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+        cur.close()
+        conn.close()
+
+        questions = []
+        for question in data:
+            questions.append({
+                "question_num": question[0],
+                "type": question[1],
+                "description": question[2],
+                "options": question[3]
+            })
+
+        form['questions'] = questions
+
+        response = {
+            "status": 200,
+            "form": form
+        }
+
+    except psycopg2.OperationalError as e:
+        response = {
+            "status": 400,
+            "text": f"Error while using database: '{str(e).strip()}'"
+        }
+
+    return jsonify(response)
+
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv("PORT", default=5000))
