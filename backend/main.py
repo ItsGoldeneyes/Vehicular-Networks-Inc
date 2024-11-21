@@ -332,7 +332,7 @@ def get_forms():
         return jsonify(response)
 
     # Get forms from database
-    query = f"SELECT id, name, type, created_by, created_at FROM public.form';"
+    query = f"SELECT id, name, type, created_by, created_at FROM public.form;"
 
     try:
         conn = get_db_connection()
