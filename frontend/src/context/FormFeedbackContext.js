@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react";
+import { useUser } from "./UserContext";
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const BACKEND_URL = NODE_ENV === 'development' ? 'http://localhost:5000' : 'https://backend-group5.up.railway.app/';
@@ -8,6 +9,7 @@ export const FormFeedbackContext = createContext(null);
 export function FormFeedbackProvider({ children }) {
     const [ poll, setPoll ] = useState(null);
     const [ feedbackForm, setFeedbackForm ] = useState(null);
+    const { user } = useUser();
 
     const getDefaultPoll = async () => {
     //     const newUser = await fetch(`${BACKEND_URL}/register`, {
@@ -50,8 +52,11 @@ export function FormFeedbackProvider({ children }) {
     }
 
     const submitFeedbackForm = async (feedback) => {
-        await fetch(`${BACKEND_URL}/submit_feedback`, {
-            method: "POST",
+        // user is logged in; not null
+        console.assert(!!user);
+
+        const res = await fetch(`${BACKEND_URL}/submit-form`, {
+            method: "post",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(feedback)
         })
@@ -59,14 +64,10 @@ export function FormFeedbackProvider({ children }) {
             .then(
                 res => {
                     if (res.status === 200) {
-                        return true;
-                        // return {
-                        //     profile_status: res.profile_status,
-                        //     username: res.username
-                        // };
+                        return res;
                     } else {
                         alert(`Error Submitting Feedback In: ${res.text}`)
-                        return false;
+                        return res;
                     }
                 }
             )
@@ -74,9 +75,11 @@ export function FormFeedbackProvider({ children }) {
                 err => {
                     alert("Error Submiting Feedback. Check the console for more details.");
                     console.error(err);
-                    return false;
+                    return err;
                 }
             );
+        
+        return res;
     }
 
     return (

@@ -2,24 +2,34 @@ import React, { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { TextField, Button } from "@mui/material";
 import "./FeedbackForm.css";
-import { useFormFeedback } from "../../context/FormFeedbackContext";
 import { useUser } from "../../context/UserContext";
+import { useFormFeedback } from "../../context/FormFeedbackContext";
 
 export default function FeedbackForm() {
   const { theme } = useOutletContext(); // Get theme from context
-  const [feedback, setFeedback] = useState(""); // State for feedback
+  const [ feedback, setFeedback ] = useState(""); // State for feedback
   const { getFeedbackForm, submitFeedbackForm } = useFormFeedback();
   const [ hasSubmitted, setHasSubmitted ] = useState(false);
-  const [ user ] = useUser();
+  const { user } = useUser();
 
   const handleSubmit = async () => {
     try {
-      const success = await submitFeedbackForm({
-        "user_id": user,
-        "feedback": feedback
+      const res = await submitFeedbackForm({
+        requested_by: user.user_id,
+        form: {
+          form_id: "20c1200f-cc03-4b80-9349-f19f6e826d03",
+          responses: [
+            {
+              question_num: 1,
+              type: "freeform",
+              answer: feedback
+            }
+          ]
+        }
       });
-      if (success) {
+      if (res.status === 200) {
         setHasSubmitted(true);
+        setFeedback("");
       }
     } catch (e) {
       console.error(e);
