@@ -26,11 +26,6 @@ def get_db_connection():
     return conn
 
 
-# @app.route('/')
-# def index():
-#     return jsonify({"Choo Choo": "Welcome to your Flask app 🚅"})
-
-
 @app.route('/test-db')
 def testdb():
     conn = get_db_connection()
@@ -41,6 +36,7 @@ def testdb():
     conn.close()
 
     return jsonify(data)
+
 
 @app.route('/register', methods=["POST"])
 def register():
@@ -121,6 +117,7 @@ def register():
             }
 
     return jsonify(response)
+
 
 @app.route('/login', methods=["POST"])
 def login():
@@ -231,6 +228,7 @@ def lookup_user():
         }
 
     return jsonify(response)
+
 
 @app.route('/create-form', methods=["POST"])
 def create_form():
@@ -387,6 +385,7 @@ def create_form():
 
     return jsonify(response)
 
+
 @app.route('/get-forms', methods=["POST"])
 def get_forms():
     """
@@ -476,6 +475,7 @@ def get_forms():
         }
 
     return jsonify(response)
+
 
 @app.route('/get-form', methods=["POST"])
 def get_form():
@@ -605,6 +605,164 @@ def get_form():
         }
 
     return jsonify(response)
+
+
+@app.route('/submit-form', methods=["POST"])
+def submit_form():
+    """
+    Request needs to be in the format:
+    {
+        "requested_by": user_id,
+        "form": {
+            "form_id": uuid,
+            "responses": [
+                {
+                    "question_num": 1,
+                    "type": "freeform, rate, or multiple_choice"
+                    "answer": "text iff freeform, int if rate or multiple_Choice"
+                },
+                {
+                    "question_num": 2,
+                    "type": "freeform, rate, or multiple_choice"
+                    "answer": "text iff freeform, int if rate or multiple_Choice"
+                }
+            ]
+        }
+    }
+
+    If request accepted, returns:
+    {
+        "status": 200,
+        "answers_submitted": "int"
+    }
+
+    If request rejected, returns:
+    {
+        "status": 400,
+        "text": "Error message"
+    }
+
+    Form added to database with format:
+        TABLE form_response
+        "id": "form_id",
+        "question_num": intQuestionNum,
+        "form_id": "form_id",
+        "user_id": "requested_by",
+        "freeform_answer": "text", (only for 'freeform' questions)
+        "rate_answer": intOption, (only for 'rate' questions)
+        "mc_answer": intOption (only for 'multiple_choice' questions)
+    """
+
+    body = request.json
+
+    if not 'requested_by' in body:
+        response = {
+            "status": 400,
+            "text": "No user provided."
+        }
+        return jsonify(response)
+    #     TODO check user exists?
+
+    if not 'form' in body:
+        response = {
+            "status": 400,
+            "text": "No form provided."
+        }
+        return jsonify(response)
+
+    if not 'form_id' in body['form']:
+        response = {
+            "status": 400,
+            "text": "No form id provided."
+        }
+        return jsonify(response)
+    #     TODO check form_id exists?
+
+    if not 'responses' in body['form']:
+        response = {
+            "status": 400,
+            "text": "Responses not provided."
+        }
+        return jsonify(response)
+
+    for answer in body['form']['responses']:
+        if not 'question_num' in answer:
+            response = {
+                "status": 400,
+                "text": "Question number of answer not provided"
+            }
+            return jsonify(response)
+        # TODO check question_num matches form_question in DB?
+
+        if not 'type' in answer:
+            response = {
+                "status": 400,
+                "text": "Answer type not provided"
+            }
+            return jsonify(response)
+        # TODO check type matches form_question.type in DB?
+
+        if answer['type'] not in ['freeform', 'rate', 'multiple_choice']:
+            response = {
+                "status": 400,
+                "text": "Invalid answer type received"
+            }
+            return jsonify(response)
+
+        if answer['type'] in ['rate'] and not str(answer['type']).isdigit():
+            response = {
+                "status": 400,
+                "text": "Answer for rate is not a non-negative integer"
+            }
+
+        if not 'answer' in answer:
+            response = {
+                "status": 400,
+                "text": "No answer provided for some question"
+            }
+            return jsonify(response)
+
+    try:
+
+        conn = get_db_connection()
+        cur = conn.cursor()
+
+        for answer in body['form']['responses']:
+            if answer['type'] == 'freeform':
+                query = f"INSERT INTO form_response ('question_num', 'form_id', 'user_id', 'freeform_answer') VALUES ('{answer['question_num']}', '{body['form']['form_id']}', '{body['requested_by']}', '{answer['answer']}') RETURNING id;"
+            elif answer['type'] == 'rate':
+                query = f"INSERT INTO form_response ('question_num', 'form_id', 'user_id', 'rate_answer') VALUES ('{answer['question_num']}', '{body['form']['form_id']}', '{body['requested_by']}', {answer['answer']}) RETURNING id;"
+            elif answer['type'] == 'multiple_choice':
+                query = f"INSERT INTO form_response ('question_num', 'form_id', 'user_id', 'mc_answer') VALUES ('{answer['question_num']}', '{body['form']['form_id']}', '{body['requested_by']}', '{answer['answer']}') RETURNING id;"
+
+            cur.execute(query)
+
+        data = cur.fetchall()
+        cur.close()
+        conn.commit()
+        conn.close()
+
+        if len(data) == len(body['form']['responses']):
+            response = {
+                "status": 200,
+                "answers_submitted": len(data)
+            }
+        else:
+            # Shouldn't enter here
+            response = {
+                "status": 400,
+                "text": "Answer submission error: unknown"
+            }
+
+    except psycopg2.OperationalError as e:
+        response = {
+            "status": 400,
+            "text": f"Error while using database: '{str(e).strip()}'"
+        }
+        return jsonify(response)
+
+    return jsonify(response)
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv("PORT", default=5000))
