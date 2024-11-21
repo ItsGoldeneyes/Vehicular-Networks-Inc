@@ -5,19 +5,11 @@ import search_icon_dark from "../Assets/search-b.png";
 import React, { useEffect, useState } from "react";
 import { Button, Switch } from "@mui/material";
 import { useUser } from "../context/UserContext";
+import { useTheme } from "../context/ThemeContext";
 
 export default function RootLayout() {
-  const current_theme = localStorage.getItem("current_theme");
-  const [theme, setTheme] = useState(current_theme ? current_theme : "light");
-  const toggle_mode = () => {
-    theme == "light" ? setTheme("dark") : setTheme("light");
-  };
-
+  const { theme, setTheme, toggleTheme } = useTheme();
   const { user, userLogOut } = useUser();
-
-  useEffect(() => {
-    localStorage.setItem("current_theme", theme);
-  }, [theme]);
 
   return (
     <div className="root-layout">
@@ -82,11 +74,11 @@ export default function RootLayout() {
             />
           </div>
 
-          {/* <img onClick={()=>{toggle_mode()}} src={theme == 'light' ? toggle_light : toggle_dark} alt="" className='toggle-icon'/> */}
+          {/* <img onClick={()=>{toggleTheme()}} src={theme == 'light' ? toggle_light : toggle_dark} alt="" className='toggle-icon'/> */}
           <div className="theme-toggle">
             <Switch
               checked={theme === "dark"}
-              onChange={toggle_mode}
+              onChange={toggleTheme}
               color="primary" /* You can change the color or customize it */
             />
             <span>{theme === "light" ? "Light" : "Dark"}</span>
@@ -95,7 +87,7 @@ export default function RootLayout() {
         <main>
           {" "}
           {/* This is where the main content will be rendered */}
-          <Outlet context={{ theme }} />
+          <Outlet />
         </main>
       </div>
     </div>

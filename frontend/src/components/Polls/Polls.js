@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import { Box, Typography, TextField, Button, Rating } from "@mui/material";
+import { useTheme } from "../../context/ThemeContext";
 
 export default function Polls() {
-  const { theme } = useOutletContext(); // Get theme from context
+  const { theme } = useTheme();
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [pollData, setPollData] = useState({});

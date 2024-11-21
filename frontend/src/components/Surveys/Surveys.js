@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import "./Surveys.css"; // Import the CSS file
+import { useTheme } from "../../context/ThemeContext";
 
 export default function Surveys() {
-  const { theme } = useOutletContext(); // Get theme from context
+  const { theme } = useTheme();
 
   useEffect(() => {
       document.title = "Surveys - FleetRewards";

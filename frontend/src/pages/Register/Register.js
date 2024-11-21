@@ -4,13 +4,14 @@ import { NavLink } from "react-router-dom";
 import { useOutletContext } from "react-router-dom";
 import { Link } from "@mui/material";
 import { useUser } from "../../context/UserContext";
+import { useTheme } from "../../context/ThemeContext";
 
 export default function Register() {
+  const { theme } = useTheme();
   const nameId = useId();
   const emailId = useId();
   const passId = useId();
   const passConfirmId = useId();
-  const { theme } = useOutletContext(); // Get theme from context
   const { userRegister, isLoading } = useUser();
 
   useEffect(() => {

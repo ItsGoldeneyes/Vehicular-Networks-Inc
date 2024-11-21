@@ -4,9 +4,10 @@ import { TextField, Button } from "@mui/material";
 import "./FeedbackForm.css";
 import { useUser } from "../../context/UserContext";
 import { useFormFeedback } from "../../context/FormFeedbackContext";
+import { useTheme } from "../../context/ThemeContext";
 
 export default function FeedbackForm() {
-  const { theme } = useOutletContext(); // Get theme from context
+  const { theme } = useTheme();
   const [ feedback, setFeedback ] = useState(""); // State for feedback
   const { getFeedbackForm, submitFeedbackForm } = useFormFeedback();
   const [ hasSubmitted, setHasSubmitted ] = useState(false);

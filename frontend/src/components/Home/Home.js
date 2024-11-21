@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import './Home.css'; // Import the CSS file
+import { useTheme } from '../../context/ThemeContext';
 
 export default function Home() {
-    const { theme } = useOutletContext(); // Get theme from context
+    const { theme } = useTheme();
 
     useEffect(() => {
         document.title = "Home - FleetRewards";

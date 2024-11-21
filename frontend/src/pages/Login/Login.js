@@ -3,11 +3,12 @@ import styles from "./Login.module.css";
 import { NavLink } from "react-router-dom";
 import { useOutletContext } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
+import { useTheme } from "../../context/ThemeContext";
 
 export default function Login() {
+  const { theme } = useTheme();
   const usernameId = useId();
   const passId = useId();
-  const { theme } = useOutletContext(); // Get theme from context
   const [ attemptedLogin, setAttemptedLogin ] = useState(false);
   const [ loginMessage, setLoginMessage ] = useState(null);
   const { user, userAuth, isLoading } = useUser();
