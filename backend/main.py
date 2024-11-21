@@ -767,7 +767,7 @@ def submit_form():
             return jsonify(response)
 
     try:
-
+        answer_data = []
         conn = get_db_connection()
         cur = conn.cursor()
 
@@ -784,19 +784,15 @@ def submit_form():
             cur.execute(query)
 
         data = cur.fetchall()
+        answer_data.append(data)
         cur.close()
         conn.commit()
         conn.close()
 
-        print(data)
-        print(len(data))
-        print(len(body['form']['responses']))
-        print(body['form']['responses'])
-        print(len(data) == len(body['form']['responses']))
-        if len(data) == len(body['form']['responses']):
+        if len(answer_data) == len(body['form']['responses']):
             response = {
                 "status": 200,
-                "answers_submitted": len(data)
+                "answers_submitted": len(answer_data)
             }
         else:
             # Shouldn't enter here
