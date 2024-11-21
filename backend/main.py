@@ -245,13 +245,13 @@ def create_form():
         # Add form to form table
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute(f"INSERT INTO public.form (id, name, type, created_by, created_at) VALUES ('{id}', '{body['form']['name']}', '{body['form']['type']}', '{body['requested_by']}', '{current_timestamp}');")
+        cur.execute(f"INSERT INTO public.form (name, type, created_by) VALUES ('{body['form']['name']}', '{body['form']['type']}', '{body['requested_by']}');")
         cur.close()
 
         # Add questions to form_question table
         for question in body['form']['questions']:
             cur = conn.cursor()
-            cur.execute(f"INSERT INTO public.form_question VALUES ('{id}', '{question['question_num']}', '{question['type']}', '{question['description']}' {',' if 'options' in question else ''} {question['options'] if 'options' in question else ''});")
+            cur.execute(f"INSERT INTO public.form_question VALUES ('{id}', '{question['question_num']}', '{question['type']}', '{question['description']}'{',' if 'options' in question else ''} {question['options'] if 'options' in question else ''});")
             conn.commit()
             cur.close()
 
