@@ -442,8 +442,16 @@ def get_forms():
         }
         return jsonify(response)
 
-    # Get forms from database
-    query = f"SELECT id, name, type, created_by, created_at, points FROM public.form;"
+    # Get forms from database that user has not responded to
+    query = f"""
+    SELECT form.id, form.name, form.type, form.created_by, form.created_at, form.points
+    FROM public.form
+    WHERE form.id NOT IN (
+        SELECT form_id
+        FROM public.form_response
+        WHERE user_id = '{body['requested_by']}'
+    );
+    """
 
     try:
         conn = get_db_connection()
@@ -468,6 +476,7 @@ def get_forms():
             "status": 200,
             "forms": forms
         }
+
     except psycopg2.OperationalError as e:
         response = {
             "status": 400,
