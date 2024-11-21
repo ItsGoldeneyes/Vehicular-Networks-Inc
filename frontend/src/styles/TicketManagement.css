@@ -1,16 +1,19 @@
-.ticket-table {
+.ticket-table, .feedback-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
 }
 
 .ticket-table th,
-.ticket-table td {
+.feedback-table th,
+.ticket-table td,
+.feedback-table td {
   padding: 10px;
   border: 1px solid #ddd;
 }
 
-.ticket-table th {
+.ticket-table th,
+.feedback-table th {
   background-color: #f4f4f4;
 }
 
@@ -58,4 +61,9 @@
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
+}
+
+.ticket-management-container h3 {
+  text-align: left !important;
+  margin-left: 10px;
 }

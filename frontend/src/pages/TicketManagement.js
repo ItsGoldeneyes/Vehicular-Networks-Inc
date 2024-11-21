@@ -18,6 +18,7 @@ function TicketManagement() {
 	const [admins, setAdmins] = useState([]);
 	const [selectedAdmin, setSelectedAdmin] = useState("");
 	const [selectedStatus, setSelectedStatus] = useState("");
+	const [userFeedbacks, setUserFeedbacks] = useState([]);
 	const [showSuccessful, setShowSuccessful] = useState(false);
 	const [alertContent, setAlertContent] = useState("");
 
@@ -43,6 +44,18 @@ function TicketManagement() {
 			console.log(err);
 		}
 	};
+
+	const fetchUserFeedback = async () => {
+		try {
+			const res = await axios.get("http://localhost:5000/api/userfeedback");
+			console.log("user feedback", res.data);
+			setUserFeedbacks(res.data);
+		} 
+		catch (err) {
+			console.log(err);
+		}
+	};
+
 
 	const formatDate = (date) => {
 		if (!date) return "";
@@ -146,12 +159,14 @@ function TicketManagement() {
 	useEffect(() => {
 		fetchAdmins();
 		fetchTickets();
+		fetchUserFeedback();
 	}, []);
 
 	return (
-		<div>
+		<div className="ticket-management-container">
 			{showSuccessful && <Alert severity="success">{alertContent}</Alert>}
 			<h2>Ticket & Feedback Management</h2>
+			<h3>Tickets</h3>
 			<table className="ticket-table">
 				<thead>
 					<tr>
@@ -248,6 +263,29 @@ function TicketManagement() {
 									</div>
 								</div>
 							</td>
+						</tr>
+					))}
+				</tbody>
+			</table>
+			<h3>Feedback</h3>
+			<table className="feedback-table">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>User ID</th>
+						<th>Rating</th>
+						<th>Comments</th>
+						<th>Date Submitted</th>
+					</tr>
+				</thead>
+				<tbody>
+					{userFeedbacks.map((feedback) => (
+						<tr key={feedback.Submission_ID}>
+							<td>{feedback.Submission_ID}</td>
+							<td>{feedback.User_ID}</td>
+							<td>{feedback.Rating}</td>
+							<td>{feedback.Comments}</td>
+							<td>{formatDate(feedback.Date_submitted)}</td>
 						</tr>
 					))}
 				</tbody>

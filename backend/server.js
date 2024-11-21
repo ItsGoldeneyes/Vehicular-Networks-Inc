@@ -8,18 +8,6 @@ const db = require("./config/db");
 app.use(express.json());
 app.use(cors());
 
-
-// // MySQL database configuration
-// const dbConfig = {
-//   host: 'localhost', // MySQL host
-//   user: 'root',      // Replace with your MySQL user
-//   password: 'yashyerasi',      // Replace with your MySQL password
-//   database: 'cps714_database' // Replace with your MySQL database name
-// };
-
-// // Create a MySQL connection pool
-// const pool = mysql.createPool(dbConfig);
-
 // Routes
 
 // Fetch all users from EndUser table
@@ -109,6 +97,18 @@ app.post('/tickets', (req, res) => {
       res.json({ message: 'Ticket created successfully', ticketId: results.insertId });
     }
   );
+});
+
+app.get('/api/userfeedback', (req, res) => {
+  console.log("fetching all user feedback");
+  db.query('SELECT * FROM User_Feedback', (err, results) => {
+    if (err) {
+      console.error('Error fetching user feedback:', err);
+      res.status(500).json({ error: 'Database error', details: err.message });
+      return;
+    }
+    res.json(results);
+  });
 });
 
 // **Rewards Routes**
