@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const BACKEND_URL = NODE_ENV === 'development' ? 'http://localhost:5000' : 'https://backend-group5.up.railway.app/';
@@ -9,8 +9,16 @@ console.log(`Using NODE_ENV: ${NODE_ENV}`);
 export const UserContext = createContext(null);
 
 export function UserProvider({ children }) {
-    const [ user, setUser ] = useState(null);
+    const [ user, setUser ] = useState(JSON.parse(localStorage.getItem("user")) || null);
     const [ isLoading, setIsLoading ] = useState(false);
+
+    useEffect(() => {
+        if(user === null) {
+            localStorage.removeItem("user");
+        } else {
+            localStorage.setItem("user", JSON.stringify(user));
+        }
+    }, [user]);
 
     async function userRegister(form) {
         const formData = new FormData(form);
