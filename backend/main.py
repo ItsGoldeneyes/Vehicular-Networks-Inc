@@ -276,6 +276,92 @@ def create_form():
 
     return jsonify(response)
 
+@app.route('/get-forms', methods=["POST"])
+def get_forms():
+    """
+    Request needs to be in the format:
+    {
+        "requested_by": "username"
+    }
+
+    If request accepted, returns:
+    {
+        "status": 200,
+        "forms": [
+            {
+                "form_id": "form_id",
+                "name": "form name",
+                "type": "feedback, survey, or poll",
+                "created_by": "username",
+                "created_at": "timestamp"
+            },
+            ...
+        ]
+    }
+
+    If request rejected, returns:
+    {
+        "status": 400,
+        "text": "Error message"
+    }
+    """
+    body = request.json
+
+    # If userid not in users table, return error
+    query = f"SELECT user_id FROM public.profile WHERE username = '{body['requested_by']}';"
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+        cur.close()
+        conn.close()
+
+        if len(data) == 0:
+            response = {
+                "status": 400,
+                "text": "User not found"
+            }
+            return jsonify(response)
+    except psycopg2.OperationalError as e:
+        response = {
+            "status": 400,
+            "text": f"Error while using database: '{str(e).strip()}'"
+        }
+        return jsonify(response)
+
+    # Get forms from database
+    query = f"SELECT id, name, type, created_by, created_at FROM public.form';"
+
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+        cur.close()
+        conn.close()
+
+        forms = []
+        for form in data:
+            forms.append({
+                "form_id": form[0],
+                "name": form[1],
+                "type": form[2],
+                "created_by": form[3],
+                "created_at": form[4]
+            })
+
+        response = {
+            "status": 200,
+            "forms": forms
+        }
+    except psycopg2.OperationalError as e:
+        response = {
+            "status": 400,
+            "text": f"Error while using database: '{str(e).strip()}'"
+        }
+
+    return jsonify(response)
 
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv("PORT", default=5000))
