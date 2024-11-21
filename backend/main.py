@@ -788,6 +788,9 @@ def submit_form():
         conn.commit()
         conn.close()
 
+        print(data)
+        print(len(data))
+        print(len(body['form']['responses']))
         if len(data) == len(body['form']['responses']):
             response = {
                 "status": 200,
