@@ -42,9 +42,35 @@ def testdb():
 
     return jsonify(data)
 
-
 @app.route('/register', methods=["POST"])
 def register():
+    """
+    Takes a username, email, password, and password confirmation. If the passwords match, the user is registered.
+
+    Request needs to be in the format:
+    {
+        "username": "username",
+        "email": "email",
+        "pass": "password",
+        "pass-confirm": "password"
+    }
+
+    If request accepted, returns:
+    {
+        "status": 200,
+        "user_id": "user_id",
+        "username": "username",
+        "profile_status": "normal"
+    }
+
+    If request rejected, returns:
+    {
+        "status": 400,
+        "text": "Error message"
+    }
+
+    """
+    print("register")
     body = request.json
 
     if not body['pass'] == body['pass-confirm']:
@@ -96,9 +122,33 @@ def register():
 
     return jsonify(response)
 
-
 @app.route('/login', methods=["POST"])
 def login():
+    """
+    Takes a username and password, returns user_id if the username and password match.
+
+    Request needs to be in the format:
+    {
+        "username": "username",
+        "password": "password"
+    }
+
+    If request accepted, returns:
+    {
+        "status": 200,
+        "user_id": "user_id",
+        "username": "username",
+        "profile_status": "normal"
+    }
+
+    If request rejected, returns:
+    {
+        "status": 400,
+        "text": "Error message
+    }
+    """
+
+    print("login")
     body = request.json
     query = f"SELECT user_id, username, profile_status FROM public.profile WHERE username = '{body['username']}' AND password = '{body['password']}';"
 
@@ -130,6 +180,58 @@ def login():
 
     return jsonify(response)
 
+@app.route('/lookup-user', methods=["POST"])
+def lookup_user():
+    """
+    Takes an email, returns a user_id if the email is found in the database.
+
+    Request needs to be in the format:
+    {
+        "email": "email"
+    }
+
+    If request accepted, returns:
+    {
+        "status": 200,
+        "user_id": "user_id"
+    }
+
+    If request rejected, returns:
+    {
+        "status": 400,
+        "text": "Error message"
+    }
+    """
+
+    body = request.json
+    query = f"SELECT user_id FROM public.profile WHERE email = '{body['email']}';"
+
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+        cur.close()
+        conn.close()
+
+        if len(data) == 1:
+            response = {
+                "status": 200,
+                "user_id": data[0][0]
+            }
+        else:
+            response = {
+                "status": 400,
+                "text": "User not found"
+            }
+    except psycopg2.OperationalError as e:
+        response = {
+            "status": 400,
+            "text": f"Error while using database: '{str(e).strip()}'"
+        }
+
+    return jsonify(response)
+
 @app.route('/create-form', methods=["POST"])
 def create_form():
     """
@@ -139,6 +241,7 @@ def create_form():
         "form": {
             "name": "form name",
             "type": "feedback, survey, or poll",
+            "points": "points",
             "questions": [
                 {
                     "question_num": 1,
@@ -203,6 +306,14 @@ def create_form():
         }
         return jsonify(response)
 
+    # Check for points
+    if not 'points' in body['form']:
+        response = {
+            "status": 400,
+            "text": "Form points not provided"
+        }
+        return jsonify(response)
+
     # Check for questions
     if not 'questions' in body['form']:
         response = {
@@ -236,12 +347,12 @@ def create_form():
 
     # Add form to database
     try:
-        print(f"INSERT INTO public.form VALUES ('{body['form']['name']}', '{body['form']['type']}', '{body['requested_by']}');")
+        print(f"INSERT INTO public.form (name, type, created_by, points) VALUES ('{body['form']['name']}', '{body['form']['type']}', '{body['requested_by']}', {body['form']['points']});")
 
         # Add form to form table
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute(f"INSERT INTO public.form (name, type, created_by) VALUES ('{body['form']['name']}', '{body['form']['type']}', '{body['requested_by']}');")
+        cur.execute(f"INSERT INTO public.form (name, type, created_by, points) VALUES ('{body['form']['name']}', '{body['form']['type']}', '{body['requested_by']}', {body['form']['points']});")
         # Pull form id
         cur.execute(f"SELECT id FROM public.form WHERE name = '{body['form']['name']}' AND created_by = '{body['requested_by']}' ORDER BY created_at DESC LIMIT 1 ;")
         form_id = cur.fetchall()
@@ -293,7 +404,8 @@ def get_forms():
                 "name": "form name",
                 "type": "feedback, survey, or poll",
                 "created_by": "username",
-                "created_at": "timestamp"
+                "created_at": "timestamp",
+                "points": "points"
             },
             ...
         ]
@@ -305,10 +417,11 @@ def get_forms():
         "text": "Error message"
     }
     """
+    print("get-forms")
     body = request.json
 
     # If userid not in users table, return error
-    query = f"SELECT user_id FROM public.profile WHERE username = '{body['requested_by']}';"
+    query = f"SELECT user_id FROM public.profile WHERE user_id = '{body['requested_by']}';"
     try:
         conn = get_db_connection()
         cur = conn.cursor()
@@ -331,7 +444,7 @@ def get_forms():
         return jsonify(response)
 
     # Get forms from database
-    query = f"SELECT id, name, type, created_by, created_at FROM public.form';"
+    query = f"SELECT id, name, type, created_by, created_at, points FROM public.form;"
 
     try:
         conn = get_db_connection()
@@ -348,13 +461,143 @@ def get_forms():
                 "name": form[1],
                 "type": form[2],
                 "created_by": form[3],
-                "created_at": form[4]
+                "created_at": form[4],
+                "points": form[5]
             })
 
         response = {
             "status": 200,
             "forms": forms
         }
+    except psycopg2.OperationalError as e:
+        response = {
+            "status": 400,
+            "text": f"Error while using database: '{str(e).strip()}'"
+        }
+
+    return jsonify(response)
+
+@app.route('/get-form', methods=["POST"])
+def get_form():
+    """
+    Request needs to be in the format:
+    {
+        "requested_by": "user_id",
+        "form_id": "form_id"
+    }
+
+    If request accepted, returns:
+    {
+        "status": 200,
+        "form": {
+            "name": "form name",
+            "type": "feedback, survey, or poll",
+            "created_by": "username",
+            "created_at": "timestamp",
+            "points": "points",
+            "questions": [
+                {
+                    "question_num": 1,
+                    "type": "freeform, rate, or multiple_choice"
+                    "description": "description of question 1, effectively the question itself"
+                    "options": {["option1", "option2", "option3"]} (only for multiple_choice)
+                },
+                ...
+            ]
+        }
+    }
+
+    If request rejected, returns:
+    {
+        "status": 400,
+        "text": "Error message"
+    }
+    """
+    print("get-form")
+    body = request.json
+
+    # Check if user_id is in users table
+    query = f"SELECT user_id FROM public.profile WHERE user_id = '{body['requested_by']}';"
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+        cur.close()
+        conn.close()
+
+        if len(data) == 0:
+            response = {
+                "status": 400,
+                "text": "User not found"
+            }
+            return jsonify(response)
+    except psycopg2.OperationalError as e:
+        response = {
+            "status": 400,
+            "text": f"Error while using database: '{str(e).strip()}'"
+        }
+        return jsonify(response)
+
+    # Check for form_id
+    if not 'form_id' in body:
+        response = {
+            "status": 400,
+            "text": "Form ID not provided"
+        }
+        return jsonify(response)
+
+    # Get form from database
+    query = f"SELECT name, type, created_by, created_at, points FROM public.form WHERE id = '{body['form_id']}';"
+
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+        cur.close()
+        conn.close()
+
+        if len(data) == 0:
+            response = {
+                "status": 400,
+                "text": "Form not found"
+            }
+            return jsonify(response)
+
+        form = {
+            "name": data[0][0],
+            "type": data[0][1],
+            "created_by": data[0][2],
+            "created_at": data[0][3],
+            "points": data[0][4]
+        }
+
+        query = f"SELECT question_num, type, description, options FROM public.form_question WHERE form_id = '{body['form_id']}';"
+
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+        cur.close()
+        conn.close()
+
+        questions = []
+        for question in data:
+            questions.append({
+                "question_num": question[0],
+                "type": question[1],
+                "description": question[2],
+                "options": question[3]
+            })
+
+        form['questions'] = questions
+
+        response = {
+            "status": 200,
+            "form": form
+        }
+
     except psycopg2.OperationalError as e:
         response = {
             "status": 400,
