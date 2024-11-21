@@ -180,7 +180,7 @@ def login():
 
     return jsonify(response)
 
-@app.route('/lookup_user', methods=["POST"])
+@app.route('/lookup-user', methods=["POST"])
 def lookup_user():
     """
     Takes an email, returns a user_id if the email is found in the database.
