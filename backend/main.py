@@ -619,12 +619,12 @@ def submit_form():
                 {
                     "question_num": 1,
                     "type": "freeform, rate, or multiple_choice"
-                    "answer": "text iff freeform, int if rate or multiple_Choice"
+                    "answer": "text iff freeform or multiple_choice, int if rate (1 to 5, inclusive)"
                 },
                 {
                     "question_num": 2,
                     "type": "freeform, rate, or multiple_choice"
-                    "answer": "text iff freeform, int if rate or multiple_Choice"
+                    "answer": "text iff freeform or multiple_choice, int if rate (1 to 5, inclusive)"
                 }
             ]
         }
