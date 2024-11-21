@@ -305,10 +305,11 @@ def get_forms():
         "text": "Error message"
     }
     """
+    print("get-forms")
     body = request.json
 
     # If userid not in users table, return error
-    query = f"SELECT user_id FROM public.profile WHERE username = '{body['requested_by']}';"
+    query = f"SELECT user_id FROM public.profile WHERE user_id = '{body['requested_by']}';"
     try:
         conn = get_db_connection()
         cur = conn.cursor()
