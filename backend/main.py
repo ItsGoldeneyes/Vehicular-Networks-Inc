@@ -661,7 +661,29 @@ def submit_form():
             "text": "No user provided."
         }
         return jsonify(response)
-    #     TODO check user exists?
+
+    # Check if user_id is in users table
+    query = f"SELECT user_id FROM public.profile WHERE user_id = '{body['requested_by']}';"
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+        cur.close()
+        conn.close()
+
+        if len(data) == 0:
+            response = {
+                "status": 400,
+                "text": "User not found"
+            }
+            return jsonify(response)
+    except psycopg2.OperationalError as e:
+        response = {
+            "status": 400,
+            "text": f"Error while using database: '{str(e).strip()}'"
+        }
+        return jsonify(response)
 
     if not 'form' in body:
         response = {
@@ -676,7 +698,29 @@ def submit_form():
             "text": "No form id provided."
         }
         return jsonify(response)
-    #     TODO check form_id exists?
+
+    # Check if form_id is in forms table
+    query = f"SELECT id FROM public.form WHERE id = '{body['form']['form_id']}';"
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+        cur.close()
+        conn.close()
+
+        if len(data) == 0:
+            response = {
+                "status": 400,
+                "text": "Form not found"
+            }
+            return jsonify(response)
+    except psycopg2.OperationalError as e:
+        response = {
+            "status": 400,
+            "text": f"Error while using database: '{str(e).strip()}'"
+        }
+        return jsonify(response)
 
     if not 'responses' in body['form']:
         response = {
