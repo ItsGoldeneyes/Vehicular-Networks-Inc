@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const { Client } = require('pg');  // PostgreSQL client
-<<<<<<<< HEAD:userprofilemngr/userprofilemngr/backend/app.js
 const { env } = require('process');
 
 const USER = env.PGUSER || 'postgres';
@@ -10,7 +9,6 @@ const HOST = env.PGHOST || 'localhost';
 const PASSWORD = env.PGPASSWORD || 'password';
 const PORT = env.PGPORT || 5432;
 
-========
 require("dotenv").config({path:"./conf.env"});
 
 C_DB_USER = process.env.PGUSER || 'postgres';
@@ -18,24 +16,15 @@ C_DB_HOST = process.env.PGHOST || 'localhost';
 C_DB_NAME = process.env.DB_NAME || 'usermanagement';
 C_DB_PASS = process.env.PGPASSWORD || 'master';
 C_DB_PORT = process.env.PGPORT || 5432;
->>>>>>>> 047005e04e9247d5045d9d060cc9e93944c05fd1:userprofilemngr/userprofilemngr/backend/server.js
 
 
 // PostgreSQL client setup
 const client = new Client({
-<<<<<<<< HEAD:userprofilemngr/userprofilemngr/backend/app.js
     user: USER,
     host: HOST,
     database: 'usermanagement',
     password: PASSWORD,
     port: PORT,
-========
-    user: C_DB_USER,
-    host: C_DB_HOST,
-    database: C_DB_NAME,
-    password: C_DB_PASS,
-    port: C_DB_PORT, 
->>>>>>>> 047005e04e9247d5045d9d060cc9e93944c05fd1:userprofilemngr/userprofilemngr/backend/server.js
 });
 
 client.connect(); // Establish connection to the database
