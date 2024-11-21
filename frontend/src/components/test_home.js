@@ -51,7 +51,7 @@ export default function TestHomePage() {
 	const [users, setUsers] = useState([]);
 
 	useEffect(() => {
-		axios.get('http://localhost:5000/api/users')
+		axios.get('http://fleetrewards-copy-1-group2.up.railway.app/api/users')
 		.then(response => {
 			setUsers(response.data);
 		})
