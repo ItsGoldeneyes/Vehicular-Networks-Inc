@@ -118,7 +118,7 @@ function FullScreenMedia() {
           <div style={{
             textAlign: "right",
           }}>
-          {isUpcomingEvent(media.DATE) && <button style={{
+          {(isUpcomingEvent(media.DATE) || media.TYPE == "course") && <button style={{
             padding: "10px 20px",
             backgroundColor: "green",
             color: "white",
