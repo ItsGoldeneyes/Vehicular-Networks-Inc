@@ -783,15 +783,15 @@ def submit_form():
 
             cur.execute(query)
 
-        data = cur.fetchall()
-        answer_data.append(data)
+            data = cur.fetchall()
+            answer_data.append(data)
         cur.close()
         conn.commit()
         conn.close()
 
         print(answer_data)
         print(len(answer_data))
-        
+
         print(len(body['form']['responses']))
         print(body['form']['responses'])
         # Ensure that all answers were submitted and have an associated id
