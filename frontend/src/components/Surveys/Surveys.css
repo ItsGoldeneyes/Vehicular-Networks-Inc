@@ -30,7 +30,8 @@
 }
 
 .survey-card.dark {
-    
+    background-color: #333;
+    border-color: #555;
 }
 
 .survey-card:hover {
@@ -46,6 +47,10 @@
     font-size: 1.2em;
     color: #666;
     margin-bottom: 20px;
+}
+
+.survey-points.dark {
+    color: #ccc;
 }
 
 .survey-button {

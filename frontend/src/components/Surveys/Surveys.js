@@ -36,9 +36,9 @@ export default function Surveys() {
       <div className="survey-list">
         {
           forms.map(form => (
-            <div key={form.form_id} className="survey-card">
+            <div key={form.form_id} className={`survey-card ${theme}`}>
               <h3 className="survey-title">{form.name}</h3>
-              <p className="survey-points">Points: {form.points}</p>
+              <p className={`survey-points ${theme}`}>Points: {form.points}</p>
               <button className="survey-button">Take Survey</button>
             </div>
           ))
