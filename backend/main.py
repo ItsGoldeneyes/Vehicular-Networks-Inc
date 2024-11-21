@@ -245,12 +245,12 @@ def create_form():
 
     # Add form to database
     try:
-        print(f"INSERT INTO public.form (name, type, created_by, points) VALUES ('{body['form']['name']}', '{body['form']['type']}', '{body['requested_by']}', {body['points']});")
+        print(f"INSERT INTO public.form (name, type, created_by, points) VALUES ('{body['form']['name']}', '{body['form']['type']}', '{body['requested_by']}', {body['form']['points']});")
 
         # Add form to form table
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute(f"INSERT INTO public.form (name, type, created_by, points) VALUES ('{body['form']['name']}', '{body['form']['type']}', '{body['requested_by']}, '{body['requested_by']}', {body['points']}');")
+        cur.execute(f"INSERT INTO public.form (name, type, created_by, points) VALUES ('{body['form']['name']}', '{body['form']['type']}', '{body['requested_by']}, '{body['requested_by']}', {body['form']['points']}');")
         # Pull form id
         cur.execute(f"SELECT id FROM public.form WHERE name = '{body['form']['name']}' AND created_by = '{body['requested_by']}' ORDER BY created_at DESC LIMIT 1 ;")
         form_id = cur.fetchall()
