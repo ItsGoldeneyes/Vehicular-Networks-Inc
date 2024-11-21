@@ -235,17 +235,16 @@ def create_form():
 
     # Add form to database
     try:
-        # Create form uuid
-        id = uuid.uuid4()
-        ts = time.time()
-        current_timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-
-        print(f"INSERT INTO public.form VALUES ('{id}', '{body['form']['name']}', '{body['form']['type']}', '{body['requested_by']}', {current_timestamp});")
+        print(f"INSERT INTO public.form VALUES ('{body['form']['name']}', '{body['form']['type']}', '{body['requested_by']}');")
 
         # Add form to form table
         conn = get_db_connection()
         cur = conn.cursor()
         cur.execute(f"INSERT INTO public.form (name, type, created_by) VALUES ('{body['form']['name']}', '{body['form']['type']}', '{body['requested_by']}');")
+        # Pull form id
+        cur.execute(f"SELECT id FROM public.form WHERE name = '{body['form']['name']}' AND created_by = '{body['requested_by']}' ORDER BY created_on DESC LIMIT 1 ;")
+        form_id = cur.fetchall()
+        id = form_id[0][0]
         cur.close()
 
         # Add questions to form_question table
