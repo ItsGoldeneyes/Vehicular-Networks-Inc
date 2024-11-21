@@ -1,10 +1,11 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-import uuid
-import time
 import datetime
 import psycopg2
+import json
+import time
+import uuid
 import os
 
 app = Flask(__name__)
@@ -247,12 +248,19 @@ def create_form():
         id = form_id[0][0]
         cur.close()
 
-        # Add questions to form_question table
         for question in body['form']['questions']:
             cur = conn.cursor()
-            cur.execute(f"INSERT INTO public.form_question VALUES ('{id}', '{question['question_num']}', '{question['type']}', '{question['description']}'{',' if 'options' in question else ''} {question['options'] if 'options' in question else ''});")
-            conn.commit()
-            cur.close()
+            # Serialize options to JSON if present, else set to None
+            options = json.dumps(question['options']) if 'options' in question else None
+            cur.execute(
+                """
+                INSERT INTO public.form_question (form_id, question_num, type, description, options)
+                VALUES (%s, %s, %s, %s, %s);
+                """,
+                (id, question['question_num'], question['type'], question['description'], options)
+            )
+        conn.commit()
+        cur.close()
 
         conn.close()
 
