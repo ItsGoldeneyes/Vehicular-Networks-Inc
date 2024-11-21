@@ -773,6 +773,8 @@ def submit_form():
 
         for answer in body['form']['responses']:
             if answer['type'] == 'freeform':
+                # Remove ' from answer to prevent errors
+                answer['answer'] = answer['answer'].replace("'", "")
                 query = f"INSERT INTO form_response (question_num, form_id, user_id, freeform_answer) VALUES ('{answer['question_num']}', '{body['form']['form_id']}', '{body['requested_by']}', '{answer['answer']}') RETURNING id;"
             elif answer['type'] == 'rate':
                 query = f"INSERT INTO form_response (question_num, form_id, user_id, rate_answer) VALUES ('{answer['question_num']}', '{body['form']['form_id']}', '{body['requested_by']}', {answer['answer']}) RETURNING id;"
