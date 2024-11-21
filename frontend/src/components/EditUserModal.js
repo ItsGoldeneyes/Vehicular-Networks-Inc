@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import "./EditUserModal.css";
+import Button from "@mui/material/Button";
 
 function EditUserModal({ user, onClose, onSave }) {
-	const [name, setName] = useState(user.name);
-	const [email, setEmail] = useState(user.email);
+	const [fName, setFName] = useState(user.fName);
+	const [lName, setLName] = useState(user.lName);
+	const [email, setEmail] = useState(user.Email);
 	const [role, setRole] = useState(user.role);
 	const [accessLevel, setAccessLevel] = useState(user.accessLevel);
 
 	const handleSave = () => {
-		const updatedUser = { ...user, name, role, accessLevel };
+		const updatedUser = { ...user, fName, lName, Email: email, role, accessLevel };
+		console.log("Update user", updatedUser);
 		onSave(updatedUser);
 	};
 
@@ -17,11 +20,19 @@ function EditUserModal({ user, onClose, onSave }) {
 			<div className="modal-content">
 				<h2>Edit User</h2>
 				<label>
-					Name:
+					First Name:
 					<input
 						type="text"
-						value={name}
-						onChange={(e) => setName(e.target.value)}
+						value={fName}
+						onChange={(e) => setFName(e.target.value)}
+					/>
+				</label>
+				<label>
+					Last Name:
+					<input
+						type="text"
+						value={lName}
+						onChange={(e) => setLName(e.target.value)}
 					/>
 				</label>
 				<label>
@@ -40,8 +51,9 @@ function EditUserModal({ user, onClose, onSave }) {
 						onChange={(e) => setRole(e.target.value)}
 					>
 						<option value="">Select role</option>
-						<option value="User">User</option>
-						<option value="Admin">Admin</option>
+						<option value="enduser">End User</option>
+						<option value="admin">Admin</option>
+						<option value="superadmin">Super Admin</option>
 					</select>
 				</label>
 				<label>
@@ -49,13 +61,13 @@ function EditUserModal({ user, onClose, onSave }) {
 					<input
 						type="number"
 						value={accessLevel}
-                        min={1}
-                        max={3}
+						min={1}
+						max={3}
 						onChange={(e) => setAccessLevel(e.target.value)}
 					/>
 				</label>
-				<button onClick={handleSave}>Save</button>
-				<button onClick={onClose}>Cancel</button>
+				<Button variant="contained" onClick={handleSave}>Save</Button>
+				<Button variant="contained" onClick={onClose}>Cancel</Button>
 			</div>
 		</div>
 	);

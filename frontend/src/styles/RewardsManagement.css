@@ -53,20 +53,14 @@
   cursor: pointer;
 }
 
-.modal-content button:first-of-type {
-  background-color: #2ecc71;
-  color: white;
+.reward-input-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 20px;
+  padding-left: 5rem;
+  padding-rig: 5rem;
 }
 
-.modal-content button:first-of-type:hover {
-  background-color: #27ae60;
-}
 
-.modal-content button:last-of-type {
-  background-color: #e74c3c;
-  color: white;
-}
 
-.modal-content button:last-of-type:hover {
-  background-color: #c0392b;
-}

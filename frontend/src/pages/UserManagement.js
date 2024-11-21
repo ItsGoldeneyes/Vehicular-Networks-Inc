@@ -1,29 +1,47 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import User from "../components/User";
 import "../styles/UserManagement.css";
 import EditUserModal from "../components/EditUserModal";
+import Button from "@mui/material/Button";
+import Alert from '@mui/material/Alert';
 
-const userData = [
-	{
-		id: 1,
-		name: "John Doe",
-		email: "john.doe@gmail.com",
-		role: "User",
-		accessLevel: "1",
-	},
-	{
-		id: 2,
-		name: "Jane Smith",
-		email: "john.doe@gmail.com",
-		role: "Admin",
-		accessLevel: "2",
-	},
-];
+
+// const userData = [
+// 	{
+// 		id: 1,
+// 		name: "John Doe",
+// 		email: "john.doe@gmail.com",
+// 		role: "User",
+// 		accessLevel: "1",
+// 	},
+// 	{
+// 		id: 2,
+// 		name: "Jane Smith",
+// 		email: "john.doe@gmail.com",
+// 		role: "Admin",
+// 		accessLevel: "2",
+// 	},
+// ];
 
 function UserManagement() {
-   const [users, setUsers] = React.useState(userData);
+   const [users, setUsers] = React.useState([]);
    const [selectedUser, setSelectedUser] = React.useState(null);
    const [isModalActive, setIsModalActive] = React.useState(false);
+   const [showSuccessfulEdit, setShowSuccessfulEdit] = useState(false);
+   const [alertContent, setAlertContent] = useState("");
+
+
+   const fetchUsers = async () => {
+      try {
+         const res = await axios.get("http://localhost:5000/api/users");
+         console.log("users", res.data);
+         setUsers(res.data);
+      }
+      catch (err) {
+         console.log(err);
+      }
+   } 
 
    const updateUserInfo = (user) => {
       setSelectedUser(user);
@@ -35,14 +53,32 @@ function UserManagement() {
       setSelectedUser(null);
    };
 
-   const saveUserInfo = (updatedUser) => {
-      setUsers(users.map(user => (user.id === updatedUser.id ? updatedUser : user)));
-      closeModal();
+   const saveUserInfo = async (updatedUser) => {
+      try {
+         await axios.put(`http://localhost:5000/api/users/${updatedUser.User_ID}`, updatedUser);
+         setUsers(users.map(user => (user.User_ID === updatedUser.User_ID ? updatedUser : user)));
+         closeModal();
+         setAlertContent("User information updated successfully");
+         setShowSuccessfulEdit(true);
+         setTimeout(() => {
+            setShowSuccessfulEdit(false);
+         }, 2500);
+      }
+      catch (err) {
+         console.log(err);
+      }
    };
+
+   useEffect(() => {
+      fetchUsers();
+   }, []);
 
 
 	return (
 		<div>
+         {showSuccessfulEdit &&
+            <Alert severity="success">{alertContent}</Alert>
+         }
 			<h2>User Management</h2>
          <table className="user-info-table">
             <thead>
@@ -56,7 +92,7 @@ function UserManagement() {
             </thead>
             <tbody>
                {users.map((user) => (
-                  <User key={user.id} userInfo={user} onEdit={updateUserInfo} />
+                  <User key={user.User_ID} userInfo={user} onEdit={updateUserInfo} />
                ))}
             </tbody>
          </table>
