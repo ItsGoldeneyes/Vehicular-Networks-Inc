@@ -139,6 +139,7 @@ def create_form():
         "form": {
             "name": "form name",
             "type": "feedback, survey, or poll",
+            "points": "points",
             "questions": [
                 {
                     "question_num": 1,
@@ -203,6 +204,14 @@ def create_form():
         }
         return jsonify(response)
 
+    # Check for points
+    if not 'points' in body['form']:
+        response = {
+            "status": 400,
+            "text": "Form points not provided"
+        }
+        return jsonify(response)
+
     # Check for questions
     if not 'questions' in body['form']:
         response = {
@@ -236,12 +245,12 @@ def create_form():
 
     # Add form to database
     try:
-        print(f"INSERT INTO public.form VALUES ('{body['form']['name']}', '{body['form']['type']}', '{body['requested_by']}');")
+        print(f"INSERT INTO public.form (name, type, created_by, points) VALUES ('{body['form']['name']}', '{body['form']['type']}', '{body['requested_by']}', {body['points']});")
 
         # Add form to form table
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute(f"INSERT INTO public.form (name, type, created_by) VALUES ('{body['form']['name']}', '{body['form']['type']}', '{body['requested_by']}');")
+        cur.execute(f"INSERT INTO public.form (name, type, created_by, points) VALUES ('{body['form']['name']}', '{body['form']['type']}', '{body['requested_by']}, '{body['requested_by']}', {body['points']}');")
         # Pull form id
         cur.execute(f"SELECT id FROM public.form WHERE name = '{body['form']['name']}' AND created_by = '{body['requested_by']}' ORDER BY created_at DESC LIMIT 1 ;")
         form_id = cur.fetchall()
@@ -293,7 +302,8 @@ def get_forms():
                 "name": "form name",
                 "type": "feedback, survey, or poll",
                 "created_by": "username",
-                "created_at": "timestamp"
+                "created_at": "timestamp",
+                "points": "points"
             },
             ...
         ]
@@ -332,7 +342,7 @@ def get_forms():
         return jsonify(response)
 
     # Get forms from database
-    query = f"SELECT id, name, type, created_by, created_at FROM public.form;"
+    query = f"SELECT id, name, type, created_by, created_at, points FROM public.form;"
 
     try:
         conn = get_db_connection()
@@ -381,6 +391,7 @@ def get_form():
             "type": "feedback, survey, or poll",
             "created_by": "username",
             "created_at": "timestamp",
+            "points": "points",
             "questions": [
                 {
                     "question_num": 1,
@@ -434,7 +445,7 @@ def get_form():
         return jsonify(response)
 
     # Get form from database
-    query = f"SELECT name, type, created_by, created_at FROM public.form WHERE id = '{body['form_id']}';"
+    query = f"SELECT name, type, created_by, created_at, points FROM public.form WHERE id = '{body['form_id']}';"
 
     try:
         conn = get_db_connection()
@@ -455,7 +466,8 @@ def get_form():
             "name": data[0][0],
             "type": data[0][1],
             "created_by": data[0][2],
-            "created_at": data[0][3]
+            "created_at": data[0][3],
+            "points": data[0][4]
         }
 
         query = f"SELECT question_num, type, description, options FROM public.form_question WHERE form_id = '{body['form_id']}';"
