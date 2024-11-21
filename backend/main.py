@@ -242,7 +242,7 @@ def create_form():
         cur = conn.cursor()
         cur.execute(f"INSERT INTO public.form (name, type, created_by) VALUES ('{body['form']['name']}', '{body['form']['type']}', '{body['requested_by']}');")
         # Pull form id
-        cur.execute(f"SELECT id FROM public.form WHERE name = '{body['form']['name']}' AND created_by = '{body['requested_by']}' ORDER BY created_on DESC LIMIT 1 ;")
+        cur.execute(f"SELECT id FROM public.form WHERE name = '{body['form']['name']}' AND created_by = '{body['requested_by']}' ORDER BY created_at DESC LIMIT 1 ;")
         form_id = cur.fetchall()
         id = form_id[0][0]
         cur.close()
