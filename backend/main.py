@@ -44,6 +44,33 @@ def testdb():
 
 @app.route('/register', methods=["POST"])
 def register():
+    """
+    Takes a username, email, password, and password confirmation. If the passwords match, the user is registered.
+
+    Request needs to be in the format:
+    {
+        "username": "username",
+        "email": "email",
+        "pass": "password",
+        "pass-confirm": "password"
+    }
+
+    If request accepted, returns:
+    {
+        "status": 200,
+        "user_id": "user_id",
+        "username": "username",
+        "profile_status": "normal"
+    }
+
+    If request rejected, returns:
+    {
+        "status": 400,
+        "text": "Error message"
+    }
+
+    """
+    print("register")
     body = request.json
 
     if not body['pass'] == body['pass-confirm']:
@@ -97,6 +124,31 @@ def register():
 
 @app.route('/login', methods=["POST"])
 def login():
+    """
+    Takes a username and password, returns user_id if the username and password match.
+
+    Request needs to be in the format:
+    {
+        "username": "username",
+        "password": "password"
+    }
+
+    If request accepted, returns:
+    {
+        "status": 200,
+        "user_id": "user_id",
+        "username": "username",
+        "profile_status": "normal"
+    }
+
+    If request rejected, returns:
+    {
+        "status": 400,
+        "text": "Error message
+    }
+    """
+
+    print("login")
     body = request.json
     query = f"SELECT user_id, username, profile_status FROM public.profile WHERE username = '{body['username']}' AND password = '{body['password']}';"
 
