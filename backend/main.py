@@ -652,7 +652,7 @@ def submit_form():
         "rate_answer": intOption, (only for 'rate' questions)
         "mc_answer": intOption (only for 'multiple_choice' questions)
     """
-
+    print("submit-form")
     body = request.json
 
     if not 'requested_by' in body:
@@ -773,11 +773,11 @@ def submit_form():
 
         for answer in body['form']['responses']:
             if answer['type'] == 'freeform':
-                query = f"INSERT INTO form_response ('question_num', 'form_id', 'user_id', 'freeform_answer') VALUES ('{answer['question_num']}', '{body['form']['form_id']}', '{body['requested_by']}', '{answer['answer']}') RETURNING id;"
+                query = f"INSERT INTO form_response (question_num, form_id, user_id, freeform_answer) VALUES ('{answer['question_num']}', '{body['form']['form_id']}', '{body['requested_by']}', '{answer['answer']}') RETURNING id;"
             elif answer['type'] == 'rate':
-                query = f"INSERT INTO form_response ('question_num', 'form_id', 'user_id', 'rate_answer') VALUES ('{answer['question_num']}', '{body['form']['form_id']}', '{body['requested_by']}', {answer['answer']}) RETURNING id;"
+                query = f"INSERT INTO form_response (question_num, form_id, user_id, rate_answer) VALUES ('{answer['question_num']}', '{body['form']['form_id']}', '{body['requested_by']}', {answer['answer']}) RETURNING id;"
             elif answer['type'] == 'multiple_choice':
-                query = f"INSERT INTO form_response ('question_num', 'form_id', 'user_id', 'mc_answer') VALUES ('{answer['question_num']}', '{body['form']['form_id']}', '{body['requested_by']}', '{answer['answer']}') RETURNING id;"
+                query = f"INSERT INTO form_response (question_num, form_id, user_id, mc_answer) VALUES ('{answer['question_num']}', '{body['form']['form_id']}', '{body['requested_by']}', '{answer['answer']}') RETURNING id;"
 
             cur.execute(query)
 
