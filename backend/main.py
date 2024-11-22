@@ -1109,7 +1109,7 @@ def create_training_session():
     If request accepted, returns:
     {
         "status": 200,
-        "session_id": "session_id"
+        "training_id": "training_id"
     }
 
     If request rejected, returns:
@@ -1120,7 +1120,7 @@ def create_training_session():
 
     Session added to database with format:
         TABLE training_session
-        "id": "session_id",
+        "id": "training_id",
         "title": "session title",
         "description": "session description",
         "created_by": "user_id",
@@ -1164,15 +1164,15 @@ def create_training_session():
         cur.execute(f"INSERT INTO public.training_session (title, description, points) VALUES ('{body['session']['title']}', '{body['session']['description']}', {body['session']['points']});")
         # Pull session id
         cur.execute(f"SELECT id FROM public.training_session WHERE title = '{body['session']['title']}' AND description = '{body['session']['description']}';")
-        session_id = cur.fetchall()
-        id = session_id[0][0]
+        training_id = cur.fetchall()
+        id = training_id[0][0]
         cur.close()
         conn.commit()
         conn.close()
 
         response = {
             "status": 200,
-            "session_id": id
+            "training_id": id
         }
 
     except psycopg2.OperationalError as e:
@@ -1190,7 +1190,7 @@ def log_training_session():
     Request needs to be in the format:
     {
         "requested_by": user_id,
-        "session_id": session_id
+        "training_id": training_id
     }
 
     If request accepted, returns:
@@ -1230,8 +1230,8 @@ def log_training_session():
         }
         return jsonify(response)
 
-    # Check if session_id is in training_session table
-    query = f"SELECT id FROM public.training_session WHERE id = '{body['session_id']}';"
+    # Check if training_id is in training_session table
+    query = f"SELECT id FROM public.training_session WHERE id = '{body['training_id']}';"
     try:
         conn = get_db_connection()
         cur = conn.cursor()
@@ -1257,7 +1257,7 @@ def log_training_session():
     try:
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute(f"INSERT INTO public.attendance (session_id, user_id) VALUES ('{body['session_id']}', '{body['requested_by']}');")
+        cur.execute(f"INSERT INTO public.attendance (training_id, user_id) VALUES ('{body['training_id']}', '{body['requested_by']}');")
         cur.close()
         conn.commit()
         conn.close()
@@ -1288,7 +1288,7 @@ def report_training_attendance():
         "status": 200,
         "attendance": [
             {
-                "session_id": "session_id",
+                "training_id": "training_id",
                 "title": "session title",
                 "description": "session description",
                 "points": int
@@ -1335,7 +1335,7 @@ def report_training_attendance():
     SELECT training_session.id, training_session.title, training_session.description, training_session.points
     FROM public.training_session
     WHERE training_session.id IN (
-        SELECT session_id
+        SELECT training_id
         FROM public.attendance
         WHERE user_id = '{body['requested_by']}'
     );
@@ -1351,7 +1351,7 @@ def report_training_attendance():
         attendance = []
         for session in data:
             attendance.append({
-                "session_id": session[0],
+                "training_id": session[0],
                 "title": session[1],
                 "description": session[2],
                 "points": session[3]
