@@ -16,15 +16,17 @@ export default function RootLayout() {
       <div className={`container ${theme}`}>
         <div className="navbar" theme={theme} setTheme={setTheme}>
           {/* <img src="" alt="" className='logo'/> - for logo */}
-          <h1 className="logo">FleetRewards</h1>
+          <NavLink to="/" className="nav-item">
+            <h1 className="logo">FleetRewards</h1>
+          </NavLink>
 
           <nav>
             <ul className="nav-links">
-              <li>
+              {/* <li>
                 <NavLink to="/" className="nav-item">
                   Home
                 </NavLink>
-              </li>
+              </li> */}
               { user && <>
                 <li>
                   <NavLink to="/surveys" className="nav-item">
@@ -49,9 +51,9 @@ export default function RootLayout() {
               </>}
               { user ?
                 <li>
-                  <Button component={NavLink} onClick={userLogOut}>
+                  <NavLink to="/" className="nav-item" onClick={userLogOut}>
                     Logout
-                  </Button>
+                  </NavLink>
                 </li> :
                 <li>
                     <NavLink

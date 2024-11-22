@@ -54,7 +54,9 @@ export function UserProvider({ children }) {
             );
         setIsLoading(false);
 
-        setUser(newUser);
+        if (user?.user_id) {
+            setUser(newUser);
+        }
     }
 
     async function userAuth(form) {
@@ -78,7 +80,7 @@ export function UserProvider({ children }) {
                         };
                     } else {
                         alert(`Error Logging In: ${res.text}`)
-                        return null;
+                        return res;
                     }
                 }
             )
@@ -86,12 +88,17 @@ export function UserProvider({ children }) {
                 err => {
                     alert("Error logging in. Check the console for more details.");
                     console.error(err);
-                    return null;
+                    return {
+                        status: 400,
+                        error: err
+                    };
                 }
             );
         setIsLoading(false);
 
-        setUser(newUser);
+        if (newUser?.user_id) {
+            setUser(newUser);
+        };
     };
 
     const userLogOut = () => {

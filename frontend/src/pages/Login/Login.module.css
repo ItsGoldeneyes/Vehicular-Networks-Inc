@@ -13,23 +13,28 @@
     content: "*";
 }
 
-.registerForm {
+.loginForm {
     display: flex;
     flex-direction: row;
     align-items: center;
     flex-wrap: wrap;
     row-gap: 10px;
+    column-gap: 10px;
 }
 
-.registerLabel {
-    flex: 1 0 34%;
+.loginLabel {
+    flex: 1 0 25%;
 }
 
-.registerInput {
-    flex: 1 0 34%;
+.loginInput {
+    flex: 1 0 60%;
     border-radius: 5px;
 }
 
 .submit {
-    flex: 1 0 100%;
+    flex: 1 0 25%;
+}
+
+.submitInfo {
+    flex: 1 0 60%;
 }

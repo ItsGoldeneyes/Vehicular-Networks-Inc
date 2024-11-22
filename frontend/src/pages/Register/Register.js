@@ -1,8 +1,7 @@
 import React, { useEffect, useId } from "react";
 import styles from "./Register.module.css";
-import { NavLink } from "react-router-dom";
-import { useOutletContext } from "react-router-dom";
-import { Link } from "@mui/material";
+import { Navigate, NavLink } from "react-router-dom";
+import { Box, Button, Link } from "@mui/material";
 import { useUser } from "../../context/UserContext";
 import { useTheme } from "../../context/ThemeContext";
 
@@ -12,7 +11,7 @@ export default function Register() {
   const emailId = useId();
   const passId = useId();
   const passConfirmId = useId();
-  const { userRegister, isLoading } = useUser();
+  const { user, userRegister, isLoading } = useUser();
 
   useEffect(() => {
     document.title = "Register - FleetRewards";
@@ -21,6 +20,10 @@ export default function Register() {
   function handleSubmit(e) {
     e.preventDefault();
     userRegister(e.target);
+  }
+
+  if (user) {
+    return <Navigate to="/" />
   }
 
   return (
@@ -32,7 +35,8 @@ export default function Register() {
             Fields marked with <span className={styles.required} /> are
             required.
           </p>
-          <form
+          <Box
+            component="form"
             method="post"
             onSubmit={handleSubmit}
             className={styles.registerForm}
@@ -89,11 +93,12 @@ export default function Register() {
               required
             />
 
-            <button className={styles.submit} type="submit">
+            <Button type="submit" variant="contained" size="large">
               Create Account
-            </button>
-          </form>
-          { isLoading && <p>Loading...</p> }
+            </Button>
+
+            { isLoading && <p className={styles.submitInfo}>Loading...</p> }
+          </Box>
 
           <p>
             Already have an account? <Link component={NavLink} to="/login">Log In</Link>
