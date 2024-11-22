@@ -1163,7 +1163,7 @@ def create_training_session():
         cur = conn.cursor()
         cur.execute(f"INSERT INTO public.training_session (title, description, points) VALUES ('{body['session']['title']}', '{body['session']['description']}', {body['session']['points']});")
         # Pull session id
-        cur.execute(f"SELECT id FROM public.training_session WHERE title = '{body['session']['title']}' ORDER BY created_at DESC LIMIT 1 ;")
+        cur.execute(f"SELECT id FROM public.training_session WHERE title = '{body['session']['title']}' AND description = '{body['session']['description']}' DESC LIMIT 1 ;")
         session_id = cur.fetchall()
         id = session_id[0][0]
         cur.close()
