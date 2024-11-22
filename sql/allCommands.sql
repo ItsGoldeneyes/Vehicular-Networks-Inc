@@ -28,9 +28,9 @@ create table public.form_question (
 );
 create table public.form_response (
   id				uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  question_num		int2,
-  form_id			uuid,
-  user_id			uuid,
+  question_num		int2 NOT NULL,
+  form_id			uuid NOT NULL,
+  user_id			uuid NOT NULL,
   freeform_answer	varchar,
   rate_answer		int2,
   mc_answer		varchar,
