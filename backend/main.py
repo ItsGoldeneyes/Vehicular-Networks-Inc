@@ -1275,36 +1275,36 @@ def log_training_session():
     return jsonify(response)
 
 
-@app.route('/report-user-sessions', methods=["POST"])
-def report_user_sessions():
+@app.route('/report-training-attendance', methods=["POST"])
+def report_training_attendance():
     """
     Request needs to be in the format:
     {
-        "requested_by": user_id,
+        "requested_by": user_id
     }
-    
+
     If request accepted, returns:
     {
         "status": 200,
-        "sessions": [
+        "attendance": [
             {
                 "session_id": "session_id",
                 "title": "session title",
                 "description": "session description",
-                "points": int,
-                "created_at": "timestamp"
+                "points": int
             },
             ...
         ]
+
     }
-    
+
     If request rejected, returns:
     {
         "status": 400,
         "text": "Error message"
     }
     """
-    print("report-user-sessions")
+    print("report-training-attendance")
     body = request.json
 
     # Check if user_id is in users table
@@ -1330,13 +1330,15 @@ def report_user_sessions():
         }
         return jsonify(response)
 
-    # Get sessions from database
+    # Get user attendance from database
     query = f"""
-    SELECT session.id, session.title, session.description, session.points, session.created_at
-    FROM public.training_session AS session
-    JOIN public.training_session_log AS log
-    ON session.id = log.session_id
-    WHERE log.user_id = '{body['requested_by']}';
+    SELECT training_session.id, training_session.title, training_session.description, training_session.points
+    FROM public.training_session
+    WHERE training_session.id IN (
+        SELECT session_id
+        FROM public.training_session_log
+        WHERE user_id = '{body['requested_by']}'
+    );
     """
     try:
         conn = get_db_connection()
@@ -1346,19 +1348,18 @@ def report_user_sessions():
         cur.close()
         conn.close()
 
-        sessions = []
+        attendance = []
         for session in data:
-            sessions.append({
+            attendance.append({
                 "session_id": session[0],
                 "title": session[1],
                 "description": session[2],
-                "points": session[3],
-                "created_at": session[4]
+                "points": session[3]
             })
 
         response = {
             "status": 200,
-            "sessions": sessions
+            "attendance": attendance
         }
 
     except psycopg2.OperationalError as e:
