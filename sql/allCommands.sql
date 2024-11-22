@@ -92,14 +92,23 @@ INSERT INTO form (id, name, type, created_by, points) VALUES ('fc37027b-69bc-4dc
 INSERT INTO form_question (form_id, question_num, type, description, options) VALUES ('fc37027b-69bc-4dcf-b30d-a963dca54f13', 1, 'multiple_choice', 'Vehicular Services Inc.''s FleetRewards loyalty program is useful.', '["Strongly Agree", "Agree", "Neither agree nor disagree", "Disagree", "Strongly Disagree"]');
 INSERT INTO form_question (form_id, question_num, type, description) VALUES ('fc37027b-69bc-4dcf-b30d-a963dca54f13', 2, 'freeform', 'Enter any additional comments you have for us (Vehicular Services Inc. or the FleetRewards program).');
 INSERT INTO form_question (form_id, question_num, type, description) VALUES ('fc37027b-69bc-4dcf-b30d-a963dca54f13', 3, 'rate', 'Give us a rating on how satisfied you are with FleetRewards!');
+INSERT INTO form_question (form_id, question_num, type, description, options) VALUES ('fc37027b-69bc-4dcf-b30d-a963dca54f13', 4, 'multiple_choice', 'Vehicular Services Inc.''s FleetRewards loyalty program is useful.', '["Yes", "No"]');
+INSERT INTO form_question (form_id, question_num, type, description) VALUES ('fc37027b-69bc-4dcf-b30d-a963dca54f13', 5, 'freeform', 'Anything else?');
+INSERT INTO form_question (form_id, question_num, type, description) VALUES ('fc37027b-69bc-4dcf-b30d-a963dca54f13', 6, 'rate', 'How are you today?');
 INSERT INTO form (id, name, type, created_by, points) VALUES ('89c93f6f-d57f-401f-bbb1-f8e8eda67352', 'Comprehensive Form (Poll)', 'survey', 'd45a0d11-acb0-43cc-b20b-e2ab8c1444e2', 103);
 INSERT INTO form_question (form_id, question_num, type, description) VALUES ('89c93f6f-d57f-401f-bbb1-f8e8eda67352', 1, 'rate', 'Give us a rating on how satisfied you are with FleetRewards!');
 INSERT INTO form_question (form_id, question_num, type, description, options) VALUES ('89c93f6f-d57f-401f-bbb1-f8e8eda67352', 2, 'multiple_choice', 'Vehicular Services Inc.''s FleetRewards loyalty program is useful.', '["Strongly Agree", "Agree", "Neither agree nor disagree", "Disagree", "Strongly Disagree"]');
 INSERT INTO form_question (form_id, question_num, type, description) VALUES ('89c93f6f-d57f-401f-bbb1-f8e8eda67352', 3, 'freeform', 'Enter any additional comments you have for us (Vehicular Services Inc. or the FleetRewards program).');
+INSERT INTO form_question (form_id, question_num, type, description) VALUES ('89c93f6f-d57f-401f-bbb1-f8e8eda67352', 4, 'freeform', 'Anything else?');
+INSERT INTO form_question (form_id, question_num, type, description) VALUES ('89c93f6f-d57f-401f-bbb1-f8e8eda67352', 5, 'rate', 'How are you today?');
+INSERT INTO form_question (form_id, question_num, type, description, options) VALUES ('89c93f6f-d57f-401f-bbb1-f8e8eda67352', 6, 'multiple_choice', 'Vehicular Services Inc.''s FleetRewards loyalty program is useful.', '["Yes", "No"]');
 INSERT INTO form (id, name, type, created_by, points) VALUES ('3c334487-0b3e-4daf-b6e9-4093087fda7e', 'Comprehensive Form (Feedback)', 'survey', 'd45a0d11-acb0-43cc-b20b-e2ab8c1444e2', 102);
 INSERT INTO form_question (form_id, question_num, type, description) VALUES ('3c334487-0b3e-4daf-b6e9-4093087fda7e', 1, 'freeform', 'Enter any additional comments you have for us (Vehicular Services Inc. or the FleetRewards program).');
 INSERT INTO form_question (form_id, question_num, type, description, options) VALUES ('3c334487-0b3e-4daf-b6e9-4093087fda7e', 2, 'multiple_choice', 'Vehicular Services Inc.''s FleetRewards loyalty program is useful.', '["Strongly Agree", "Agree", "Neither agree nor disagree", "Disagree", "Strongly Disagree"]');
 INSERT INTO form_question (form_id, question_num, type, description) VALUES ('3c334487-0b3e-4daf-b6e9-4093087fda7e', 3, 'rate', 'Give us a rating on how satisfied you are with FleetRewards!');
+INSERT INTO form_question (form_id, question_num, type, description) VALUES ('3c334487-0b3e-4daf-b6e9-4093087fda7e', 6, 'rate', 'How are you today?');
+INSERT INTO form_question (form_id, question_num, type, description) VALUES ('3c334487-0b3e-4daf-b6e9-4093087fda7e', 5, 'freeform', 'Anything else?');
+INSERT INTO form_question (form_id, question_num, type, description, options) VALUES ('3c334487-0b3e-4daf-b6e9-4093087fda7e', 4, 'multiple_choice', 'Vehicular Services Inc.''s FleetRewards loyalty program is useful.', '["Yes", "No"]');
 
 INSERT INTO training_session (id, title, description, points) VALUES ('0a736891-01d6-4c00-afed-8cb32550f29d', 'Getting Started in VN Inc.', 'The first video to get you started!', 10);
 
