@@ -2,7 +2,7 @@ import { createContext, useContext, useState } from "react";
 import { useUser } from "./UserContext";
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
-const BACKEND_URL = NODE_ENV === 'development' ? 'http://localhost:5000' : 'https://backend-group5.up.railway.app/';
+const BACKEND_URL = NODE_ENV === 'development' ? 'http://127.0.0.1:5000' : 'https://backend-group5.up.railway.app/';
 
 export const FormFeedbackContext = createContext(null);
 
@@ -12,49 +12,17 @@ export function FormFeedbackProvider({ children }) {
     const { user } = useUser();
 
     const getDefaultPoll = async () => {
-    //     const newUser = await fetch(`${BACKEND_URL}/register`, {
-    //         method: form.method,
-    //         headers: { 'Content-Type': 'application/json' },
-    //         body: JSON.stringify(formEntries)
-    //     })
-    //         .then(res => res.json())
-    //         .then(
-    //             res => {
-    //                 if (res.status === 200) {
-    //                     return {
-    //                         profile_status: res.profile_status,
-    //                         username: res.username
-    //                     };
-    //                 } else {
-    //                     alert(`Error Registering: ${res.text}`)
-    //                     return null;
-    //                 }
-    //             }
-    //         )
-    //         .catch(
-    //             err => {
-    //                 alert("Error registering account. Check the console for more details.");
-    //                 console.error(err);
-    //                 return null;
-    //             }
-    //         );
-    //     setIsLoading(false);
-
-    //     setUser(newUser);
     }
 
     const getFeedbackForm = async () => {
         if(poll === null) {
-            // await 
+            // await
         } else {
             return poll;
         }
     }
 
     const submitFeedbackForm = async (feedback) => {
-        // user is logged in; not null
-        console.assert(!!user);
-
         const res = await fetch(`${BACKEND_URL}/submit-form`, {
             method: "post",
             headers: { 'Content-Type': 'application/json' },

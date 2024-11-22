@@ -2,7 +2,7 @@ import { createContext, useContext, useState } from "react";
 import { useUser } from "./UserContext";
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
-const BACKEND_URL = NODE_ENV === 'development' ? 'http://localhost:5000' : 'https://backend-group5.up.railway.app/';
+const BACKEND_URL = NODE_ENV === 'development' ? 'http://127.0.0.1:5000' : 'https://backend-group5.up.railway.app/';
 
 export const SurveyContext = createContext(null);
 

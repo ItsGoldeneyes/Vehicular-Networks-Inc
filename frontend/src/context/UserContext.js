@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
-const BACKEND_URL = NODE_ENV === 'development' ? 'http://localhost:5000' : 'https://backend-group5.up.railway.app/';
+const BACKEND_URL = NODE_ENV === 'development' ? 'http://127.0.0.1:5000' : 'https://backend-group5.up.railway.app/';
 
 console.log(`Using backend URL: ${BACKEND_URL}`);
 console.log(`Using NODE_ENV: ${NODE_ENV}`);
