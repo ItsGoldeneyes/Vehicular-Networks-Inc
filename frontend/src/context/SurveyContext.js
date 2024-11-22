@@ -25,7 +25,6 @@ export function SurveyContextProvider({ children }) {
             const res = await response.json();
 
             if (response.ok) {
-                console.log(res);
                 return res;
             } else {
                 throw new Error(res.text || 'Error Getting Forms');
