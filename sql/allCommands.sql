@@ -86,6 +86,21 @@ INSERT INTO form_response (question_num, form_id, user_id, mc_answer) VALUES (3,
 INSERT INTO form_response (question_num, form_id, user_id, mc_answer) VALUES (4, '38c09435-975e-47c7-bb97-ab072c326764', '189684c2-569a-436e-8d25-47cf07449d11', 'Strongly Agree');
 INSERT INTO form_response (question_num, form_id, user_id, freeform_answer) VALUES (5, '38c09435-975e-47c7-bb97-ab072c326764', '189684c2-569a-436e-8d25-47cf07449d11', 'N/A');
 
+-- All types of questions
+
+INSERT INTO form (id, name, type, created_by, points) VALUES ('fc37027b-69bc-4dcf-b30d-a963dca54f13', 'Comprehensive Form (Survey)', 'survey', 'd45a0d11-acb0-43cc-b20b-e2ab8c1444e2', 101);
+INSERT INTO form_question (form_id, question_num, type, description, options) VALUES ('fc37027b-69bc-4dcf-b30d-a963dca54f13', 1, 'multiple_choice', 'Vehicular Services Inc.''s FleetRewards loyalty program is useful.', '["Strongly Agree", "Agree", "Neither agree nor disagree", "Disagree", "Strongly Disagree"]');
+INSERT INTO form_question (form_id, question_num, type, description) VALUES ('fc37027b-69bc-4dcf-b30d-a963dca54f13', 2, 'freeform', 'Enter any additional comments you have for us (Vehicular Services Inc. or the FleetRewards program).');
+INSERT INTO form_question (form_id, question_num, type, description) VALUES ('fc37027b-69bc-4dcf-b30d-a963dca54f13', 3, 'rate', 'Give us a rating on how satisfied you are with FleetRewards!');
+INSERT INTO form (id, name, type, created_by, points) VALUES ('89c93f6f-d57f-401f-bbb1-f8e8eda67352', 'Comprehensive Form (Poll)', 'survey', 'd45a0d11-acb0-43cc-b20b-e2ab8c1444e2', 103);
+INSERT INTO form_question (form_id, question_num, type, description) VALUES ('89c93f6f-d57f-401f-bbb1-f8e8eda67352', 1, 'rate', 'Give us a rating on how satisfied you are with FleetRewards!');
+INSERT INTO form_question (form_id, question_num, type, description, options) VALUES ('89c93f6f-d57f-401f-bbb1-f8e8eda67352', 2, 'multiple_choice', 'Vehicular Services Inc.''s FleetRewards loyalty program is useful.', '["Strongly Agree", "Agree", "Neither agree nor disagree", "Disagree", "Strongly Disagree"]');
+INSERT INTO form_question (form_id, question_num, type, description) VALUES ('89c93f6f-d57f-401f-bbb1-f8e8eda67352', 3, 'freeform', 'Enter any additional comments you have for us (Vehicular Services Inc. or the FleetRewards program).');
+INSERT INTO form (id, name, type, created_by, points) VALUES ('3c334487-0b3e-4daf-b6e9-4093087fda7e', 'Comprehensive Form (Feedback)', 'survey', 'd45a0d11-acb0-43cc-b20b-e2ab8c1444e2', 102);
+INSERT INTO form_question (form_id, question_num, type, description) VALUES ('3c334487-0b3e-4daf-b6e9-4093087fda7e', 1, 'freeform', 'Enter any additional comments you have for us (Vehicular Services Inc. or the FleetRewards program).');
+INSERT INTO form_question (form_id, question_num, type, description, options) VALUES ('3c334487-0b3e-4daf-b6e9-4093087fda7e', 2, 'multiple_choice', 'Vehicular Services Inc.''s FleetRewards loyalty program is useful.', '["Strongly Agree", "Agree", "Neither agree nor disagree", "Disagree", "Strongly Disagree"]');
+INSERT INTO form_question (form_id, question_num, type, description) VALUES ('3c334487-0b3e-4daf-b6e9-4093087fda7e', 3, 'rate', 'Give us a rating on how satisfied you are with FleetRewards!');
+
 INSERT INTO training_session (id, title, description, points) VALUES ('0a736891-01d6-4c00-afed-8cb32550f29d', 'Getting Started in VN Inc.', 'The first video to get you started!', 10);
 
 INSERT INTO attendance (training_id, user_id) VALUES ('0a736891-01d6-4c00-afed-8cb32550f29d', 'd45a0d11-acb0-43cc-b20b-e2ab8c1444e2');
