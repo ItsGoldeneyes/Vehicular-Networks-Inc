@@ -26,18 +26,6 @@ def get_db_connection():
     return conn
 
 
-@app.route('/test-db')
-def testdb():
-    conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute('SELECT * FROM public.profile;')
-    data = cur.fetchall()
-    cur.close()
-    conn.close()
-
-    return jsonify(data)
-
-
 @app.route('/register', methods=["POST"])
 def register():
     """
