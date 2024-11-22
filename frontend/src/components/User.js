@@ -10,6 +10,7 @@ function User({ userInfo, onEdit }) {
             <td>{userInfo.Email}</td>
             <td>{userInfo.role}</td>
             <td>{userInfo.accessLevel}</td>
+            <td>{userInfo.points}</td>
             <td>
                 <Button variant="contained" className="edit-button" onClick={() => onEdit(userInfo)}>
                     Edit

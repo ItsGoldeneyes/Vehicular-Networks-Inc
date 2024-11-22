@@ -10,6 +10,13 @@
   border: 1px solid #ddd;
 }
 
+
+/* .rewards-table td {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */
+
 .rewards-table th {
   background-color: #f4f4f4;
 }
@@ -60,8 +67,36 @@
   align-items: center;
   margin-top: 20px;
   padding-left: 5rem;
-  padding-rig: 5rem;
+  padding-right: 5rem;
 }
 
+.rewards-and-redemptions-container h3 {
+  text-align: left !important;
+  margin-left: 10px;
+}
 
+.rewards-container {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10rem;
+}
 
+.add-reward-form {
+  margin-left: 1rem;
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.add-reward-form Button {
+  width: 200px;
+}
+
+.reward-input-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+}

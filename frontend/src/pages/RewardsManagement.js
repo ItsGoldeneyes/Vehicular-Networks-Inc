@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import * as dayjs from "dayjs";
 import "../styles/RewardsManagement.css";
 import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
 import Alert from "@mui/material/Alert";
 
 // const initialRewards = [
@@ -11,19 +13,46 @@ import Alert from "@mui/material/Alert";
 
 function RewardsManagement() {
 	const [rewards, setRewards] = useState([]);
+	const [rewardRedemptions, setRewardRedemptions] = useState([]);
 	const [selectedReward, setSelectedReward] = useState(null);
+	const [users, setUsers] = useState([]);
 	const [points, setPoints] = useState("");
 	const [status, setStatus] = useState("");
+	const [approvalStatus, setApprovalStatus] = useState("");
 	const [name, setName] = useState("");
 	const [description, setDescription] = useState("");
 	const [showSuccessful, setShowSuccessful] = useState(false);
+	const [showError, setShowError] = useState(false);
 	const [alertContent, setAlertContent] = useState("");
+	const [disableApprove, setDisableApprove] = useState(false);
+
+	const fetchUsers = async () => {
+		try {
+			const res = await axios.get("http://localhost:5000/api/users");
+			console.log(res.data);
+			setUsers(res.data);
+		} catch (err) {
+			console.log(err);
+		}
+	};
 
 	const fetchRewards = async () => {
 		try {
 			const res = await axios.get("http://localhost:5000/api/rewards");
 			console.log(res.data);
 			setRewards(res.data);
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	const fetchRewardRedemptions = async () => {
+		try {
+			const res = await axios.get(
+				"http://localhost:5000/api/redeem-rewards"
+			);
+			console.log("reward redemptions", res.data);
+			setRewardRedemptions(res.data);
 		} catch (err) {
 			console.log(err);
 		}
@@ -88,46 +117,217 @@ function RewardsManagement() {
 		setDescription("");
 	};
 
+	const handleApprove = async (id) => {
+		try {
+			let rewardRedemption = getRewardRedemptionById(id);
+
+			if (rewardRedemption.ApprovalStatus === "Approved" || rewardRedemption.ApprovalStatus === "Rejected") {
+				setAlertContent("Reward redemption has already been approved/rejected!");
+				setShowError(true);
+				setTimeout(() => {
+					setShowError(false);
+				}, 2500);
+				return;
+			}
+
+			let user = getUserById(getRewardRedemptionById(id).User_ID);
+			let userPoints = (getUserById(user.User_ID)).points;
+			let pointsRequired = (getRewardById(getRewardRedemptionById(id).Reward_ID)).Points_required;
+
+			if (userPoints < pointsRequired) {
+				console.log("lol");
+				setAlertContent("Not enough points to redeem this reward");
+				setShowError(true);
+				setTimeout(() => {
+					setShowError(false);
+				}, 2500);
+			}
+			else {
+				await axios.put(`http://localhost:5000/api/users/${user.User_ID}`, {
+					...user,
+					points: (userPoints - pointsRequired)
+				});
+				await axios.put(
+					`http://localhost:5000/api/redeem-rewards/${id}`,
+					{
+						Redemption_ID: id,
+						ApprovalStatus: "Approved",
+					}
+				);
+				setAlertContent("Reward redemption approved successfully");
+				setShowSuccessful(true);
+				setTimeout(() => {
+					setShowSuccessful(false);
+				}, 2500);
+			}
+			fetchRewardRedemptions();
+			fetchUsers();
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	const handleReject = async (id) => {
+		try {
+			let rewardRedemption = getRewardRedemptionById(id);
+
+			if (rewardRedemption.ApprovalStatus === "Approved" || rewardRedemption.ApprovalStatus === "Rejected") {
+				setAlertContent("Reward redemption has already been approved/rejected!");
+				setShowError(true);
+				setTimeout(() => {
+					setShowError(false);
+				}, 2500);
+				return;
+			}
+
+			await axios.put(
+				`http://localhost:5000/api/redeem-rewards/${id}`,
+				{
+					Redemption_ID: id,
+					ApprovalStatus: "Rejected",
+				}
+			);
+		} catch (err) {
+			console.log(err);
+		}
+		fetchRewardRedemptions();
+	};
+
+	const formatDate = (date) => {
+		if (!date) return "";
+		// const date = new Date(date);
+		// const d = date);
+		// const year = d.getFullYear();
+		// const month = String(d.getMonth() + 1).padStart(2, '0');
+		// const day = String(d.getDate()).padStart(2, '0');
+		// return `${year}-${month}-${day}`;
+		return dayjs(date).format("YYYY-MM-DD");
+	};
+
+	const getNameById = (id) => {
+		const user = users.find((u) => u.User_ID === id);
+		return user ? `${user.fName} ${user.lName}` : "";
+	};
+
+	const getUserById = (id) => {
+		const user = users.find((u) => u.User_ID === id);
+		return user ? user : null;
+	};
+
+	const getRewardNameById = (id) => {
+		const reward = rewards.find((r) => r.Reward_ID === id);
+		return reward ? reward.rewardName : "";
+	};
+
+	const getRewardById = (id) => {
+		const reward = rewards.find((r) => r.Reward_ID === id);
+		return reward ? reward : null;
+	};
+
+	const getRewardRedemptionById = (id) => {
+		const redemption = rewardRedemptions.find(
+			(r) => r.Redemption_ID === id
+		);
+		return redemption ? redemption : null;
+	};
+
 	useEffect(() => {
+		fetchUsers();
 		fetchRewards();
+		fetchRewardRedemptions();
 	}, []);
 
 	return (
-		<div>
+		<div className="rewards-and-redemptions-container">
 			{showSuccessful && <Alert severity="success">{alertContent}</Alert>}
+			{showError && <Alert severity="error">{alertContent}</Alert>}
 			<h2>Rewards Management</h2>
-			<table className="rewards-table">
-				<thead>
-					<tr>
-						<th>ID</th>
-						<th>Name</th>
-						<th>Description</th>
-						<th>Points Required</th>
-						<th>Status</th>
-						<th>Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					{rewards.map((reward) => (
-						<tr key={reward.Reward_ID}>
-							<td>{reward.Reward_ID}</td>
-							<td>{reward.rewardName}</td>
-							<td>{reward.RewardsDescription}</td>
-							<td>{reward.Points_required}</td>
-							<td>{reward.Status}</td>
-							<td>
-								<Button variant="contained" onClick={() => editReward(reward)}>
-									Edit
-								</Button>
-							</td>
+			<h3>Rewards Catalog</h3>
+			<div className="rewards-container">
+				<table className="rewards-table">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Name</th>
+							<th>Description</th>
+							<th>Points Required</th>
+							<th>Status</th>
+							<th>Actions</th>
 						</tr>
-					))}
-				</tbody>
-			</table>
-			{selectedReward && (
-				<div className="modal">
-					<div className="modal-content">
-						<h2>Edit Reward</h2>
+					</thead>
+					<tbody>
+						{rewards.map((reward) => (
+							<tr key={reward.Reward_ID}>
+								<td>{reward.Reward_ID}</td>
+								<td>{reward.rewardName}</td>
+								<td>{reward.RewardsDescription}</td>
+								<td>{reward.Points_required}</td>
+								<td>{reward.Status}</td>
+								<td>
+									<Button
+										variant="contained"
+										onClick={() => editReward(reward)}
+									>
+										Edit
+									</Button>
+								</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+				{selectedReward && (
+					<div className="modal">
+						<div className="modal-content">
+							<h2>Edit Reward</h2>
+							<label>
+								Points:
+								<input
+									type="number"
+									value={points}
+									onChange={(e) => setPoints(e.target.value)}
+								/>
+							</label>
+							<label>
+								Status:
+								<select
+									id="availability"
+									name="availability"
+									value={status}
+									onChange={(e) => setStatus(e.target.value)}
+								>
+									<option value="" disabled>
+										Select Status
+									</option>
+									<option value="Active">Active</option>
+									<option value="Inactive">Inactive</option>
+								</select>
+							</label>
+							<Button
+								variant="contained"
+								onClick={saveRewardEdit}
+							>
+								Save
+							</Button>
+							<Button
+								variant="contained"
+								onClick={() => setSelectedReward(null)}
+							>
+								Cancel
+							</Button>
+						</div>
+					</div>
+				)}
+				<div className="add-reward-form">
+					<h2>Add New Reward</h2>
+					<div className="reward-input-container">
+						<label>
+							Name:
+							<input
+								type="text"
+								value={name}
+								onChange={(e) => setName(e.target.value)}
+							/>
+						</label>
 						<label>
 							Points:
 							<input
@@ -137,10 +337,15 @@ function RewardsManagement() {
 							/>
 						</label>
 						<label>
+							Description:
+							<textarea
+								value={description}
+								onChange={(e) => setDescription(e.target.value)}
+							/>
+						</label>
+						<label>
 							Status:
 							<select
-								id="availability"
-								name="availability"
 								value={status}
 								onChange={(e) => setStatus(e.target.value)}
 							>
@@ -151,54 +356,67 @@ function RewardsManagement() {
 								<option value="Inactive">Inactive</option>
 							</select>
 						</label>
-						<Button variant="contained" onClick={saveRewardEdit}>Save</Button>
-						<Button variant="contained" onClick={() => setSelectedReward(null)}>
-							Cancel
-						</Button>
 					</div>
+					<Button variant="contained" onClick={addReward}>
+						Add Reward
+					</Button>
 				</div>
-			)}
-			<div className="add-reward-form">
-				<h2>Add New Reward</h2>
-				<div className="reward-input-container">
-					<label>
-						Name:
-						<input
-							type="text"
-							value={name}
-							onChange={(e) => setName(e.target.value)}
-						/>
-					</label>
-					<label>
-						Points:
-						<input
-							type="number"
-							value={points}
-							onChange={(e) => setPoints(e.target.value)}
-						/>
-					</label>
-					<label>
-						Description:
-						<textarea
-							value={description}
-							onChange={(e) => setDescription(e.target.value)}
-						/>
-					</label>
-					<label>
-						Status:
-						<select
-							value={status}
-							onChange={(e) => setStatus(e.target.value)}
-						>
-							<option value="" disabled>
-								Select Status
-							</option>
-							<option value="Active">Active</option>
-							<option value="Inactive">Inactive</option>
-						</select>
-					</label>
-				</div>
-				<Button variant="contained" onClick={addReward}>Add Reward</Button>
+			</div>
+			<div className="rewards-redemptions-container">
+				<h3>User Reward Redemptions</h3>
+				<table className="rewards-table">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>User</th>
+							<th>Reward</th>
+							<th>Redeem Date</th>
+							<th>Approval Status</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						{rewardRedemptions.map((r) => (
+							<tr key={r.Redemption_ID}>
+								<td>{r.Redemption_ID}</td>
+								<td>{getNameById(r.User_ID)}</td>
+								<td>{getRewardNameById(r.Reward_ID)}</td>
+								<td>{formatDate(r.RedeemDate)}</td>
+								<td>{r.ApprovalStatus}</td>
+								<td>
+									<Stack
+										direction="row"
+										spacing={2}
+										sx={{
+											justifyContent: "center",
+											alignItems: "center",
+										}}
+									>
+										{" "}
+										<Button
+											color="success"
+											variant="contained"
+											onClick={() =>
+												handleApprove(r.Redemption_ID)
+											}
+										>
+											Approve
+										</Button>
+										<Button
+											color="error"
+											variant="contained"
+											onClick={() =>
+												handleReject(r.Redemption_ID)
+											}
+										>
+											Reject
+										</Button>
+									</Stack>
+								</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
 			</div>
 		</div>
 	);

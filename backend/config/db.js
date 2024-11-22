@@ -29,7 +29,8 @@ db.connect((err) => {
           Email VARCHAR(100) UNIQUE,
           Password VARCHAR(50),
           role ENUM('superadmin', 'admin', 'enduser'),
-          accessLevel INT CHECK (accessLevel BETWEEN 1 AND 3)
+          accessLevel INT CHECK (accessLevel BETWEEN 1 AND 3),
+          points INT DEFAULT 0
         )`;
 
       const createUserPointsTable = `
@@ -97,8 +98,7 @@ db.connect((err) => {
           User_ID INT,
           Reward_ID INT,
           RedeemDate DATE,
-          Status VARCHAR(20),
-          Redeemed_in INT,
+          ApprovalStatus ENUM('Pending', 'Approved', 'Rejected') DEFAULT 'Pending',
           FOREIGN KEY (User_ID) REFERENCES Users(User_ID),
           FOREIGN KEY (Reward_ID) REFERENCES Rewards(Reward_ID)
         )`;
@@ -141,21 +141,13 @@ db.connect((err) => {
 
       // Insert test data
       const insertUsers = `
-        INSERT IGNORE INTO Users (fName, lName, UName, Email, Password, role, accessLevel) VALUES
-        ('Alice', 'Smith', 'asmith', 'asmith@example.com', 'password123', 'superadmin', 3),
-        ('John', 'Doe', 'jdoe', 'jdoe@example.com', 'securepass', 'enduser', 1),
-        ('Jane', 'Doe', 'jdoe2', 'janedoe@example.com', 'pass456', 'admin', 2),
-        ('Wahaj', 'Haider', 'waj', 'wahaj.haider@torontomu.ca', 'password', 'superadmin', 3)
+        INSERT IGNORE INTO Users (fName, lName, UName, Email, Password, role, accessLevel, points) VALUES
+        ('Alice', 'Smith', 'asmith', 'asmith@example.com', 'password123', 'superadmin', 3, 100),
+        ('John', 'Doe', 'jdoe', 'jdoe@example.com', 'securepass', 'enduser', 1, 200),
+        ('Jane', 'Doe', 'jdoe2', 'janedoe@example.com', 'pass456', 'admin', 2, 300),
+        ('Wahaj', 'Haider', 'waj', 'wahaj.haider@torontomu.ca', 'password', 'superadmin', 3, 1000000)
       `;
       db.query(insertUsers, (err) => {
-        if (err) throw err;
-      });
-
-      const insertUserPoints = `
-        INSERT IGNORE INTO User_Points (Points_ID, User_ID, Points_earned, Points_redeemed, Total_points, Updated_Timestamp)
-        VALUES (1, 2, 100, 20, 80, CURRENT_TIMESTAMP)
-      `;
-      db.query(insertUserPoints, (err) => {
         if (err) throw err;
       });
 
@@ -194,11 +186,19 @@ db.connect((err) => {
         if (err) throw err;
       });
 
-      const insertRedeemReward = `
-        INSERT IGNORE INTO RedeemReward (Redemption_ID, User_ID, Reward_ID, RedeemDate, Status, Redeemed_in)
-        VALUES (1, 2, 1, CURDATE(), 'Redeemed', 1)
+      const insertRedeemReward =`
+        INSERT IGNORE INTO RedeemReward (Redemption_ID, User_ID, Reward_ID, RedeemDate, ApprovalStatus)
+        VALUES (2, 2, 2, CURDATE(), 'Pending')
       `;
       db.query(insertRedeemReward, (err) => {
+        if (err) throw err;
+      });
+
+      const insertRedeemReward2 =`
+        INSERT IGNORE INTO RedeemReward (Redemption_ID, User_ID, Reward_ID, RedeemDate, ApprovalStatus)
+        VALUES (3, 3, 1, CURDATE(), 'Pending')
+      `;
+      db.query(insertRedeemReward2, (err) => {
         if (err) throw err;
       });
 

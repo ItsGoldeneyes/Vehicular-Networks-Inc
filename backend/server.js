@@ -26,14 +26,14 @@ app.get('/api/users', (req, res) => {
 // Update a user in EndUser table
 app.put('/api/users/:id', (req, res) => {
   const { id } = req.params;
-  const { fName, lName, UName, Email, Password, role, accessLevel } = req.body;
-  const query = 'UPDATE Users SET fName = ?, lName = ?, UName = ?, Email = ?, Password = ?, role = ?, accessLevel = ? WHERE User_ID = ?';
-  db.query(query, [fName, lName, UName, Email, Password, role, accessLevel, id], (err, results) => {
+  const { fName, lName, UName, Email, Password, role, accessLevel, points } = req.body;
+  const query = 'UPDATE Users SET fName = ?, lName = ?, UName = ?, Email = ?, Password = ?, role = ?, accessLevel = ?, points = ? WHERE User_ID = ?';
+  db.query(query, [fName, lName, UName, Email, Password, role, accessLevel, points, id], (err, results) => {
     if (err) {
       console.error('Error updating user:', err);
       return res.status(500).json({ error: 'Failed to update user' });
     }
-    res.json({ id, fName, lName, UName, Email, Password, role, accessLevel }); // Send updated user data back to the frontend
+    res.json({ id, fName, lName, UName, Email, Password, role, accessLevel, points }); // Send updated user data back to the frontend
   });
 });
 
@@ -99,6 +99,7 @@ app.post('/tickets', (req, res) => {
   );
 });
 
+//fetch all user feedback
 app.get('/api/userfeedback', (req, res) => {
   console.log("fetching all user feedback");
   db.query('SELECT * FROM User_Feedback', (err, results) => {
@@ -159,7 +160,8 @@ app.post('/api/rewards', (req, res) => {
 
 // **RedeemReward Routes**
 // Fetch all redeemed rewards
-app.get('/redeem-rewards', (req, res) => {
+app.get('/api/redeem-rewards', (req, res) => {
+  console.log("fetching all reward redemptions")
   db.query('SELECT * FROM RedeemReward', (err, results) => {
     if (err) {
       console.error('Error fetching redeemed rewards:', err);
@@ -170,12 +172,13 @@ app.get('/redeem-rewards', (req, res) => {
   });
 });
 
-// Redeem a reward
-app.post('/redeem-rewards', (req, res) => {
-  const { User_ID, Reward_ID, RedeemDate, Status, Redeemed_in } = req.body;
+// Approve/Reject reward redemption
+app.put('/api/redeem-rewards/:id', (req, res) => {
+  const { id } = req.params;
+  const { ApprovalStatus } = req.body;
   db.query(
-    'INSERT INTO RedeemReward (User_ID, Reward_ID, RedeemDate, Status, Redeemed_in) VALUES (?, ?, ?, ?, ?)',
-    [User_ID, Reward_ID, RedeemDate, Status, Redeemed_in],
+    'Update RedeemReward SET ApprovalStatus = ? WHERE Redemption_ID = ?',
+    [ApprovalStatus, id],
     (err, results) => {
       if (err) {
         console.error('Error redeeming reward:', err);

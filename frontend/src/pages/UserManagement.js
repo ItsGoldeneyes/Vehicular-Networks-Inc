@@ -88,6 +88,8 @@ function UserManagement() {
                   <th>Email</th>
                   <th>Role</th>
                   <th>Access Level</th>
+                  <th>Points</th>
+                  <th>Actions</th>
                </tr>
             </thead>
             <tbody>
