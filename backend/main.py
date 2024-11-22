@@ -1184,6 +1184,191 @@ def create_training_session():
     return jsonify(response)
 
 
+@app.route('/log-training-session', methods=["POST"])
+def log_training_session():
+    """
+    Request needs to be in the format:
+    {
+        "requested_by": user_id,
+        "session_id": session_id
+    }
+
+    If request accepted, returns:
+    {
+        "status": 200
+    }
+
+    If request rejected, returns:
+    {
+        "status": 400,
+        "text": "Error message"
+    }
+    """
+    print("log-training-session")
+    body = request.json
+
+    # Check if user_id is in users table
+    query = f"SELECT user_id FROM public.profile WHERE user_id = '{body['requested_by']}';"
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+        cur.close()
+        conn.close()
+
+        if len(data) == 0:
+            response = {
+                "status": 400,
+                "text": "User not found"
+            }
+            return jsonify(response)
+    except psycopg2.OperationalError as e:
+        response = {
+            "status": 400,
+            "text": f"Error while using database: '{str(e).strip()}'"
+        }
+        return jsonify(response)
+
+    # Check if session_id is in training_session table
+    query = f"SELECT id FROM public.training_session WHERE id = '{body['session_id']}';"
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+        cur.close()
+        conn.close()
+
+        if len(data) == 0:
+            response = {
+                "status": 400,
+                "text": "Session not found"
+            }
+            return jsonify(response)
+    except psycopg2.OperationalError as e:
+        response = {
+            "status": 400,
+            "text": f"Error while using database: '{str(e).strip()}'"
+        }
+        return jsonify(response)
+
+    # Log session for user
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(f"INSERT INTO public.training_session_log (session_id, user_id) VALUES ('{body['session_id']}', '{body['requested_by']}');")
+        cur.close()
+        conn.commit()
+        conn.close()
+
+        response = {
+            "status": 200
+        }
+
+    except psycopg2.OperationalError as e:
+        response = {
+            "status": 400,
+            "text": f"Error while using database: '{str(e).strip()}'"
+        }
+
+    return jsonify(response)
+
+
+@app.route('/report-user-sessions', methods=["POST"])
+def report_user_sessions():
+    """
+    Request needs to be in the format:
+    {
+        "requested_by": user_id,
+    }
+    
+    If request accepted, returns:
+    {
+        "status": 200,
+        "sessions": [
+            {
+                "session_id": "session_id",
+                "title": "session title",
+                "description": "session description",
+                "points": int,
+                "created_at": "timestamp"
+            },
+            ...
+        ]
+    }
+    
+    If request rejected, returns:
+    {
+        "status": 400,
+        "text": "Error message"
+    }
+    """
+    print("report-user-sessions")
+    body = request.json
+
+    # Check if user_id is in users table
+    query = f"SELECT user_id FROM public.profile WHERE user_id = '{body['requested_by']}';"
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+        cur.close()
+        conn.close()
+
+        if len(data) == 0:
+            response = {
+                "status": 400,
+                "text": "User not found"
+            }
+            return jsonify(response)
+    except psycopg2.OperationalError as e:
+        response = {
+            "status": 400,
+            "text": f"Error while using database: '{str(e).strip()}'"
+        }
+        return jsonify(response)
+
+    # Get sessions from database
+    query = f"""
+    SELECT session.id, session.title, session.description, session.points, session.created_at
+    FROM public.training_session AS session
+    JOIN public.training_session_log AS log
+    ON session.id = log.session_id
+    WHERE log.user_id = '{body['requested_by']}';
+    """
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+        cur.close()
+        conn.close()
+
+        sessions = []
+        for session in data:
+            sessions.append({
+                "session_id": session[0],
+                "title": session[1],
+                "description": session[2],
+                "points": session[3],
+                "created_at": session[4]
+            })
+
+        response = {
+            "status": 200,
+            "sessions": sessions
+        }
+
+    except psycopg2.OperationalError as e:
+        response = {
+            "status": 400,
+            "text": f"Error while using database: '{str(e).strip()}'"
+        }
+
+    return jsonify(response)
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv("PORT", default=5000))
