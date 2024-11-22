@@ -820,6 +820,122 @@ def submit_form():
 
     return jsonify(response)
 
+@app.route('/get-form-responses', methods=["POST"])
+def get_form_responses():
+    """
+    Request needs to be in the format:
+    {
+        "requested_by": user_id,
+        "form_id": form_id
+    }
+
+    If request accepted, returns:
+    {
+        "status": 200,
+        "responses": [
+            {
+                "user_id": "user_id",
+                "freeform_answer": "text",
+                "rate_answer": int,
+                "mc_answer": int
+            },
+            ...
+        ]
+    }
+
+    If request rejected, returns:
+    {
+        "status": 400,
+        "text": "Error message"
+    }
+    """
+    print("get-form-responses")
+    body = request.json
+
+    # Check if user_id is in users table
+    query = f"SELECT user_id FROM public.profile WHERE user_id = '{body['requested_by']}';"
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+        cur.close()
+        conn.close()
+
+        if len(data) == 0:
+            response = {
+                "status": 400,
+                "text": "User not found"
+            }
+            return jsonify(response)
+    except psycopg2.OperationalError as e:
+        response = {
+            "status": 400,
+            "text": f"Error while using database: '{str(e).strip()}'"
+        }
+        return jsonify(response)
+
+    #check if form_id is in forms table
+    query = f"SELECT id FROM public.form WHERE id = '{body['form_id']}';"
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+        cur.close()
+        conn.close()
+
+        if len(data) == 0:
+            response = {
+                "status": 400,
+                "text": "Form not found"
+            }
+            return jsonify(response)
+    except psycopg2.OperationalError as e:
+        response = {
+            "status": 400,
+            "text": f"Error while using database: '{str(e).strip()}'"
+        }
+        return jsonify(response)
+
+    # Get form responses from database
+    query = f"""
+    SELECT user_id, freeform_answer, rate_answer, mc_answer
+    FROM public.form_response
+    WHERE form_id = '{body['form_id']}';
+    """
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+        cur.close()
+        conn.close()
+
+        responses = []
+        for response in data:
+            responses.append({
+                "user_id": response[0],
+                "freeform_answer": response[1],
+                "rate_answer": response[2],
+                "mc_answer": response[3]
+            })
+
+        response = {
+            "status": 200,
+            "responses": responses
+        }
+
+    except psycopg2.OperationalError as e:
+        response = {
+            "status": 400,
+            "text": f"Error while using database: '{str(e).strip()}'"
+        }
+
+    return jsonify(response)
+
+
+@app.route('/get-user-form-responses', methods=["POST"])
 
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv("PORT", default=5000))
