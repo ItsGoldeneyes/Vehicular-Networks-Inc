@@ -14,7 +14,7 @@ export default function Home() {
     return (
         <div className={`home ${theme}`}>
             <h2>Welcome to the Home page</h2>
-            { user && <p>You are logged in!</p> }
+            { user && <p>Welcome back {user.username}, to the FleetRewards portal!</p> }
             { !user && <p>You are not logged in. Other navigation buttons are available once you (register and) login.</p>}
         </div>
     );
