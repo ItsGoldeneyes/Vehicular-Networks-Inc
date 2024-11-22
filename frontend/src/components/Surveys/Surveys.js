@@ -34,6 +34,10 @@ export default function Surveys() {
     navigate(`/survey/${form.form_id}`, { state: { survey: form } });
   };
 
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+  
   return (
     <div className={`surveys ${theme}`}>
       <h2>Incomplete Surveys</h2>
@@ -47,7 +51,7 @@ export default function Surveys() {
               className="survey-button"
               onClick={() => handleSurveyClick(form)}
             >
-              Take Survey
+              Take {capitalizeFirstLetter(form.type)}
             </button>
           </div>
         ))}

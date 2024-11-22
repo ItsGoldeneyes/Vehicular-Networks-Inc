@@ -33,9 +33,7 @@ function App() {
           {/* <Route path="Surveys">
               <Route path="Survey"></Route>
           </Route> */}
-          <Route path="Polls" element={<Polls />}>
-            {/* <Route path="Survey"></Route> */}
-          </Route>
+          {/* <Route path="Polls" element={<Polls />}> </Route> */}
           <Route path="Feedback" element={<FeedbackForm />}>
         </Route>
           {/* <Route path=""></Route> */}

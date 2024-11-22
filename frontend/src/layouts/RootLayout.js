@@ -33,11 +33,11 @@ export default function RootLayout() {
                     Surveys
                   </NavLink>
                 </li>
-                <li>
+                {/* <li>
                   <NavLink to="/polls" className="nav-item">
                     Polls
                   </NavLink>
-                </li>
+                </li> */}
                 <li>
                   <NavLink
                     to="/feedback"
@@ -45,7 +45,7 @@ export default function RootLayout() {
                       isActive ? "nav-item active" : "nav-item"
                     }
                   >
-                    Feedback Form
+                    General Feedback
                   </NavLink>
                 </li>
               </>}
@@ -56,25 +56,25 @@ export default function RootLayout() {
                   </NavLink>
                 </li> :
                 <li>
-                    <NavLink
+                    { /*<NavLink
                       to="/login"
                       className={({ isActive }) =>
                         isActive ? "nav-item active" : "nav-item"
                       }
                     >
                       Login
-                    </NavLink> 
+                    </NavLink> */} 
                 </li>
               }
             </ul>
           </nav>
-          <div className="search-box">
+          {/*<div className="search-box">
             <input type="text" placeholder="Search" />
             <img
               src={theme == "light" ? search_icon_light : search_icon_dark}
               alt=""
             />
-          </div>
+          </div>*/}
 
           {/* <img onClick={()=>{toggleTheme()}} src={theme == 'light' ? toggle_light : toggle_dark} alt="" className='toggle-icon'/> */}
           <div className="theme-toggle">

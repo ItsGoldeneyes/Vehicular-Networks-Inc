@@ -62,7 +62,7 @@ export function UserProvider({ children }) {
     async function userAuth(form) {
         const formData = new FormData(form);
         const formEntries = Object.fromEntries(formData.entries());
-
+        
         setIsLoading(true);
         const newUser = await fetch(`${BACKEND_URL}/login`, {
             method: form.method,

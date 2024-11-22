@@ -1,7 +1,8 @@
-import React, { useEffect, useId } from "react";
+import React, { useEffect, useId, useState } from "react";
 import styles from "./Register.module.css";
 import { Navigate, NavLink } from "react-router-dom";
-import { Box, Button, Link } from "@mui/material";
+import { Box, Button, Link, TextField, IconButton, InputAdornment } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useUser } from "../../context/UserContext";
 import { useTheme } from "../../context/ThemeContext";
 
@@ -12,6 +13,9 @@ export default function Register() {
   const passId = useId();
   const passConfirmId = useId();
   const { user, userRegister, isLoading } = useUser();
+  const [data, setData] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   useEffect(() => {
     document.title = "Register - FleetRewards";
@@ -19,8 +23,11 @@ export default function Register() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    userRegister(e.target);
+    setData(userRegister(e.target));
   }
+
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleClickShowConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
 
   if (user) {
     return <Navigate to="/" />
@@ -41,67 +48,93 @@ export default function Register() {
             onSubmit={handleSubmit}
             className={styles.registerForm}
           >
-            <label htmlFor={nameId} className={styles.registerLabel}>
-              Username
-              <span className={styles.required} />
-            </label>
-            <input
-              id={nameId}
-              className={styles.registerInput}
-              name="username"
-              type="text"
-              maxLength={20}
-              required
-            />
-
-            <label htmlFor={emailId} className={styles.registerLabel}>
-              Email
-              <span className={styles.required} />
-            </label>
-            <input
-              id={emailId}
-              className={styles.registerInput}
-              name="email"
-              type="email"
-              maxLength={50}
-              required
-            />
-
-            <label htmlFor={passId} className={styles.registerLabel}>
-              Password
-              <span className={styles.required} />
-            </label>
-            <input
-              id={passId}
-              className={styles.registerInput}
-              name="pass"
-              type="password"
-              maxLength={30}
-              required
-            />
-
-            <label htmlFor={passConfirmId} className={styles.registerLabel}>
-              Confirm Password
-              <span className={styles.required} />
-            </label>
-            <input
-              id={passConfirmId}
-              className={styles.registerInput}
-              name="pass-confirm"
-              type="password"
-              maxLength={30}
-              required
-            />
-
-            <Button type="submit" variant="contained" size="large">
-              Create Account
-            </Button>
+            <TextField
+            id={nameId}
+            label="Username"
+            name="username"
+            type="text"
+            fullWidth
+            required
+            margin="normal"
+            variant="outlined"
+          />
+          <TextField
+            id={emailId}
+            label="Email"
+            name="email"
+            type="email"
+            fullWidth
+            required
+            margin="normal"
+            variant="outlined"
+          />
+          <TextField
+            id={passId}
+            label="Password"
+            name="pass"
+            type={showPassword ? "text" : "password"}
+            fullWidth
+            required
+            margin="normal"
+            variant="outlined"
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }
+            }}
+          />
+          <TextField
+            id={passConfirmId}
+            label="Confirm Password"
+            name="pass-confirm"
+            type={showConfirmPassword ? "text" : "password"}
+            fullWidth
+            required
+            margin="normal"
+            variant="outlined"
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle confirm password visibility"
+                      onClick={handleClickShowConfirmPassword}
+                      edge="end"
+                    >
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }
+            }}
+          />
+          <Button type="submit" variant="contained" size="large" fullWidth sx={{ mt: 2 }}>
+            Create Account
+          </Button>
 
             { isLoading && <p className={styles.submitInfo}>Loading...</p> }
           </Box>
 
           <p>
-            Already have an account? <Link component={NavLink} to="/login">Log In</Link>
+          {data ? (
+            <>
+              You have successfully registered! <Link component={NavLink} to="/login">Login</Link> now!
+            </>
+          ) : (
+            <>
+              Already have an account? <Link component={NavLink} to="/login">Login</Link> here!
+            </>
+          )}
           </p>
         </div>
       </div>
