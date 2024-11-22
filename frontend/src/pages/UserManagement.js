@@ -6,24 +6,6 @@ import EditUserModal from "../components/EditUserModal";
 import Button from "@mui/material/Button";
 import Alert from '@mui/material/Alert';
 
-
-// const userData = [
-// 	{
-// 		id: 1,
-// 		name: "John Doe",
-// 		email: "john.doe@gmail.com",
-// 		role: "User",
-// 		accessLevel: "1",
-// 	},
-// 	{
-// 		id: 2,
-// 		name: "Jane Smith",
-// 		email: "john.doe@gmail.com",
-// 		role: "Admin",
-// 		accessLevel: "2",
-// 	},
-// ];
-
 function UserManagement() {
    const [users, setUsers] = React.useState([]);
    const [selectedUser, setSelectedUser] = React.useState(null);
