@@ -9,6 +9,7 @@ import {
 //pages
 import Home from "./components/Home/Home";
 import Surveys from "./components/Surveys/Surveys";
+import SurveyFormPage from "./components/Surveys/SurveyFormPage"; // Updated import path
 import Polls from "./components/Polls/Polls";
 import FeedbackForm from "./components/FeedbackForm/FeedbackForm";
 import Register from "./pages/Register/Register";
@@ -28,6 +29,7 @@ function App() {
         <Route index element={<Home />} />
         <Route element={<ProtectedRoute isAllowed={!!user} />}>
           <Route path="Surveys" element={<Surveys />} />
+          <Route path="/survey/:id" element={<SurveyFormPage />} />
           {/* <Route path="Surveys">
               <Route path="Survey"></Route>
           </Route> */}
