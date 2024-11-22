@@ -1161,7 +1161,7 @@ def create_training_session():
         # Add session to training_session table
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute(f"INSERT INTO public.training_session (title, description, created_by, points) VALUES ('{body['session']['title']}', '{body['session']['description']}', {body['session']['points']});")
+        cur.execute(f"INSERT INTO public.training_session (title, description, points) VALUES ('{body['session']['title']}', '{body['session']['description']}', {body['session']['points']});")
         # Pull session id
         cur.execute(f"SELECT id FROM public.training_session WHERE title = '{body['session']['title']}' ORDER BY created_at DESC LIMIT 1 ;")
         session_id = cur.fetchall()
