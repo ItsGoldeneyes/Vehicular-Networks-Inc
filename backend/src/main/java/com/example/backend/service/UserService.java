@@ -21,6 +21,18 @@ public class UserService {
         return user != null ? user.getPointsBalance() : 0; // Return 0 if user not found
     }
 
+
+    public User saveUser(User user) {
+        return userRepository.save(user); // Saves the user to the database
+    }
+    public Integer getUserIdByUsername(String username) {
+        return userRepository.findUserIdByUsername(username);
+    }
+
+    // Method to find a user by username
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username); // Finds a user by username
+    }
     public void addPoints(Integer userId, int points, String description) {
         User user = userRepository.findById(userId).orElse(null);
         if (user != null) {
