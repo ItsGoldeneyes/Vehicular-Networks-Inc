@@ -15,7 +15,7 @@ const Dashboard: React.FC = () => {
     // Function to fetch activities
     const fetchActivities = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/activities/${userId}`);
+            const response = await axios.get(`https://backend-group4.up.railway.app/api/activities/${userId}`);
             setActivities(response.data);
         } catch (error: any) {
             setError('Error fetching activities.');
@@ -27,7 +27,7 @@ const Dashboard: React.FC = () => {
     useEffect(() => {
         const fetchPoints = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/api/users/${userId}/points`);
+                const response = await axios.get(`https://backend-group4.up.railway.app/api/users/${userId}/points`);
                 setPoints(response.data.points);
             } catch (error: any) {
                 setError('Error fetching points.');
@@ -37,7 +37,7 @@ const Dashboard: React.FC = () => {
 
         const fetchRewards = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/rewards/all');
+                const response = await axios.get('https://backend-group4.up.railway.app/api/rewards/all');
                 setRewards(response.data);  // Assuming response.data is an array of rewards
             } catch (error: any) {
                 setError('Error fetching rewards.');
