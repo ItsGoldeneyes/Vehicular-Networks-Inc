@@ -47,7 +47,7 @@ export default function Surveys() {
               className="survey-button"
               onClick={() => handleSurveyClick(form)}
             >
-              Take Survey
+              Submit Response
             </button>
           </div>
         ))}
