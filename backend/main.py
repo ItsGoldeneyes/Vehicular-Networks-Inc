@@ -1257,7 +1257,7 @@ def log_training_session():
     try:
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute(f"INSERT INTO public.training_session_log (session_id, user_id) VALUES ('{body['session_id']}', '{body['requested_by']}');")
+        cur.execute(f"INSERT INTO public.attendance (session_id, user_id) VALUES ('{body['session_id']}', '{body['requested_by']}');")
         cur.close()
         conn.commit()
         conn.close()
@@ -1336,7 +1336,7 @@ def report_training_attendance():
     FROM public.training_session
     WHERE training_session.id IN (
         SELECT session_id
-        FROM public.training_session_log
+        FROM public.attendance
         WHERE user_id = '{body['requested_by']}'
     );
     """
