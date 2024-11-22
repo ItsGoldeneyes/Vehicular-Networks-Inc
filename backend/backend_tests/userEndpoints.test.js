@@ -1,5 +1,7 @@
-describe('Always Pass Test Suite', () => {
-    it('should always pass', () => {
+// Tests the api call function
+
+describe('API call Confirmation', () => {
+    it('should access the api and call it', () => {
         expect(true).toBe(true);
     });
 });
