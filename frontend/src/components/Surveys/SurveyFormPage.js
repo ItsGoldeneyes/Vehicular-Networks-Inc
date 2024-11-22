@@ -1,6 +1,5 @@
-
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -18,7 +17,8 @@ export default function SurveyFormPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedOptions, setSelectedOptions] = useState({}); 
-  const [progress, setProgress] = useState(0); 
+  const [progress, setProgress] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchForm = async () => {
@@ -71,9 +71,9 @@ export default function SurveyFormPage() {
     );
   };
 
-  const handleMultipleChoiceChange = (questionIndex, option) => {
+  const handleCheckboxChange = (questionIndex, option) => {
     setSelectedOptions((prevState) => {
-      const updatedSelections = { ...prevState, [questionIndex]: option };
+      const updatedSelections = { ...prevState, [questionIndex]: option }; // Single value for multiple_choice
       handleProgressUpdate(questionIndex, option !== null);
       return updatedSelections;
     });
@@ -81,24 +81,48 @@ export default function SurveyFormPage() {
 
   const handleProgressUpdate = (questionIndex, answered) => {
     const totalQuestions = form.questions.length;
-    const completedQuestions = form.questions.reduce((count, _, idx) => {
-      if (idx === questionIndex) return count + (answered ? 1 : 0);
-      const answeredCondition =
-        selectedOptions[idx] ||
-        document.querySelector(`[name="question-${idx}"]:checked`) ||
-        document.querySelector(`[name="question-${idx}"]`)?.value;
-      return count + (answeredCondition ? 1 : 0);
+
+    const completedQuestions = form.questions.reduce((count, question, idx) => {
+      if (idx === questionIndex) {
+        return count + (answered ? 1 : 0);
+      }
+
+      const isAnswered = (() => {
+        if (question.type === "freeform") {
+          const textInput = document.querySelector(
+            `textarea[name="question-${idx}"]`
+          );
+          return textInput && textInput.value.trim() !== "";
+        }
+
+        if (question.type === "rate") {
+          return document.querySelector(`input[name="question-${idx}"]:checked`);
+        }
+
+        if (question.type === "multiple_choice") {
+          return selectedOptions[idx];
+        }
+
+        return false;
+      })();
+
+      return count + (isAnswered ? 1 : 0);
     }, 0);
+
     setProgress((completedQuestions / totalQuestions) * 100);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (progress < 100) {
+      alert("Please complete all questions before submitting the form.");
+      return;
+    }
+
     const responses = form.questions.map((question, index) => {
       if (question.type === "freeform") {
-        const textInput = document.querySelector(
-          `textarea[name="question-${index}"]`
-        );
+        const textInput = document.querySelector(`textarea[name="question-${index}"]`);
         return {
           question_num: question.question_num,
           type: question.type,
@@ -150,6 +174,7 @@ export default function SurveyFormPage() {
       const result = await response.json();
       if (result.status === 200) {
         alert("Form submitted successfully!");
+        navigate("/surveys");
       } else {
         alert("Failed to submit the form. Please try again.");
       }
@@ -174,16 +199,10 @@ export default function SurveyFormPage() {
         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
       }}
     >
-      <Typography
-        variant="h4"
-        sx={{ fontWeight: "bold", marginBottom: "10px" }}
-      >
+      <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: "10px" }}>
         {form.name}
       </Typography>
-      <Typography
-        variant="subtitle1"
-        sx={{ marginBottom: "20px", color: "#555" }}
-      >
+      <Typography variant="subtitle1" sx={{ marginBottom: "20px", color: "#555" }}>
         Points: {form.points}
       </Typography>
       <LinearProgressWithLabel value={progress} />
@@ -202,65 +221,52 @@ export default function SurveyFormPage() {
                 onChange={(e) =>
                   handleProgressUpdate(index, e.target.value.trim() !== "")
                 }
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    borderColor: "blue",
-                  },
-                }}
               />
             )}
             {question.type === "rate" && (
-              <Box>
-                <RadioGroup
-                  row
-                  name={`question-${index}`}
-                  onChange={() => handleProgressUpdate(index, true)}
-                  sx={{ justifyContent: "space-around" }}
-                >
-                  {[1, 2, 3, 4, 5].map((rating) => (
-                    <FormControlLabel
-                      key={rating}
-                      value={rating}
-                      control={<Radio />}
-                      label={rating}
-                    />
-                  ))}
-                </RadioGroup>
-              </Box>
+              <RadioGroup
+                name={`question-${index}`}
+                onChange={() => handleProgressUpdate(index, true)}
+              >
+                {[1, 2, 3, 4, 5].map((rating) => (
+                  <FormControlLabel
+                    key={rating}
+                    value={rating}
+                    control={<Radio />}
+                    label={rating}
+                  />
+                ))}
+              </RadioGroup>
             )}
             {question.type === "multiple_choice" && (
-              <Box>
-                <RadioGroup
-                  name={`question-${index}`}
-                  onChange={(e) =>
-                    handleMultipleChoiceChange(index, e.target.value)
-                  }
-                  value={selectedOptions[index] || ""}
-                >
-                  {question.options.map((option, i) => (
-                    <FormControlLabel
-                      key={i}
-                      value={option}
-                      control={<Radio />}
-                      label={option}
-                    />
-                  ))}
-                </RadioGroup>
-              </Box>
+              <RadioGroup
+                name={`question-${index}`}
+                onChange={(e) => handleCheckboxChange(index, e.target.value)}
+              >
+                {question.options.map((option, i) => (
+                  <FormControlLabel
+                    key={i}
+                    value={option}
+                    control={<Radio />}
+                    label={option}
+                  />
+                ))}
+              </RadioGroup>
             )}
           </Box>
         ))}
         <Button
           type="submit"
           variant="contained"
+          disabled={progress < 100}
           sx={{
-            backgroundColor: "#007bff",
+            backgroundColor: progress === 100 ? "#007bff" : "#ccc",
             color: "#ffffff",
             textTransform: "none",
             fontSize: "14px",
             padding: "8px 16px",
             ":hover": {
-              backgroundColor: "#0056b3",
+              backgroundColor: progress === 100 ? "#0056b3" : "#ccc",
             },
           }}
         >
