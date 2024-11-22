@@ -205,12 +205,15 @@ export default function SurveyFormPage() {
       <Typography variant="subtitle1" sx={{ marginBottom: "20px", color: "#555" }}>
         Points: {form.points}
       </Typography>
+      <Typography variant="subtitle2" sx={({ marginBottom: "20px" })}>
+        Fields marked with <span style={{ color: "#c00" }}>*</span> are required.
+      </Typography>
       <LinearProgressWithLabel value={progress} />
       <form onSubmit={handleSubmit}>
         {form.questions.map((question, index) => (
           <Box key={index} sx={{ marginBottom: "20px" }}>
             <Typography variant="subtitle1" sx={{ marginBottom: "10px" }}>
-              {question.question_num}. {question.description}
+              {question.question_num}. {question.description}<span style={{ color: "#c00" }}>*</span>
             </Typography>
             {question.type === "freeform" && (
               <TextField
