@@ -10,7 +10,7 @@ const RewardsManagement = () => {
 	useEffect(() => {
 		const fetchAllRewards = async () => {
 			try {
-				const response = await fetch("http://localhost:8080/api/rewards/all"); // Call the /all endpoint
+				const response = await fetch("https://backend-group4.up.railway.app/api/rewards/all"); // Call the /all endpoint
 				if (response.ok) {
 					const data = await response.json();
 					// Sort the rewards by rewardId in ascending order
@@ -37,7 +37,7 @@ const RewardsManagement = () => {
 	const saveRewardEdit = async () => {
 		try {
 			const response = await fetch(
-				`http://localhost:8080/api/rewards/${selectedReward.rewardId}/${points}`, // Update the reward points using the API
+				`https://backend-group4.up.railway.app/api/rewards/${selectedReward.rewardId}/${points}`, // Update the reward points using the API
 				{
 					method: "POST", // Use POST to update points
 					headers: {
