@@ -1093,5 +1093,97 @@ def get_user_points():
     return jsonify(response)
 
 
+@app.route('/create-training-session', methods=["POST"])
+def create_training_session():
+    """
+    Request needs to be in the format:
+    {
+        "requested_by": user_id,
+        "session": {
+            "title": "session title",
+            "description": "session description",
+            "points": int,
+        }
+    }
+
+    If request accepted, returns:
+    {
+        "status": 200,
+        "session_id": "session_id"
+    }
+
+    If request rejected, returns:
+    {
+        "status": 400,
+        "text": "Error message"
+    }
+
+    Session added to database with format:
+        TABLE training_session
+        "id": "session_id",
+        "title": "session title",
+        "description": "session description",
+        "created_by": "user_id",
+        "created_at": "timestamp",
+        "points": int
+"""
+    print("create-training-session")
+    body = request.json
+
+    # Check for session title
+    if not 'title' in body['session']:
+        response = {
+            "status": 400,
+            "text": "Session title not provided"
+        }
+        return jsonify(response)
+
+    # Check for session description
+    if not 'description' in body['session']:
+        response = {
+            "status": 400,
+            "text": "Session description not provided"
+        }
+        return jsonify(response)
+
+    # Check for points
+    if not 'points' in body['session']:
+        response = {
+            "status": 400,
+            "text": "Session points not provided"
+        }
+        return jsonify(response)
+
+    # Add session to database
+    try:
+        print(f"INSERT INTO public.training_session (title, description, points) VALUES ('{body['session']['title']}', '{body['session']['description']}', {body['session']['points']});")
+
+        # Add session to training_session table
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(f"INSERT INTO public.training_session (title, description, created_by, points) VALUES ('{body['session']['title']}', '{body['session']['description']}', {body['session']['points']});")
+        # Pull session id
+        cur.execute(f"SELECT id FROM public.training_session WHERE title = '{body['session']['title']}' ORDER BY created_at DESC LIMIT 1 ;")
+        session_id = cur.fetchall()
+        id = session_id[0][0]
+        cur.close()
+        conn.commit()
+        conn.close()
+
+        response = {
+            "status": 200,
+            "session_id": id
+        }
+
+    except psycopg2.OperationalError as e:
+        response = {
+            "status": 400,
+            "text": f"Error while using database: '{str(e).strip()}'"
+        }
+
+    return jsonify(response)
+
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv("PORT", default=5000))
