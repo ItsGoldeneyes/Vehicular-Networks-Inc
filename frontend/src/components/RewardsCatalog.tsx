@@ -18,7 +18,7 @@ const RewardsCatalog: React.FC<RewardsCatalogProps> = ({ rewards, userId, update
         if (reward.pointsRequired > 0) {
             try {
                 // Redeem the points on the backend
-                const response = await fetch(`http://localhost:8080/api/loyalty/redeem/${reward.rewardId}/${userId}`, {
+                const response = await fetch(`https://backend-group4.up.railway.app/api/loyalty/redeem/${reward.rewardId}/${userId}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -30,7 +30,7 @@ const RewardsCatalog: React.FC<RewardsCatalogProps> = ({ rewards, userId, update
                     updateUserPoints((prevPoints) => prevPoints - reward.pointsRequired);
 
                     // Log the redemption activity
-                    const activityResponse = await fetch(`http://localhost:8080/api/activities/${userId}/${reward.rewardId}?type=REDEEMED`, {
+                    const activityResponse = await fetch(`https://backend-group4.up.railway.app/api/activities/${userId}/${reward.rewardId}?type=REDEEMED`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
