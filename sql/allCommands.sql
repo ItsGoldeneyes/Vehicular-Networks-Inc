@@ -58,8 +58,8 @@ create table public.attendance (
 -- Placeholder data
 
 INSERT INTO profile (user_id, username, email, password, profile_status) VALUES ('d45a0d11-acb0-43cc-b20b-e2ab8c1444e2', 'admin', 'admin@admin.com', 'admin', 'admin');
-INSERT INTO profile (user_id, username, email, password) VALUES ('189684c2-569a-436e-8d25-47cf07449d11', 'hamala@karris.party', 'Hamala Karris', 'admin');
-INSERT INTO profile (user_id, username, email, password) VALUES ('f18c9489-9dbd-4c28-ae5e-7af35e1dc308', 'tonald@drump.party', 'Tonald Drump', 'admin');
+INSERT INTO profile (user_id, username, email, password) VALUES ('189684c2-569a-436e-8d25-47cf07449d11', 'Hamala Karris', 'hamala@karris.party', 'admin');
+INSERT INTO profile (user_id, username, email, password) VALUES ('f18c9489-9dbd-4c28-ae5e-7af35e1dc308', 'Tonald Drump', 'tonald@drump.party', 'admin');
 
 INSERT INTO form (id, name, type, created_by, points) VALUES ('20c1200f-cc03-4b80-9349-f19f6e826d03', 'Feedback Form', 'feedback', 'd45a0d11-acb0-43cc-b20b-e2ab8c1444e2', 10);
 INSERT INTO form_question (form_id, question_num, type, description) VALUES ('20c1200f-cc03-4b80-9349-f19f6e826d03', 1, 'freeform', 'Is there any sort of feedback you want to give us?');
