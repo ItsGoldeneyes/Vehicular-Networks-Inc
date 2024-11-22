@@ -11,6 +11,9 @@ import {
   LinearProgress,
 } from "@mui/material";
 
+const NODE_ENV = process.env.NODE_ENV || 'development';
+const BACKEND_URL = NODE_ENV === 'development' ? 'http://127.0.0.1:5000' : 'https://backend-group5.up.railway.app/';
+
 export default function SurveyFormPage() {
   const { id: formId } = useParams();
   const [form, setForm] = useState(null);
@@ -29,7 +32,7 @@ export default function SurveyFormPage() {
           return;
         }
 
-        const response = await fetch(`http://127.0.0.1:5000/get-form`, {
+        const response = await fetch(`${BACKEND_URL}/get-form`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
