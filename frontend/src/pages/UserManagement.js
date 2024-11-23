@@ -13,7 +13,7 @@ function UserManagement() {
    const [showSuccessfulEdit, setShowSuccessfulEdit] = useState(false);
    const [alertContent, setAlertContent] = useState("");
 
-
+   // fetch users
    const fetchUsers = async () => {
       try {
          // const res = await axios.get("http://localhost:5000/api/users");
@@ -26,6 +26,7 @@ function UserManagement() {
       }
    } 
 
+   // open modal for user info updates
    const updateUserInfo = (user) => {
       setSelectedUser(user);
       setIsModalActive(true);
@@ -36,6 +37,8 @@ function UserManagement() {
       setSelectedUser(null);
    };
 
+
+   // save user info in to the database
    const saveUserInfo = async (updatedUser) => {
       try {
          await axios.put(`http://localhost:5000/api/users/${updatedUser.User_ID}`, updatedUser);

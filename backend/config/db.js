@@ -1,6 +1,7 @@
 const mysql = require("mysql2");
 require("dotenv").config();
 
+// create a connection to the mysql database
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
@@ -12,17 +13,21 @@ const db = mysql.createConnection({
   }
 });
 
+// connect to the database
 db.connect((err) => {
   if (err) throw err;
-  console.log("Connected to MySQL");
+  console.log("connected to mysql");
 
+  // create the database if it doesn't exist
   db.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME}`, (err) => {
     if (err) throw err;
-    console.log(`Database ${process.env.DB_NAME} created or exists already`);
+    console.log(`database ${process.env.DB_NAME} created or exists already`);
 
+    // switch to the created database
     db.changeUser({ database: process.env.DB_NAME }, (err) => {
       if (err) throw err;
 
+      // create users table
       const createUsersTable = `
         CREATE TABLE IF NOT EXISTS Users (
           User_ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -36,6 +41,7 @@ db.connect((err) => {
           points INT DEFAULT 0
         )`;
 
+      // create user points table
       const createUserPointsTable = `
         CREATE TABLE IF NOT EXISTS User_Points (
           Points_ID INT PRIMARY KEY,
@@ -47,6 +53,7 @@ db.connect((err) => {
           FOREIGN KEY (User_ID) REFERENCES Users(User_ID)
         )`;
 
+      // create user feedback table
       const createUserFeedbackTable = `
         CREATE TABLE IF NOT EXISTS User_Feedback (
           Submission_ID INT PRIMARY KEY,
@@ -57,20 +64,7 @@ db.connect((err) => {
           FOREIGN KEY (User_ID) REFERENCES Users(User_ID)
         )`;
 
-      // const createTicketsTable = `
-      //   CREATE TABLE IF NOT EXISTS Tickets (
-      //     Ticket_ID INT PRIMARY KEY,
-      //     Submitter_ID INT,
-      //     Admin_ID INT,
-      //     TicketDescription TEXT,
-      //     Date_created DATE,
-      //     Date_resolved DATE,
-      //     TicketPriority VARCHAR(20),
-      //     Status VARCHAR(20),
-      //     FOREIGN KEY (Submitter_ID) REFERENCES Users(User_ID),
-      //     FOREIGN KEY (Admin_ID) REFERENCES Users(User_ID)
-      //   )`;
-
+      // create tickets table
       const createTicketsTable = `
         CREATE TABLE IF NOT EXISTS Tickets (
           Ticket_ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -86,6 +80,7 @@ db.connect((err) => {
           FOREIGN KEY (Admin_ID) REFERENCES Users(User_ID)
         )`;
 
+      // create rewards table
       const createRewardsTable = `
         CREATE TABLE IF NOT EXISTS Rewards (
           Reward_ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -95,6 +90,7 @@ db.connect((err) => {
           Status VARCHAR(20)
         )`;
 
+      // create redeem reward table
       const createRedeemRewardTable = `
         CREATE TABLE IF NOT EXISTS RedeemReward (
           Redemption_ID INT PRIMARY KEY,
@@ -106,6 +102,7 @@ db.connect((err) => {
           FOREIGN KEY (Reward_ID) REFERENCES Rewards(Reward_ID)
         )`;
 
+      // create learning content table
       const createLearningContentTable = `
         CREATE TABLE IF NOT EXISTS Learning_Content (
           ContentID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -119,6 +116,7 @@ db.connect((err) => {
           FOREIGN KEY (AdminID) REFERENCES Users(User_ID)
         )`;
 
+      // execute table creation queries
       db.query(createUsersTable, (err) => {
         if (err) throw err;
       });
@@ -141,8 +139,7 @@ db.connect((err) => {
         if (err) throw err;
       });
 
-
-      // Insert test data
+      // insert test data
       const insertUsers = `
         INSERT IGNORE INTO Users (fName, lName, UName, Email, Password, role, accessLevel, points) VALUES
         ('Alice', 'Smith', 'asmith', 'asmith@example.com', 'password123', 'superadmin', 3, 100),
@@ -213,7 +210,7 @@ db.connect((err) => {
         if (err) throw err;
       });
 
-      console.log("All tables created and test data inserted.");
+      console.log("all tables created and initial data inserted.");
     });
   });
 });

@@ -26,9 +26,11 @@ function RewardsManagement() {
 	const [alertContent, setAlertContent] = useState("");
 	const [disableApprove, setDisableApprove] = useState(false);
 
+
+	// fetch all users
 	const fetchUsers = async () => {
 		try {
-			const res = await axios.get("http://localhost:5000/api/users");
+			const res = await axios.get("https://fleetrewards-backend-group7.up.railway.app/api/users");
 			console.log(res.data);
 			setUsers(res.data);
 		} catch (err) {
@@ -36,9 +38,10 @@ function RewardsManagement() {
 		}
 	};
 
+	// fetch rewards
 	const fetchRewards = async () => {
 		try {
-			const res = await axios.get("http://localhost:5000/api/rewards");
+			const res = await axios.get("https://fleetrewards-backend-group7.up.railway.app/api/rewards");
 			console.log(res.data);
 			setRewards(res.data);
 		} catch (err) {
@@ -46,10 +49,12 @@ function RewardsManagement() {
 		}
 	};
 
+
+	// fetch reward redemption requests
 	const fetchRewardRedemptions = async () => {
 		try {
 			const res = await axios.get(
-				"http://localhost:5000/api/redeem-rewards"
+				"https://fleetrewards-backend-group7.up.railway.app/api/redeem-rewards"
 			);
 			console.log("reward redemptions", res.data);
 			setRewardRedemptions(res.data);
@@ -66,10 +71,12 @@ function RewardsManagement() {
 		// setDescription(reward.RewardsDescription);
 	};
 
+
+	// save edit to rewards catalog and save to db
 	const saveRewardEdit = async () => {
 		try {
 			const res = await axios.put(
-				`http://localhost:5000/api/rewards/${selectedReward.Reward_ID}`,
+				`https://fleetrewards-backend-group7.up.railway.app/api/rewards/${selectedReward.Reward_ID}`,
 				{
 					Points: points,
 					Status: status,
@@ -93,10 +100,12 @@ function RewardsManagement() {
 		setDescription("");
 	};
 
+
+	// create new reward and save to db
 	const addReward = async () => {
 		console.log(points, status, name, description);
 		try {
-			const res = await axios.post("http://localhost:5000/api/rewards", {
+			const res = await axios.post("https://fleetrewards-backend-group7.up.railway.app/api/rewards", {
 				Points: points,
 				Status: status,
 				Name: name,
@@ -117,6 +126,8 @@ function RewardsManagement() {
 		setDescription("");
 	};
 
+
+	// approve reward redemption request and update user points
 	const handleApprove = async (id) => {
 		try {
 			let rewardRedemption = getRewardRedemptionById(id);
@@ -143,12 +154,12 @@ function RewardsManagement() {
 				}, 2500);
 			}
 			else {
-				await axios.put(`http://localhost:5000/api/users/${user.User_ID}`, {
+				await axios.put(`https://fleetrewards-backend-group7.up.railway.app/api/users/${user.User_ID}`, {
 					...user,
 					points: (userPoints - pointsRequired)
 				});
 				await axios.put(
-					`http://localhost:5000/api/redeem-rewards/${id}`,
+					`https://fleetrewards-backend-group7.up.railway.app/api/redeem-rewards/${id}`,
 					{
 						Redemption_ID: id,
 						ApprovalStatus: "Approved",
@@ -167,6 +178,7 @@ function RewardsManagement() {
 		}
 	};
 
+	// reject reward redemption request
 	const handleReject = async (id) => {
 		try {
 			let rewardRedemption = getRewardRedemptionById(id);
@@ -181,7 +193,7 @@ function RewardsManagement() {
 			}
 
 			await axios.put(
-				`http://localhost:5000/api/redeem-rewards/${id}`,
+				`https://fleetrewards-backend-group7.up.railway.app/api/redeem-rewards/${id}`,
 				{
 					Redemption_ID: id,
 					ApprovalStatus: "Rejected",
@@ -193,6 +205,7 @@ function RewardsManagement() {
 		fetchRewardRedemptions();
 	};
 
+	// format date to yyyy-mm-dd
 	const formatDate = (date) => {
 		if (!date) return "";
 		// const date = new Date(date);
@@ -204,21 +217,25 @@ function RewardsManagement() {
 		return dayjs(date).format("YYYY-MM-DD");
 	};
 
+	// get user name by id
 	const getNameById = (id) => {
-		const user = users.find((u) => u.User_ID === id);
-		return user ? `${user.fName} ${user.lName}` : "";
+		const user = users.find((u) => u.User_ID === id); // find user by id
+		return user ? `${user.fName} ${user.lName}` : ""; // return concatenated first and last name
 	};
 
+	// get user by id
 	const getUserById = (id) => {
 		const user = users.find((u) => u.User_ID === id);
 		return user ? user : null;
 	};
 
+	// get reward name by id
 	const getRewardNameById = (id) => {
 		const reward = rewards.find((r) => r.Reward_ID === id);
 		return reward ? reward.rewardName : "";
 	};
 
+	// get reward by id
 	const getRewardById = (id) => {
 		const reward = rewards.find((r) => r.Reward_ID === id);
 		return reward ? reward : null;

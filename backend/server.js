@@ -2,7 +2,7 @@ const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
 const app = express();
-const port = 5000; // 
+const port = 5000;  
 const db = require("./config/db");
 
 app.use(cors({
@@ -10,38 +10,37 @@ app.use(cors({
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 }));
 
-app.use(express.json());
+app.use(express.json()); // parse json 
 
 // Routes
-
-// Fetch all users from EndUser table
+// fetch all users from users table
 app.get('/api/users', (req, res) => {
   console.log("fetching all users");
-  const query = 'SELECT * FROM Users'; // Changed to use EndUser table
+  const query = 'SELECT * FROM Users';
   db.query(query, (err, results) => {
     if (err) {
-      console.error('Error fetching users:', err);
-      return res.status(500).json({ error: 'Failed to fetch users' });
+      console.error('error fetching users:', err);
+      return res.status(500).json({ error: 'failed to fetch users' });
     }
-    res.json(results);  // Send the users to the frontend
+    res.json(results);  
   });
 });
 
-// Update a user in EndUser table
+// update a user in users table
 app.put('/api/users/:id', (req, res) => {
   const { id } = req.params;
   const { fName, lName, UName, Email, Password, role, accessLevel, points } = req.body;
   const query = 'UPDATE Users SET fName = ?, lName = ?, UName = ?, Email = ?, Password = ?, role = ?, accessLevel = ?, points = ? WHERE User_ID = ?';
   db.query(query, [fName, lName, UName, Email, Password, role, accessLevel, points, id], (err, results) => {
     if (err) {
-      console.error('Error updating user:', err);
-      return res.status(500).json({ error: 'Failed to update user' });
+      console.error('error updating user:', err);
+      return res.status(500).json({ error: 'failed to update user' });
     }
-    res.json({ id, fName, lName, UName, Email, Password, role, accessLevel, points }); // Send updated user data back to the frontend
+    res.json({ id, fName, lName, UName, Email, Password, role, accessLevel, points }); // send updated user data back to the frontend
   });
 });
 
-// Create a new user in EndUser table
+// Create a new user in users table
 app.post('/api/users', (req, res) => {
   const { fName, lName, UName, Email, Password, role, accessLevel } = req.body;
   db.query(
@@ -287,7 +286,6 @@ app.post('/user-rewards', (req, res) => {
   );
 });
 
-// Start the server
 app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+  console.log(`hello this is the server!!!`);
 });

@@ -22,9 +22,14 @@ function TicketManagement() {
 	const [showSuccessful, setShowSuccessful] = useState(false);
 	const [alertContent, setAlertContent] = useState("");
 
+
+	// fetch all admins
 	const fetchAdmins = async () => {
 		try {
-			const res = await axios.get("http://localhost:5000/api/users");
+			// const res = await axios.get("http://localhost:5000/api/users");
+			const res = await axios.get(
+				"https://fleetrewards-backend-group7.up.railway.app/api/users"
+			);
 			const admins = res.data.filter(
 				(user) => user.role === "admin" || user.role === "superadmin"
 			);
@@ -35,9 +40,14 @@ function TicketManagement() {
 		}
 	};
 
+
+	// fetch tickets
 	const fetchTickets = async () => {
 		try {
-			const res = await axios.get("http://localhost:5000/api/tickets");
+			// const res = await axios.get("http://localhost:5000/api/tickets");
+			const res = await axios.get(
+				"https://fleetrewards-backend-group7.up.railway.app/api/tickets"
+			);
 			console.log("tickets", res.data);
 			setTickets(res.data);
 		} catch (err) {
@@ -45,18 +55,31 @@ function TicketManagement() {
 		}
 	};
 
+
+	// fetch all user feedback from form responses (group 5 integration)
 	const fetchUserFeedback = async () => {
 		try {
-			const res = await axios.get("http://localhost:5000/api/userfeedback");
-			console.log("user feedback", res.data);
-			setUserFeedbacks(res.data);
-		} 
-		catch (err) {
+			// const res = await axios.get("http://localhost:5000/api/userfeedback");
+			// const res = await axios.get("https://fleetrewards-backend-group7.up.railway.app/api/userfeedback");
+
+			// Integration with Group 5: Fetch user feedback
+
+			const res = await axios.post(
+				"https://backend-group5.up.railway.app/get-form-responses",
+				{
+					requested_by: "ef0e3dcf-becf-4834-961e-bda7b9afbde8",
+					form_id: "20c1200f-cc03-4b80-9349-f19f6e826d03",
+				}
+			);
+
+			console.log("user feedback", res.data.responses);
+			setUserFeedbacks(res.data.responses);
+		} catch (err) {
 			console.log(err);
 		}
 	};
 
-
+	// format data to yyyy-mm-dd
 	const formatDate = (date) => {
 		if (!date) return "";
 		// const date = new Date(date);
@@ -68,6 +91,7 @@ function TicketManagement() {
 		return dayjs(date).format("YYYY-MM-DD");
 	};
 
+	// update status and save to database
 	const updateStatus = async (ticket) => {
 		let currDate = new dayjs().add(1, "d").format("YYYY-MM-DD");
 		console.log(currDate);
@@ -75,7 +99,7 @@ function TicketManagement() {
 		try {
 			if (selectedStatus === "Open" || selectedStatus === "In Progress") {
 				res = await axios.put(
-					`http://localhost:5000/api/tickets/${ticket.Ticket_ID}`,
+					`https://fleetrewards-backend-group7.up.railway.app/api/tickets/${ticket.Ticket_ID}`,
 					{
 						...ticket,
 						Status: selectedStatus,
@@ -84,7 +108,7 @@ function TicketManagement() {
 				);
 			} else if (selectedStatus === "Closed") {
 				res = await axios.put(
-					`http://localhost:5000/api/tickets/${ticket.Ticket_ID}`,
+					`https://fleetrewards-backend-group7.up.railway.app/api/tickets/${ticket.Ticket_ID}`,
 					{
 						...ticket,
 						Status: selectedStatus,
@@ -104,13 +128,21 @@ function TicketManagement() {
 		}
 	};
 
+	// update feedback and save to database
 	const updateFeedback = async (ticket, feedback) => {
 		if (feedback === "") {
 			setSelectedTicket(null);
 		}
 		try {
+			// const res = await axios.put(
+			// 	`http://localhost:5000/api/tickets/${ticket.Ticket_ID}`,
+			// 	{
+			// 		...ticket,
+			// 		feedback: feedback,
+			// 	}
+			// );
 			const res = await axios.put(
-				`http://localhost:5000/api/tickets/${ticket.Ticket_ID}`,
+				`https://fleetrewards-backend-group7.up.railway.app/api/tickets/${ticket.Ticket_ID}`,
 				{
 					...ticket,
 					feedback: feedback,
@@ -129,15 +161,19 @@ function TicketManagement() {
 		setSelectedTicket(null);
 	};
 
+
+	// get admin name using admin id (user id)
 	const getAdminName = (adminID) => {
 		const admin = admins.find((admin) => admin.User_ID === adminID);
 		return admin ? `${admin.fName} ${admin.lName}` : "";
 	};
 
+
+	// assign ticket to specific admin
 	const assignAdmin = async (ticket, adminID) => {
 		try {
 			const res = await axios.put(
-				`http://localhost:5000/api/tickets/${ticket.Ticket_ID}`,
+				`https://fleetrewards-backend-group7.up.railway.app/api/tickets/${ticket.Ticket_ID}`,
 				{
 					Admin_ID: adminID,
 					Status: ticket.Status,
@@ -267,25 +303,23 @@ function TicketManagement() {
 					))}
 				</tbody>
 			</table>
-			<h3>Feedback</h3>
+			<h3>User Feedback - Form Responses</h3>
 			<table className="feedback-table">
 				<thead>
 					<tr>
-						<th>ID</th>
 						<th>User ID</th>
-						<th>Rating</th>
-						<th>Comments</th>
-						<th>Date Submitted</th>
+						<th>Rate Answer</th>
+						<th>Multiple Choice Answer</th>
+						<th>Freeform Answer</th>
 					</tr>
 				</thead>
 				<tbody>
 					{userFeedbacks.map((feedback) => (
-						<tr key={feedback.Submission_ID}>
-							<td>{feedback.Submission_ID}</td>
-							<td>{feedback.User_ID}</td>
-							<td>{feedback.Rating}</td>
-							<td>{feedback.Comments}</td>
-							<td>{formatDate(feedback.Date_submitted)}</td>
+						<tr key={feedback.user_id}>
+							<td>{feedback.user_id}</td>
+							<td>{feedback.rate_answer}</td>
+							<td>{feedback.mc_answer}</td>
+							<td>{feedback.freeform_answer}</td>
 						</tr>
 					))}
 				</tbody>

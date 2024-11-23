@@ -17,20 +17,22 @@ function ContentManagement() {
 	const [showSuccessful, setShowSuccessful] = useState(false);
 	const [alertContent, setAlertContent] = useState("");
 
+	// fetch content upload history
 	const fetchContentUploads = async () => {
 		try {
-			const res = await axios.get("http://localhost:5000/api/content");
+			const res = await axios.get("https://fleetrewards-backend-group7.up.railway.app/api/content");
 			setContentUploads(res.data);
 		} catch (err) {
 			console.log(err);
 		}
 	};
 
+	// fetch all admins
 	const fetchAdmins = async () => {
 		try {
-			const res = await axios.get("http://localhost:5000/api/users");
+			const res = await axios.get("https://fleetrewards-backend-group7.up.railway.app/api/users");
 			const admins = res.data.filter(
-				(user) => user.role === "admin" || user.role === "superadmin"
+				(user) => user.role === "admin" || user.role === "superadmin" // fetch all users with roles either admin or superadmin
 			);
 			console.log("admins", admins);
 			setAdmins(admins);
@@ -39,6 +41,7 @@ function ContentManagement() {
 		}
 	};
 
+	// get admin name by ID
 	const getAdminName = (adminID) => {
 		const admin = admins.find((admin) => admin.User_ID === adminID);
 		return admin ? `${admin.fName} ${admin.lName}` : "";
@@ -55,10 +58,11 @@ function ContentManagement() {
 		return dayjs(date).format("YYYY-MM-DD");
 	};
 
+	// upload content
 	const handleUpload = async () => {
 		let currDate = dayjs().format("YYYY-MM-DD");
 		try {
-			const res = await axios.post("http://localhost:5000/api/content", {
+			const res = await axios.post("https://fleetrewards-backend-group7.up.railway.app/api/content", {
 				AdminID: admin,
 				Title: title,
 				ContentDescription: description,
