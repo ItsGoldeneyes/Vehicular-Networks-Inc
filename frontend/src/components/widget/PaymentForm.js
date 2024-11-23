@@ -89,7 +89,7 @@ export const PaymentForm = ({ pay_cred, user }) => {
                 className="w-full py-3 px-4 border border-gray-400 rounded-lg focus:outline-none focus:border-blue-500"
               />
             </div>
-            <div className="col-span-2 sm:col-span-1">
+            <div className="col-span-2">
               <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">Address</label>
               <input
                 type="text"

@@ -6,7 +6,8 @@ import { CompanyDetails } from "./widget/CompanyDetails";
 import { PaymentForm } from "./widget/PaymentForm";
 import { ContactInfoForm } from "./widget/ContactInfoForm";
 import { ListVehicleDel } from "./widget/ListVehicle";
-import { ListPurchase } from "./widget/ListPurchase";
+import { ActivityLogs } from "./widget/ActivityLogs";
+import { RedeemableGoods } from "./widget/Redeemables";
 
 import left_chevron from './../resources/chevron-left-small.svg';
 
@@ -82,14 +83,8 @@ export default function ProfilePage() {
                 {paymentCreds.map(paymentCred => <PaymentForm key={paymentCred.id} pay_cred={paymentCred} user={user} />)}
                 <ContactInfoForm user={user} />
             </div>
-            <div className="rounded-2xl shadow-2xl bg-white w-5/6 h-50 space-y-4 pt-6">
-                <div className='border-l-8 border-yellow-400 bg-gray-100 font-bold px-6 mb-6 w-fit'>
-                    <h2>Activity Logs</h2>
-                </div>
-                <div className="rounded-2xl bg-gray-800 p-4 space-y-2 bg-center bg-repeat-round" style={{ backgroundSize: 100, backgroundImage: `url(${left_chevron})` }}>
-                    {purchases.map(purchase => <ListPurchase key={purchase.id} purchase={purchase} />)}
-                </div>
-            </div>
+            <RedeemableGoods user={user} />
+            <ActivityLogs user={user} />
         </div>
     );
 }
