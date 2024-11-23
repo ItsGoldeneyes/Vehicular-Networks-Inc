@@ -1,5 +1,6 @@
 package com.example.backend.demo;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -9,10 +10,9 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**") // Adjust mapping to match your endpoints
-                .allowedOrigins("https://fleetrewards-group4.up.railway.app") // Your frontend URL
+        registry.addMapping("/api/**")
+                .allowedOrigins("*")
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
-                .allowedHeaders("*") // Allow all headers
-                .allowCredentials(true); // Enable credentials if needed
+                .allowCredentials(false); // Optional, if you need to allow credentials
     }
 }
