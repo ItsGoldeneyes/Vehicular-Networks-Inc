@@ -5,13 +5,12 @@ const app = express();
 const port = 5000; // 
 const db = require("./config/db");
 
-app.use(express.json());
-
 app.use(cors({
-  origin: 'http://localhost:3000', 
+  origin: '*', 
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
 }));
+
+app.use(express.json());
 
 // Routes
 
