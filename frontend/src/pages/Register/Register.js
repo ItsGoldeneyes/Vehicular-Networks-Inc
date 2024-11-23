@@ -57,6 +57,19 @@ export default function Register() {
             required
             margin="normal"
             variant="outlined"
+            slotProps={{
+              input: {
+                style: {
+                  backgroundColor: theme === "dark" ? "#fff" : "#f9f9f9",
+                  color: "#000", // Black text
+                },
+              },
+              label: {
+                style: {
+                  color: theme === "dark" ? "#000" : "rgba(0, 0, 0, 0.6)",
+                },
+              },
+            }}
           />
           <TextField
             id={emailId}
@@ -67,6 +80,19 @@ export default function Register() {
             required
             margin="normal"
             variant="outlined"
+            slotProps={{
+              input: {
+                style: {
+                  backgroundColor: theme === "dark" ? "#fff" : "#f9f9f9",
+                  color: "#000", // Black text
+                },
+              },
+              label: {
+                style: {
+                  color: theme === "dark" ? "#000" : "rgba(0, 0, 0, 0.6)",
+                },
+              },
+            }}
           />
           <TextField
             id={passId}
@@ -79,6 +105,10 @@ export default function Register() {
             variant="outlined"
             slotProps={{
               input: {
+                style: {
+                  backgroundColor: theme === "dark" ? "#fff" : "#f9f9f9",
+                  color: "#000",
+                },
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton
@@ -104,6 +134,10 @@ export default function Register() {
             variant="outlined"
             slotProps={{
               input: {
+                style: {
+                  backgroundColor: theme === "dark" ? "#fff" : "#f9f9f9",
+                  color: "#000",
+                },
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton
