@@ -41,7 +41,7 @@ function UserManagement() {
    // save user info in to the database
    const saveUserInfo = async (updatedUser) => {
       try {
-         await axios.put(`http://localhost:5000/api/users/${updatedUser.User_ID}`, updatedUser);
+         await axios.put(`https://fleetrewards-backend-group7.up.railway.app/api/users/${updatedUser.User_ID}`, updatedUser);
          setUsers(users.map(user => (user.User_ID === updatedUser.User_ID ? updatedUser : user)));
          closeModal();
          setAlertContent("User information updated successfully");

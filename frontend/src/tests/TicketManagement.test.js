@@ -53,7 +53,7 @@ describe('TicketManagement Component', () => {
 
     await waitFor(() => {
       expect(axios.put).toHaveBeenCalledWith(
-        `http://localhost:5000/api/tickets/${mockTicket.Ticket_ID}`,
+        `https://fleetrewards-backend-group7.up.railway.app/api/tickets/${mockTicket.Ticket_ID}`,
         expect.objectContaining({
           Status: 'In Progress',
         })
@@ -82,7 +82,7 @@ describe('TicketManagement Component', () => {
 
     await waitFor(() => {
       expect(axios.put).toHaveBeenCalledWith(
-        `http://localhost:5000/api/tickets/${mockTicket.Ticket_ID}`,
+        `https://fleetrewards-backend-group7.up.railway.app/api/tickets/${mockTicket.Ticket_ID}`,
         expect.objectContaining({
           Admin_ID: mockAdmin.User_ID,
         })

@@ -65,7 +65,7 @@ describe("RewardsManagement", () => {
 
     // Verify that the API call to save the reward is made
     expect(axios.put).toHaveBeenCalledWith(
-      "http://localhost:5000/api/rewards/1",
+      "https://fleetrewards-backend-group7.up.railway.app/api/rewards/1",
       expect.objectContaining({
         Points: "150",
         Status: "Inactive",
