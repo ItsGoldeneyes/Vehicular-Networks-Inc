@@ -9,10 +9,10 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**")
-                .allowedOrigins("https://fleetrewards-group4.up.railway.app") // Replace with your frontend URL
+        registry.addMapping("/api/**") // Adjust mapping to match your endpoints
+                .allowedOrigins("https://fleetrewards-group4.up.railway.app") // Your frontend URL
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
-                .allowedHeaders("Content-Type", "Authorization", "X-Requested-With", "Accept")
-                .allowCredentials(true); // Set to true if cookies or session-based authentication is used
+                .allowedHeaders("*") // Allow all headers
+                .allowCredentials(true); // Enable credentials if needed
     }
 }
