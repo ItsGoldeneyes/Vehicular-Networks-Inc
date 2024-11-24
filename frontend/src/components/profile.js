@@ -6,6 +6,7 @@ import { CompanyDetails } from "./widget/CompanyDetails";
 import { PaymentForm } from "./widget/PaymentForm";
 import { ContactInfoForm } from "./widget/ContactInfoForm";
 import { ListVehicleDel } from "./widget/ListVehicle";
+import { PurchaseLogs } from "./widget/PurchaseLogs";
 import { ActivityLogs } from "./widget/ActivityLogs";
 import { RedeemableGoods } from "./widget/Redeemables";
 
@@ -84,7 +85,10 @@ export default function ProfilePage() {
                 <ContactInfoForm user={user} />
             </div>
             <RedeemableGoods user={user} />
-            <ActivityLogs user={user} />
+            <div className="rounded-2xl shadow-2xl bg-white w-5/6 h-50 space-y-8 pt-6">
+                <PurchaseLogs user={user} />
+                <ActivityLogs user={user} />
+            </div>
         </div>
     );
 }
