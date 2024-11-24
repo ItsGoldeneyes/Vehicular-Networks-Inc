@@ -20,7 +20,7 @@ app.get('/api/users', (req, res) => {
   db.query(query, (err, results) => {
     if (err) {
       console.error('error fetching users:', err);
-      return res.status(500).json({ error: 'failed to fetch users' });
+      return res.status(500).json({ error: err.message });
     }
     res.json(results);  
   });

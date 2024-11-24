@@ -16,13 +16,12 @@ function UserManagement() {
    // fetch users
    const fetchUsers = async () => {
       try {
-         // const res = await axios.get("http://localhost:5000/api/users");
          const res = await axios.get("https://fleetrewards-backend-group7.up.railway.app/api/users");
          console.log("users", res.data);
          setUsers(res.data);
       }
       catch (err) {
-         console.log(err);
+         console.log(err.response?.data?.err || err.message);
       }
    } 
 
